@@ -4,18 +4,15 @@
  * Generally speaking, it will contain an auth flow (registration, login, forgot password)
  * and a "main" flow which the user will use once logged in.
  */
-import {
-  DarkTheme,
-  DefaultTheme,
-  NavigationContainer,
-} from "@react-navigation/native"
+import { DarkTheme, DefaultTheme, NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { observer } from "mobx-react-lite"
-import React from "react"
-import { useColorScheme } from "react-native"
+import React, { useEffect, useRef } from "react"
+import { AppState, useColorScheme } from "react-native"
 import * as Screens from "app/screens"
 import Config from "../config"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
+import useLanguagePreference from "app/hooks/useLanguagePreference"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -32,6 +29,13 @@ import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
  */
 export type AppStackParamList = {
   Welcome: undefined
+  ChooseLanguage: undefined
+  Walkthrough1: undefined
+  Walkthrough2: undefined
+  Walkthrough3: undefined
+  Walkthrough4: undefined
+  Auth: undefined
+
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
@@ -52,10 +56,14 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
   return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false }}
-    >
-          <Stack.Screen name="Welcome" component={Screens.WelcomeScreen} />
+    <Stack.Navigator screenOptions={{ headerShown: false, animation: "none" }}>
+      <Stack.Screen name="ChooseLanguage" component={Screens.ChooseLanguageScreen} />
+      <Stack.Screen name="Walkthrough1" component={Screens.WalkthroughScreen1} />
+      <Stack.Screen name="Walkthrough2" component={Screens.WalkthroughScreen2} />
+      <Stack.Screen name="Walkthrough3" component={Screens.WalkthroughScreen3} />
+      <Stack.Screen name="Walkthrough4" component={Screens.WalkthroughScreen4} />
+      <Stack.Screen name="Auth" component={Screens.AuthScreen} />
+
       {/** 🔥 Your screens go here */}
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
@@ -69,6 +77,26 @@ export const AppNavigator = observer(function AppNavigator(props: NavigationProp
   const colorScheme = useColorScheme()
 
   useBackButtonHandler((routeName) => exitRoutes.includes(routeName))
+
+  const { getLanguagePreference } = useLanguagePreference()
+
+  const checkPreference = async () => {
+    await getLanguagePreference()
+  }
+
+  const appState = useRef(AppState.currentState)
+
+  useEffect(() => {
+    checkPreference()
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      appState.current = nextAppState
+      checkPreference()
+    })
+
+    return () => {
+      subscription.remove()
+    }
+  }, [])
 
   return (
     <NavigationContainer

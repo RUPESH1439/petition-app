@@ -125,7 +125,7 @@ export function Button(props: ButtonProps) {
 
 const $baseViewStyle: ViewStyle = {
   minHeight: 56,
-  borderRadius: 4,
+  borderRadius: 30,
   justifyContent: "center",
   alignItems: "center",
   flexDirection: "row",
@@ -135,13 +135,14 @@ const $baseViewStyle: ViewStyle = {
 }
 
 const $baseTextStyle: TextStyle = {
-  fontSize: 16,
-  lineHeight: 20,
-  fontFamily: typography.primary.medium,
+  fontSize: 18,
+  lineHeight: 29,
+  fontFamily: typography.primary.bold,
   textAlign: "center",
   flexShrink: 1,
   flexGrow: 0,
   zIndex: 2,
+  color: colors.palette.neutral50,
 }
 
 const $rightAccessoryStyle: ViewStyle = { marginStart: spacing.extraSmall, zIndex: 1 }
@@ -153,11 +154,21 @@ const $viewPresets = {
     {
       borderWidth: 1,
       borderColor: colors.palette.neutral400,
-      backgroundColor: colors.palette.neutral100,
+      backgroundColor: colors.palette.primary100,
     },
   ] as StyleProp<ViewStyle>,
 
-  filled: [$baseViewStyle, { backgroundColor: colors.palette.neutral300 }] as StyleProp<ViewStyle>,
+  filled: [$baseViewStyle, { backgroundColor: colors.palette.primary100 }] as StyleProp<ViewStyle>,
+
+  secondary: [
+    $baseViewStyle,
+    { backgroundColor: colors.palette.secondary100 },
+  ] as StyleProp<ViewStyle>,
+
+  interest: [
+    $baseViewStyle,
+    { backgroundColor: colors.palette.interest100 },
+  ] as StyleProp<ViewStyle>,
 
   reversed: [
     $baseViewStyle,
@@ -169,16 +180,22 @@ const $textPresets: Record<Presets, StyleProp<TextStyle>> = {
   default: $baseTextStyle,
   filled: $baseTextStyle,
   reversed: [$baseTextStyle, { color: colors.palette.neutral100 }],
+  secondary: $baseTextStyle,
+  interest: $baseTextStyle,
 }
 
 const $pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {
-  default: { backgroundColor: colors.palette.neutral200 },
+  default: { backgroundColor: colors.palette.neutral100 },
   filled: { backgroundColor: colors.palette.neutral400 },
   reversed: { backgroundColor: colors.palette.neutral700 },
+  secondary: { backgroundColor: colors.palette.neutral400 },
+  interest: { backgroundColor: colors.palette.neutral400 },
 }
 
 const $pressedTextPresets: Record<Presets, StyleProp<TextStyle>> = {
   default: { opacity: 0.9 },
   filled: { opacity: 0.9 },
   reversed: { opacity: 0.9 },
+  secondary: { opacity: 0.9 },
+  interest: { opacity: 0.9 },
 }

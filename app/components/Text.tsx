@@ -1,8 +1,9 @@
 import i18n from "i18n-js"
 import React from "react"
 import { StyleProp, Text as RNText, TextProps as RNTextProps, TextStyle } from "react-native"
-import { isRTL, translate, TxKeyPath } from "../i18n"
+import { translate, TxKeyPath } from "../i18n"
 import { colors, typography } from "../theme"
+import useRTL from "app/hooks/useRTL"
 
 type Sizes = keyof typeof $sizeStyles
 type Weights = keyof typeof typography.primary
@@ -52,13 +53,14 @@ export interface TextProps extends RNTextProps {
  */
 export function Text(props: TextProps) {
   const { weight, size, tx, txOptions, text, children, style: $styleOverride, ...rest } = props
+  const { isRTL } = useRTL()
 
   const i18nText = tx && translate(tx, txOptions)
   const content = i18nText || text || children
 
   const preset: Presets = $presets[props.preset] ? props.preset : "default"
   const $styles = [
-    $rtlStyle,
+    $rtlStyle(isRTL),
     $presets[preset],
     $fontWeightStyles[weight],
     $sizeStyles[size],
@@ -74,7 +76,7 @@ export function Text(props: TextProps) {
 
 const $sizeStyles = {
   xxl: { fontSize: 36, lineHeight: 44 } as TextStyle,
-  xl: { fontSize: 24, lineHeight: 34 } as TextStyle,
+  xl: { fontSize: 24, lineHeight: 48 } as TextStyle,
   lg: { fontSize: 20, lineHeight: 32 } as TextStyle,
   md: { fontSize: 18, lineHeight: 26 } as TextStyle,
   sm: { fontSize: 16, lineHeight: 24 } as TextStyle,
@@ -88,12 +90,19 @@ const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weigh
 
 const $baseStyle: StyleProp<TextStyle> = [
   $sizeStyles.sm,
-  $fontWeightStyles.normal,
+  $fontWeightStyles.regular,
   { color: colors.text },
 ]
 
 const $presets = {
   default: $baseStyle,
+
+  primaryBold: [
+    $baseStyle,
+    $sizeStyles.xl,
+    $fontWeightStyles.bold,
+    { color: colors.palette.primary100 },
+  ],
 
   bold: [$baseStyle, $fontWeightStyles.bold] as StyleProp<TextStyle>,
 
@@ -103,7 +112,7 @@ const $presets = {
 
   formLabel: [$baseStyle, $fontWeightStyles.medium] as StyleProp<TextStyle>,
 
-  formHelper: [$baseStyle, $sizeStyles.sm, $fontWeightStyles.normal] as StyleProp<TextStyle>,
+  formHelper: [$baseStyle, $sizeStyles.sm, $fontWeightStyles.medium] as StyleProp<TextStyle>,
 }
 
-const $rtlStyle: TextStyle = isRTL ? { writingDirection: "rtl" } : {}
+const $rtlStyle = (isRTL: boolean): TextStyle => (isRTL ? { writingDirection: "rtl" } : {})
