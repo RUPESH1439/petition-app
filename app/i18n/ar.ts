@@ -6,6 +6,7 @@ const ar: Translations = {
     cancel: "حذف",
     back: "خلف",
     next: "التالي",
+    continue: "التالي",
   },
   walkthrough: {
     screen1: {
@@ -30,6 +31,11 @@ const ar: Translations = {
     title: "تسجيل دخول",
     return: "رجوع",
     phoneNumber: "رقم الهاتف",
+  },
+  createAccount: {
+    title: "إنشاء حساب",
+    personal: "حساب شخصي",
+    organization: "حساب منظمة",
   },
   welcomeScreen: {
     postscript:

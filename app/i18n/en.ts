@@ -4,6 +4,7 @@ const en = {
     cancel: "Cancel",
     back: "Back",
     next: "Next",
+    continue: "Continue",
   },
   walkthrough: {
     screen1: {
@@ -28,6 +29,11 @@ const en = {
     title: "Sign in",
     return: "Return",
     phoneNumber: "Phone Number",
+  },
+  createAccount: {
+    title: "Create Account",
+    personal: "Personal",
+    organization: "Organization",
   },
   welcomeScreen: {
     postscript:

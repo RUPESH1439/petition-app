@@ -5,7 +5,6 @@ import { View, ViewStyle } from "react-native"
 import { colors, spacing } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Button, Screen } from "app/components"
-import useLanguagePreference from "app/hooks/useLanguagePreference"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
@@ -22,7 +21,11 @@ export const AuthScreen: FC<AuthScreenProps> = observer(function AuthScreen() {
         style={$englishButton}
         onPress={() => navigation.navigate("SignIn")}
       />
-      <Button tx="auth.signUp" style={$englishButton} />
+      <Button
+        tx="auth.signUp"
+        style={$englishButton}
+        onPress={() => navigation.navigate("CreateAccount")}
+      />
       <Button tx="auth.continueAsGuest" style={$englishButton} preset="secondary" />
     </Screen>
   )
