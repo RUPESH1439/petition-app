@@ -37,6 +37,11 @@ const ar: Translations = {
     readyForLaunch: "تطبيقك تقريبا جاهز للتشغيل",
     exciting: "اوه هذا مثير",
   },
+  thankyouScreen: {
+    title: "حملة جديدة",
+    headingTop: "يتم تحميل عريضة شكرا لك",
+    headingBottom: "سيتم نشر الالتماس بعد مراجعته",
+  },
   errorScreen: {
     title: "هناك خطأ ما",
     friendlySubtitle:
