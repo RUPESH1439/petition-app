@@ -20,7 +20,7 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
       <ScreenHeader
         tx="signIn.title"
         buttonTx="signIn.return"
-        onButtonPress={() => navigation.navigate("ChooseLanguage")}
+        onButtonPress={() => navigation.goBack()}
       />
       <View style={$container}>
         <TextField placeholderTx="signIn.phoneNumber" keyboardType="phone-pad" />

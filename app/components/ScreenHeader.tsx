@@ -24,13 +24,15 @@ export interface ScreenHeaderProps {
   tx?: TxKeyPath
 
   buttonTx?: TxKeyPath
+
+  hideBorder?: boolean
 }
 
 /**
  * Describe your component here
  */
 export const ScreenHeader = observer(function ScreenHeader(props: ScreenHeaderProps) {
-  const { style, presets, onButtonPress, tx, buttonTx } = props
+  const { style, presets, onButtonPress, tx, buttonTx, hideBorder } = props
   const $styles = [$container, style]
   const { isRTL } = useRTL()
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
@@ -52,7 +54,7 @@ export const ScreenHeader = observer(function ScreenHeader(props: ScreenHeaderPr
 
   const renderDefault = () => {
     return (
-      <View style={$topContainer(isRTL)}>
+      <View style={[$topContainer(isRTL), !!hideBorder && $hideBorder]}>
         <Text tx={tx} preset="primaryBold" style={$title} />
         {!!buttonTx && (
           <Button
@@ -91,7 +93,7 @@ const $topContainer = (isRTL: boolean): ViewStyle => ({
   alignItems: "center",
   borderBottomColor: "#00000029",
   backgroundColor: colors.palette.neutral200,
-  paddingHorizontal: spacing.large,
+  paddingHorizontal: spacing.medium,
   paddingBottom: spacing.small,
   elevation: 2,
   shadowColor: "#00000029",
@@ -103,6 +105,15 @@ const $topContainer = (isRTL: boolean): ViewStyle => ({
   shadowOpacity: 0.2,
   shadowRadius: 1.41,
 })
+
+const $hideBorder = {
+  borderBottomWidth: 0,
+  shadowRadius: 0,
+  shadowOffset: {
+    width: 0,
+    height: 0,
+  },
+}
 
 const $noSpaceBetween: ViewStyle = {
   justifyContent: "flex-start",
