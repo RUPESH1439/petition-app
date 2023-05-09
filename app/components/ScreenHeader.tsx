@@ -39,7 +39,11 @@ export const ScreenHeader = observer(function ScreenHeader(props: ScreenHeaderPr
     return (
       <View style={[$topContainer(isRTL), $noSpaceBetween]}>
         <Pressable onPress={() => navigation.goBack()}>
-          <FontAwesome5 name="arrow-left" size={24} color={colors.palette.primary100} />
+          <FontAwesome5
+            name={isRTL ? "arrow-right" : "arrow-left"}
+            size={24}
+            color={colors.palette.primary100}
+          />
         </Pressable>
         <Text tx={tx} preset="primaryBold" style={$title} />
       </View>
