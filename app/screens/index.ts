@@ -8,3 +8,5 @@ export * from "./Walkthrough/WalkthroughScreen4"
 export * from "./AuthScreen"
 
 // export other screens here
+export * from "./SignInScreen"
+export * from "./SignUpScreen"

@@ -24,6 +24,10 @@ const en = {
     signUp: "Sign Up",
     continueAsGuest: "Continue As A Guest",
   },
+  signIn: {
+    title: "Sign in",
+    return: "Return",
+  },
   welcomeScreen: {
     postscript:
       "psst  — This probably isn't what your app looks like. (Unless your designer handed you these screens, and in that case, ship it!)",

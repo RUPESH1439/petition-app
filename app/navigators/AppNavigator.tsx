@@ -35,8 +35,9 @@ export type AppStackParamList = {
   Walkthrough3: undefined
   Walkthrough4: undefined
   Auth: undefined
-
   // 🔥 Your screens go here
+  SignIn: undefined
+  SignUp: undefined
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
@@ -63,8 +64,9 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="Walkthrough3" component={Screens.WalkthroughScreen3} />
       <Stack.Screen name="Walkthrough4" component={Screens.WalkthroughScreen4} />
       <Stack.Screen name="Auth" component={Screens.AuthScreen} />
-
       {/** 🔥 Your screens go here */}
+      <Stack.Screen name="SignIn" component={Screens.SignInScreen} />
+      <Stack.Screen name="SignUp" component={Screens.SignUpScreen} />
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )

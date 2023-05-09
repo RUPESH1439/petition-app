@@ -20,7 +20,7 @@ export const AuthScreen: FC<AuthScreenProps> = observer(function AuthScreen() {
       <Button
         tx="auth.signIn"
         style={$englishButton}
-        onPress={() => navigation.navigate("ChooseLanguage")}
+        onPress={() => navigation.navigate("SignIn")}
       />
       <Button tx="auth.signUp" style={$englishButton} />
       <Button tx="auth.continueAsGuest" style={$englishButton} preset="secondary" />

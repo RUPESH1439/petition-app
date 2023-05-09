@@ -8,7 +8,10 @@ export default function useLanguagePreference() {
 
   const getLanguagePreference = async () => {
     const _preference = await loadString(STORAGE.LANGUAGE)
-    if (!_preference) return "en"
+    if (!_preference) {
+      I18n.locale = "en"
+      return "en"
+    }
 
     I18n.locale = _preference
     setIsRTL(_preference === "ar")
