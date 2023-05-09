@@ -35,6 +35,11 @@ const en = {
     readyForLaunch: "Your app, almost ready for launch!",
     exciting: "(ohh, this is exciting!)",
   },
+  thankyouScreen: {
+    title: "New Petition",
+    headingTop: "Thank you \npetition is uploaded",
+    headingBottom: "petition will be published after being reviewed",
+  },
   errorScreen: {
     title: "Something went wrong!",
     friendlySubtitle:

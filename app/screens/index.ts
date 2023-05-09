@@ -10,3 +10,4 @@ export * from "./AuthScreen"
 // export other screens here
 export * from "./SignInScreen"
 export * from "./SignUpScreen"
+export * from "./ThankyouScreen"
