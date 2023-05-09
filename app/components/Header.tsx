@@ -7,11 +7,12 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { isRTL, translate } from "../i18n"
+import { translate } from "../i18n"
 import { colors, spacing } from "../theme"
 import { ExtendedEdge, useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsetsStyle"
 import { Icon, IconTypes } from "./Icon"
 import { Text, TextProps } from "./Text"
+import useRTL from "app/hooks/useRTL"
 
 export interface HeaderProps {
   /**
@@ -223,7 +224,7 @@ export function Header(props: HeaderProps) {
 
 function HeaderAction(props: HeaderActionProps) {
   const { backgroundColor, icon, text, tx, txOptions, onPress, ActionComponent, iconColor } = props
-
+  const { isRTL } = useRTL()
   const content = tx ? translate(tx, txOptions) : text
 
   if (ActionComponent) return ActionComponent

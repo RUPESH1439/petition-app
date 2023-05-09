@@ -16,6 +16,14 @@ export const customFontsToLoad = {
   spaceGroteskMedium,
   spaceGroteskSemiBold,
   spaceGroteskBold,
+  somarRoundedBold: require("../../assets/fonts/SomarRounded-Bold.ttf"),
+  somarRoundedExtraBold: require("../../assets/fonts/SomarRounded-ExtraBold.ttf"),
+  somarRoundedExtraLight: require("../../assets/fonts/SomarRounded-ExtraLight.ttf"),
+  somarRoundedLight: require("../../assets/fonts/SomarRounded-Light.ttf"),
+  somarRoundedMedium: require("../../assets/fonts/SomarRounded-Medium.ttf"),
+  somarRoundedRegular: require("../../assets/fonts/SomarRounded-Regular.ttf"),
+  somarRoundedSemiBold: require("../../assets/fonts/SomarRounded-SemiBold.ttf"),
+  somarRoundedThin: require("../../assets/fonts/SomarRounded-Thin.ttf"),
 }
 
 const fonts = {
@@ -26,6 +34,16 @@ const fonts = {
     medium: "spaceGroteskMedium",
     semiBold: "spaceGroteskSemiBold",
     bold: "spaceGroteskBold",
+  },
+  somarRounded: {
+    thin: "somarRoundedThin",
+    extraLight: "somarRoundedExtraLight",
+    light: "somarRoundedLight",
+    medium: "somarRoundedMedium",
+    regular: "somarRoundedRegular",
+    semibold: "somarRoundedSemiBold",
+    bold: "somarRoundedBold",
+    extraBold: "somarRoundedExtraBold",
   },
   helveticaNeue: {
     // iOS only font.
@@ -59,7 +77,7 @@ export const typography = {
   /**
    * The primary font. Used in most places.
    */
-  primary: fonts.spaceGrotesk,
+  primary: fonts.somarRounded,
   /**
    * An alternate font used for perhaps titles and stuff.
    */
