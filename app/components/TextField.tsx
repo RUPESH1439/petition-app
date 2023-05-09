@@ -240,22 +240,22 @@ const $inputWrapperStyle: ViewStyle = {
   flexDirection: "row",
   alignItems: "flex-start",
   borderWidth: 1,
-  borderRadius: 4,
+  borderRadius: 30,
   backgroundColor: colors.palette.neutral200,
-  borderColor: colors.palette.neutral400,
+  borderColor: colors.palette.neutral100,
   overflow: "hidden",
 }
 
 const $inputStyle: TextStyle = {
   flex: 1,
   alignSelf: "stretch",
-  fontFamily: typography.primary.normal,
-  color: colors.text,
-  fontSize: 16,
-  height: 24,
+  fontFamily: typography.primary.semibold,
+  color: colors.palette.neutral100,
+  fontSize: 17,
+  height: 32,
   // https://github.com/facebook/react-native/issues/21720#issuecomment-532642093
-  paddingVertical: 0,
-  paddingHorizontal: 0,
+  paddingVertical: 8,
+  paddingHorizontal: 8,
   marginVertical: spacing.extraSmall,
   marginHorizontal: spacing.small,
 }

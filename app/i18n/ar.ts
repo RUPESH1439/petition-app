@@ -29,6 +29,7 @@ const ar: Translations = {
   signIn: {
     title: "تسجيل دخول",
     return: "رجوع",
+    phoneNumber: "رقم الهاتف",
   },
   welcomeScreen: {
     postscript:
