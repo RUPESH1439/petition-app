@@ -27,6 +27,7 @@ const en = {
   signIn: {
     title: "Sign in",
     return: "Return",
+    phoneNumber: "Phone Number",
   },
   welcomeScreen: {
     postscript:
