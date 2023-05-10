@@ -81,7 +81,7 @@ const $tabStyle: TextStyle = {
 }
 
 const $tabBar: ViewStyle = {
-  backgroundColor: colors.palette.neutral200,
+  backgroundColor: colors.palette.neutral50,
 }
 
 const $indicator: ViewStyle = {

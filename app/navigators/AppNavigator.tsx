@@ -66,7 +66,7 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="Walkthrough2" component={Screens.WalkthroughScreen2} />
       <Stack.Screen name="Walkthrough3" component={Screens.WalkthroughScreen3} />
       <Stack.Screen name="Walkthrough4" component={Screens.WalkthroughScreen4} />
-      <Stack.Screen name="Auth" component={Screens.AuthScreen} />
+      <Stack.Screen name="Auth" component={Screens.ChooseLanguageScreen} />
       {/** 🔥 Your screens go here */}
       <Stack.Screen name="SignIn" component={Screens.SignInScreen} />
       <Stack.Screen name="SignUp" component={Screens.SignUpScreen} />

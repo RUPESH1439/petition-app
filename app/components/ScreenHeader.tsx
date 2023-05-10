@@ -92,7 +92,7 @@ const $topContainer = (isRTL: boolean): ViewStyle => ({
   justifyContent: "space-between",
   alignItems: "center",
   borderBottomColor: "#00000029",
-  backgroundColor: colors.palette.neutral200,
+  backgroundColor: colors.palette.neutral50,
   paddingHorizontal: spacing.medium,
   paddingBottom: spacing.small,
   elevation: 2,

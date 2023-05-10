@@ -8,16 +8,28 @@ const en = {
   },
   walkthrough: {
     screen1: {
-      text: `Ahmed's village does not have clean water, and this was a big problem for him and his village for a long time\n\n\nAhmed is a smart young man, and he knows that rights are taken and not given.\n\n\n So he wanted his voice to be heard and used social media as his first choice, but unfortunately, he spent so much time and effort all in vain`,
+      first:
+        "Ahmed's village does not have clean water, and this was a big problem for him and his village for a long time",
+      second: "Ahmed is a smart young man, and he knows that rights are taken and not given.",
+      third:
+        "So he wanted his voice to be heard and used social media as his first choice, but unfortunately, he spent so much time and effort all in vain",
     },
     screen2: {
-      text: `Ahmed's friend advised him to start a petition so that his entire village could stand as one voice, and the officials know the size of the problem and its impact on their lives\n\n\n But Ahmed did not have time and money to reach every person in the village\n\n\n Ahmed was looking for a way to reach them quickly and easily, and to his surprise he discovered an Rai platform`,
+      first: `Ahmed's friend advised him to start a petition so that his entire village could stand as one voice, and the officials know the size of the problem and its impact on their lives`,
+      second: "But Ahmed did not have time and money to reach every person in the village",
+      third:
+        "Ahmed was looking for a way to reach them quickly and easily, and to his surprise he discovered an Rai platform",
+      fourth: "",
     },
     screen3: {
-      text: `Ahmed published his petition on the platform and shared it with his family, friends, and his village, and he was able to collect their signatures quickly and easily, in the comfort of his home\n\n\n Ahmed's petition reached the officials, and they noticed the number of signatures he had collected, and they felt the importance of the problem, and they did establish the water purification project.`,
+      first: `Ahmed published his petition on the platform and shared it with his family, friends, and his village, and he was able to collect their signatures quickly and easily, in the comfort of his home`,
+      second: `Ahmed's petition reached the officials, and they noticed the number of signatures he had collected, and they felt the importance of the problem, and they did establish the water purification project.`,
+      third: ``,
     },
     screen4: {
-      text: `Ahmed felt extremely happy, he changed his life and the lives of the people around him for the better\n\n\n Ahmed and the people of his area now know that one person can change the lives of many people, and that every person can take the initiative and make change for him and for his community\n\n\n what you are waiting for, sign up and start a petition to change lives of people you care about`,
+      first: `Ahmed felt extremely happy, he changed his life and the lives of the people around him for the better`,
+      second: `Ahmed and the people of his area now know that one person can change the lives of many people, and that every person can take the initiative and make change for him and for his community`,
+      third: `what you are waiting for, sign up and start a petition to change lives of people you care about`,
     },
   },
   auth: {

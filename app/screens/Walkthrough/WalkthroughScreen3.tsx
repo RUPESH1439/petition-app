@@ -17,7 +17,9 @@ export const WalkthroughScreen3: FC<WalkthroughScreen3Props> = observer(
     return (
       <Screen preset="fixed" safeAreaEdges={["top", "bottom"]} contentContainerStyle={$container}>
         <View style={$topContainer}>
-          <Text tx="walkthrough.screen3.text" style={$textStyle} />
+          <Text tx="walkthrough.screen3.first" style={$textStyle} />
+          <Text tx="walkthrough.screen3.second" style={$textStyle} />
+          <Text tx="walkthrough.screen3.third" style={$textStyle} />
         </View>
 
         <Button
@@ -34,7 +36,7 @@ export const WalkthroughScreen3: FC<WalkthroughScreen3Props> = observer(
 const $container: ViewStyle = {
   flex: 1,
   backgroundColor: colors.background,
-  paddingHorizontal: spacing.large,
+  paddingHorizontal: spacing.medium,
   paddingBottom: spacing.large,
   paddingTop: spacing.large,
 }
@@ -46,4 +48,6 @@ const $topContainer: ViewStyle = {
 const $textStyle: TextStyle = {
   fontFamily: typography.primary.semibold,
   fontSize: 16,
+  lineHeight: 40,
+  marginBottom: "10%",
 }
