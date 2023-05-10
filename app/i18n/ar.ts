@@ -54,7 +54,8 @@ const ar: Translations = {
     header: "معلومات المنظمة",
     ceoInfo: "معلومات رئيس المنظمة",
     contactInfo: "معلومات التواصل",
-    organizationName: "إسم المنظمة",
+    organizationNameArabic: "إسم المنظمة باللغة العربية",
+    organizationNameEnglish: "إسم المنظمة باللغة الانجليزية",
     establishedDate: "تاريخ التأسيس",
     permitNumber: "رقم اللإجازة",
     addressCity: "عنوان المقر الرئيسي - المحافظة",
@@ -67,6 +68,7 @@ const ar: Translations = {
     websiteLink: "رابط الموقع الالكتروني - إختياري",
     permitImage: "صورة الإجازة",
     logo: "اللوغو",
+    linkOptional: "ارتباط - اختياري",
   },
   welcomeScreen: {
     postscript:

@@ -60,13 +60,16 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false, animation: "none" }}>
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, animation: "none" }}
+      initialRouteName="ChooseLanguage"
+    >
       <Stack.Screen name="ChooseLanguage" component={Screens.ChooseLanguageScreen} />
       <Stack.Screen name="Walkthrough1" component={Screens.WalkthroughScreen1} />
       <Stack.Screen name="Walkthrough2" component={Screens.WalkthroughScreen2} />
       <Stack.Screen name="Walkthrough3" component={Screens.WalkthroughScreen3} />
       <Stack.Screen name="Walkthrough4" component={Screens.WalkthroughScreen4} />
-      <Stack.Screen name="Auth" component={Screens.ChooseLanguageScreen} />
+      <Stack.Screen name="Auth" component={Screens.AuthScreen} />
       {/** 🔥 Your screens go here */}
       <Stack.Screen name="SignIn" component={Screens.SignInScreen} />
       <Stack.Screen name="SignUp" component={Screens.SignUpScreen} />

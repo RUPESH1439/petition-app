@@ -7,6 +7,8 @@ import { CreateOrganizationAccount, Screen, ScreenHeader } from "app/components"
 import { useNavigation } from "@react-navigation/native"
 import { colors, typography } from "app/theme"
 import { TabView, SceneMap, TabBar } from "react-native-tab-view"
+import I18n from "i18n-js"
+import useRTL from "app/hooks/useRTL"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "app/models"
@@ -23,12 +25,15 @@ export const CreateAccountScreen: FC<CreateAccountScreenProps> = observer(
   function CreateAccountScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
     const layout = useWindowDimensions()
-
+    const isRTL = useRTL()
     const [index, setIndex] = React.useState(0)
-    const routes = [
-      { key: "personal", title: "Personal" },
-      { key: "organization", title: "Organization" },
+
+    const _routes = [
+      { key: "personal", title: I18n.t("createAccount.personal") },
+      { key: "organization", title: I18n.t("createAccount.organization") },
     ]
+    const routes = isRTL ? _routes.reverse() : _routes
+
     return (
       <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
         <ScreenHeader
