@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Pressable, StyleProp, TextStyle, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { colors, spacing } from "app/theme"
+import { colors, spacing, typography } from "app/theme"
 import { Text } from "app/components/Text"
 import { Button } from "./Button"
 import useRTL from "app/hooks/useRTL"
@@ -122,7 +122,8 @@ const $noSpaceBetween: ViewStyle = {
 }
 
 const $title: TextStyle = {
-  fontSize: 20,
+  fontSize: 23,
+  fontFamily: typography.primary.extraBold,
 }
 
 const $button: ViewStyle = {
