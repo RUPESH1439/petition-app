@@ -12,6 +12,7 @@ const palette = {
   neutral800: "#E5E7EB",
   neutral850: "#292929",
   neutral900: "#000000",
+  neutral1000: "#00000000",
 
   primary100: "#63823B",
   primary200: "#E8C1B4",
@@ -65,7 +66,7 @@ export const colors = {
    */
   textPrimary: palette.primary100,
 
-  background: palette.neutral200,
+  background: palette.neutral50,
   /**
    * The default border color.
    */

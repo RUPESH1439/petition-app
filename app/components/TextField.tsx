@@ -215,7 +215,7 @@ export const TextField = forwardRef(function TextField(props: TextFieldProps, re
                 onBlur={onBlur}
                 value={value}
                 placeholder={placeholderContent}
-                placeholderTextColor={colors.textDim}
+                placeholderTextColor={colors.palette.neutral100}
                 {...TextInputProps}
                 editable={!disabled}
                 style={$inputStyles}
@@ -271,7 +271,7 @@ const $inputWrapperStyle: ViewStyle = {
   alignItems: "flex-start",
   borderWidth: 1,
   borderRadius: 30,
-  backgroundColor: colors.palette.neutral200,
+  backgroundColor: colors.palette.neutral50,
   borderColor: colors.palette.neutral100,
   overflow: "hidden",
 }
@@ -279,7 +279,7 @@ const $inputWrapperStyle: ViewStyle = {
 const $inputStyle: TextStyle = {
   flex: 1,
   alignSelf: "stretch",
-  fontFamily: typography.primary.semibold,
+  fontFamily: typography.primary.bold,
   color: colors.palette.neutral100,
   fontSize: 17,
   height: 32,
@@ -288,6 +288,7 @@ const $inputStyle: TextStyle = {
   paddingHorizontal: 8,
   marginVertical: spacing.extraSmall,
   marginHorizontal: spacing.small,
+  lineHeight: 29,
 }
 
 const $helperStyle: TextStyle = {

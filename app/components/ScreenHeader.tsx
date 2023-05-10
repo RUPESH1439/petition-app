@@ -92,18 +92,17 @@ const $topContainer = (isRTL: boolean): ViewStyle => ({
   justifyContent: "space-between",
   alignItems: "center",
   borderBottomColor: "#00000029",
-  backgroundColor: colors.palette.neutral200,
+  backgroundColor: colors.palette.neutral50,
   paddingHorizontal: spacing.medium,
   paddingBottom: spacing.small,
   elevation: 2,
   shadowColor: "#00000029",
-  borderBottomWidth: 2,
   shadowOffset: {
     width: 0,
-    height: 1,
+    height: 1.5,
   },
-  shadowOpacity: 0.2,
-  shadowRadius: 1.41,
+  shadowOpacity: 0.5,
+  shadowRadius: 1.5,
 })
 
 const $hideBorder = {

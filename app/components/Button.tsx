@@ -153,7 +153,7 @@ const $viewPresets = {
     $baseViewStyle,
     {
       borderWidth: 1,
-      borderColor: colors.palette.neutral400,
+      borderColor: colors.palette.neutral1000,
       backgroundColor: colors.palette.primary100,
     },
   ] as StyleProp<ViewStyle>,
@@ -178,8 +178,8 @@ const $viewPresets = {
   outlined: [
     $baseViewStyle,
     {
-      backgroundColor: colors.palette.neutral200,
-      borderWidth: 1,
+      backgroundColor: colors.palette.neutral50,
+      borderWidth: 2,
       borderColor: colors.palette.primary100,
     },
   ] as StyleProp<ViewStyle>,
@@ -191,7 +191,7 @@ const $textPresets: Record<Presets, StyleProp<TextStyle>> = {
   reversed: [$baseTextStyle, { color: colors.palette.neutral100 }],
   secondary: $baseTextStyle,
   interest: $baseTextStyle,
-  outlined: [$baseTextStyle, { color: colors.palette.primary100 }],
+  outlined: [$baseTextStyle, { color: colors.palette.primary100, fontSize: 16, lineHeight: 26 }],
 }
 
 const $pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {
@@ -200,7 +200,7 @@ const $pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {
   reversed: { backgroundColor: colors.palette.neutral700 },
   secondary: { backgroundColor: colors.palette.neutral400 },
   interest: { backgroundColor: colors.palette.neutral400 },
-  outlined: { backgroundColor: colors.palette.neutral400 },
+  outlined: { backgroundColor: colors.palette.neutral100 },
 }
 
 const $pressedTextPresets: Record<Presets, StyleProp<TextStyle>> = {
@@ -209,5 +209,5 @@ const $pressedTextPresets: Record<Presets, StyleProp<TextStyle>> = {
   reversed: { opacity: 0.9 },
   secondary: { opacity: 0.9 },
   interest: { opacity: 0.9 },
-  outlined: { opacity: 0.9 },
+  outlined: { opacity: 0.9, color: colors.palette.neutral50 },
 }

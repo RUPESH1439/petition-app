@@ -60,7 +60,10 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false, animation: "none" }}>
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, animation: "none" }}
+      initialRouteName="ChooseLanguage"
+    >
       <Stack.Screen name="ChooseLanguage" component={Screens.ChooseLanguageScreen} />
       <Stack.Screen name="Walkthrough1" component={Screens.WalkthroughScreen1} />
       <Stack.Screen name="Walkthrough2" component={Screens.WalkthroughScreen2} />
