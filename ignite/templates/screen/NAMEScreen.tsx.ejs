@@ -14,10 +14,10 @@ patches:
 import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 import { ViewStyle } from "react-native"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { AppStackScreenProps } from "app/navigators"
-import { Screen, Text } from "app/components"
-// import { useNavigation } from "@react-navigation/native"
+import { AppStackParamList, AppStackScreenProps } from "app/navigators"
+import { Screen, ScreenHeader } from "app/components"
+import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
+import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "app/models"
 
 interface <%= props.pascalCaseName %>ScreenProps extends NativeStackScreenProps<AppStackScreenProps<"<%= props.pascalCaseName %>">> {}
@@ -26,11 +26,15 @@ export const <%= props.pascalCaseName %>Screen: FC<<%= props.pascalCaseName %>Sc
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
 
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
+  const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
   return (
-    <Screen style={$root} preset="scroll">
-      <Text text="<%= props.camelCaseName %>" />
+    <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
+      <ScreenHeader
+        tx=""
+        buttonTx=""
+        onButtonPress={() => navigation.goBack()}
+      />
+      
     </Screen>
   )
 })

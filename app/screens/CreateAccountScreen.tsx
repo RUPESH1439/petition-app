@@ -5,7 +5,7 @@ import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-naviga
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Screen, ScreenHeader } from "app/components"
 import { useNavigation } from "@react-navigation/native"
-import { colors, spacing, typography } from "app/theme"
+import { colors, typography } from "app/theme"
 import { TabView, SceneMap, TabBar } from "react-native-tab-view"
 
 // import { useNavigation } from "@react-navigation/native"
