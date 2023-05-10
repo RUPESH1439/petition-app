@@ -12,6 +12,7 @@ import { translate } from "../i18n"
 import { colors, spacing, typography } from "../theme"
 import { Text, TextProps } from "./Text"
 import useRTL from "app/hooks/useRTL"
+import { Control, Controller } from "react-hook-form"
 
 export interface TextFieldAccessoryProps {
   style: StyleProp<any>
@@ -21,6 +22,8 @@ export interface TextFieldAccessoryProps {
 }
 
 export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
+  control?: Control<any>
+  name?: string
   /**
    * A style modifier for different input states.
    */
@@ -105,6 +108,8 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
  */
 export const TextField = forwardRef(function TextField(props: TextFieldProps, ref: Ref<TextInput>) {
   const {
+    control,
+    name,
     labelTx,
     label,
     labelTxOptions,
@@ -197,16 +202,37 @@ export const TextField = forwardRef(function TextField(props: TextFieldProps, re
           />
         )}
 
-        <TextInput
-          ref={input}
-          underlineColorAndroid={colors.transparent}
-          textAlignVertical="top"
-          placeholder={placeholderContent}
-          placeholderTextColor={colors.textDim}
-          {...TextInputProps}
-          editable={!disabled}
-          style={$inputStyles}
-        />
+        {control ? (
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                underlineColorAndroid={colors.transparent}
+                textAlignVertical="top"
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+                placeholder={placeholderContent}
+                placeholderTextColor={colors.textDim}
+                {...TextInputProps}
+                editable={!disabled}
+                style={$inputStyles}
+              />
+            )}
+            name={name}
+          />
+        ) : (
+          <TextInput
+            ref={input}
+            underlineColorAndroid={colors.transparent}
+            textAlignVertical="top"
+            placeholder={placeholderContent}
+            placeholderTextColor={colors.textDim}
+            {...TextInputProps}
+            editable={!disabled}
+            style={$inputStyles}
+          />
+        )}
 
         {!!RightAccessory && (
           <RightAccessory
