@@ -1,11 +1,11 @@
 import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle, useWindowDimensions } from "react-native"
+import { TextStyle, View, ViewStyle, useWindowDimensions } from "react-native"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
-import { Screen, ScreenHeader } from "app/components"
+import { CreateOrganizationAccount, Screen, ScreenHeader } from "app/components"
 import { useNavigation } from "@react-navigation/native"
-import { colors, spacing, typography } from "app/theme"
+import { colors, typography } from "app/theme"
 import { TabView, SceneMap, TabBar } from "react-native-tab-view"
 
 // import { useNavigation } from "@react-navigation/native"
@@ -14,33 +14,21 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view"
 interface CreateAccountScreenProps
   extends NativeStackScreenProps<AppStackScreenProps<"CreateAccount">> {}
 
-const FirstRoute = () => <View style={{ flex: 1, backgroundColor: "#ff4081" }} />
-
-const SecondRoute = () => <View style={{ flex: 1, backgroundColor: "#673ab7" }} />
-
 const renderScene = SceneMap({
-  first: FirstRoute,
-  second: SecondRoute,
+  personal: CreateOrganizationAccount,
+  organization: CreateOrganizationAccount,
 })
 
 export const CreateAccountScreen: FC<CreateAccountScreenProps> = observer(
   function CreateAccountScreen() {
-    // Pull in one of our MST stores
-    // const { someStore, anotherStore } = useStores()
-
-    // Pull in navigation via hook
     const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
-    const tabs = [
-      { key: "personal", label: "Personal" },
-      { key: "organization", label: "Organization" },
-    ]
     const layout = useWindowDimensions()
 
     const [index, setIndex] = React.useState(0)
-    const [routes] = React.useState([
-      { key: "first", title: "First" },
-      { key: "second", title: "Second" },
-    ])
+    const routes = [
+      { key: "personal", title: "Personal" },
+      { key: "organization", title: "Organization" },
+    ]
     return (
       <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
         <ScreenHeader
@@ -59,14 +47,10 @@ export const CreateAccountScreen: FC<CreateAccountScreenProps> = observer(
             renderTabBar={(props) => (
               <TabBar
                 {...props}
-                style={{
-                  backgroundColor: colors.palette.neutral200,
-                }}
-                labelStyle={{
-                  color: colors.palette.primary100,
-                  fontFamily: typography.primary.bold,
-                }}
-                tabStyle={{ color: colors.palette.primary100 }}
+                style={$tabBar}
+                labelStyle={$labelStyle}
+                tabStyle={$tabStyle}
+                indicatorStyle={$indicator}
               />
             )} // <-- add this line
           />
@@ -83,4 +67,23 @@ const $root: ViewStyle = {
 const $container: ViewStyle = {
   flexGrow: 1,
   height: "100%",
+}
+
+const $labelStyle: TextStyle = {
+  color: colors.palette.primary100,
+  fontFamily: typography.primary.extraBold,
+  textTransform: "none",
+  fontSize: 18,
+}
+
+const $tabStyle: TextStyle = {
+  color: colors.palette.primary100,
+}
+
+const $tabBar: ViewStyle = {
+  backgroundColor: colors.palette.neutral200,
+}
+
+const $indicator: ViewStyle = {
+  backgroundColor: colors.palette.primary100,
 }

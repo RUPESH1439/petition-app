@@ -8,10 +8,11 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { translate } from "../i18n"
+import { translate, TxKeyPath } from "../i18n"
 import { colors, spacing, typography } from "../theme"
 import { Text, TextProps } from "./Text"
 import useRTL from "app/hooks/useRTL"
+import { Control, Controller } from "react-hook-form"
 
 export interface TextFieldAccessoryProps {
   style: StyleProp<any>
@@ -21,6 +22,9 @@ export interface TextFieldAccessoryProps {
 }
 
 export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
+  control?: Control<any>
+  name?: string
+  error?: TxKeyPath
   /**
    * A style modifier for different input states.
    */
@@ -105,6 +109,9 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
  */
 export const TextField = forwardRef(function TextField(props: TextFieldProps, ref: Ref<TextInput>) {
   const {
+    control,
+    name,
+    error,
     labelTx,
     label,
     labelTxOptions,
@@ -197,16 +204,37 @@ export const TextField = forwardRef(function TextField(props: TextFieldProps, re
           />
         )}
 
-        <TextInput
-          ref={input}
-          underlineColorAndroid={colors.transparent}
-          textAlignVertical="top"
-          placeholder={placeholderContent}
-          placeholderTextColor={colors.textDim}
-          {...TextInputProps}
-          editable={!disabled}
-          style={$inputStyles}
-        />
+        {control ? (
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                underlineColorAndroid={colors.transparent}
+                textAlignVertical="top"
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+                placeholder={placeholderContent}
+                placeholderTextColor={colors.textDim}
+                {...TextInputProps}
+                editable={!disabled}
+                style={$inputStyles}
+              />
+            )}
+            name={name}
+          />
+        ) : (
+          <TextInput
+            ref={input}
+            underlineColorAndroid={colors.transparent}
+            textAlignVertical="top"
+            placeholder={placeholderContent}
+            placeholderTextColor={colors.textDim}
+            {...TextInputProps}
+            editable={!disabled}
+            style={$inputStyles}
+          />
+        )}
 
         {!!RightAccessory && (
           <RightAccessory
@@ -217,6 +245,8 @@ export const TextField = forwardRef(function TextField(props: TextFieldProps, re
           />
         )}
       </View>
+
+      {!!error && <Text tx={error} preset="error" style={$error} />}
 
       {!!(helper || helperTx) && (
         <Text
@@ -275,4 +305,9 @@ const $leftAccessoryStyle: ViewStyle = {
   height: 40,
   justifyContent: "center",
   alignItems: "center",
+}
+
+const $error: TextStyle = {
+  marginTop: 5,
+  marginLeft: spacing.medium,
 }
