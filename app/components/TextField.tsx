@@ -271,7 +271,7 @@ const $inputWrapperStyle: ViewStyle = {
   alignItems: "flex-start",
   borderWidth: 1,
   borderRadius: 30,
-  backgroundColor: colors.palette.neutral200,
+  backgroundColor: colors.palette.neutral50,
   borderColor: colors.palette.neutral100,
   overflow: "hidden",
 }
@@ -288,6 +288,7 @@ const $inputStyle: TextStyle = {
   paddingHorizontal: 8,
   marginVertical: spacing.extraSmall,
   marginHorizontal: spacing.small,
+  lineHeight: 29,
 }
 
 const $helperStyle: TextStyle = {

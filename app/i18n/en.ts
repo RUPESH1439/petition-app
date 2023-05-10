@@ -33,14 +33,14 @@ const en = {
     },
   },
   auth: {
-    signIn: "Sign In",
+    signIn: "Login",
     signUp: "Sign Up",
     continueAsGuest: "Continue As A Guest",
   },
   signIn: {
     title: "Sign in",
     return: "Return",
-    phoneNumber: "Phone Number",
+    phoneNumber: "Mobile Number",
   },
   createAccount: {
     title: "Create Account",
