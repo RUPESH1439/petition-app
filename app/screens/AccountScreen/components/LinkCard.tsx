@@ -42,8 +42,7 @@ export const LinkCard = observer(function LinkCard(props: LinkCardProps) {
 })
 
 const $container = (variant: Preset): ViewStyle => ({
-  // justifyContent: "center",
-  height: 100,
+  height: moderateVerticalScale(98),
   backgroundColor:
     variant === "secondary" ? colors.palette.secondary600 : colors.palette.primary100,
   borderRadius: 12,

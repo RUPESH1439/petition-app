@@ -1,16 +1,28 @@
 import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
+import { FlatList, Image, View } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Screen, ScreenHeader, Text } from "app/components"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
-import { moderateVerticalScale } from "app/utils/scaling"
-import { colors, spacing, typography } from "app/theme"
+import { colors } from "app/theme"
 import { LinkCard } from "./components/LinkCard"
 import { TxKeyPath } from "app/i18n"
 import { useNavigation } from "@react-navigation/native"
 import AntDesign from "react-native-vector-icons/AntDesign"
 import useRTL from "app/hooks/useRTL"
+import {
+  $accountItems,
+  $avatar,
+  $detailContainer,
+  $detailTextStyle,
+  $linkCard,
+  $linkCardLastChild,
+  $linksItemsContainer,
+  $nameContainer,
+  $phoneNumberContainer,
+  $phoneNumberText,
+  $root,
+} from "./style"
 interface AccountScreenProps extends NativeStackScreenProps<AppStackScreenProps<"Account">> {}
 
 interface AccountItem {
@@ -96,59 +108,3 @@ export const AccountScreen: FC<AccountScreenProps> = observer(function AccountSc
   )
 })
 
-const $root: ViewStyle = {
-  flex: 1,
-}
-const $detailContainer: ViewStyle = {
-  gap: 10,
-  marginTop: spacing.huge,
-}
-
-const $nameContainer = (isRTL: boolean): ViewStyle => ({
-  flexDirection: "row",
-  justifyContent: "center",
-  gap: moderateVerticalScale(10),
-  direction: isRTL ? "rtl" : "ltr",
-})
-
-const $avatar: ImageStyle = { width: 32, height: 32, borderRadius: 16 }
-
-const $detailTextStyle: TextStyle = {
-  fontSize: moderateVerticalScale(18),
-  textAlign: "center",
-  lineHeight: 30,
-  color: colors.palette.neutral100,
-}
-
-const $phoneNumberContainer: ViewStyle = {
-  alignItems: "center",
-}
-
-const $phoneNumberText: TextStyle = {
-  fontFamily: typography.primary.bold,
-  fontSize: moderateVerticalScale(20),
-}
-
-const $linksItemsContainer: ViewStyle = {
-  flexDirection: "row",
-  gap: moderateVerticalScale(18),
-  flexWrap: "wrap",
-  paddingTop: spacing.extraLarge,
-}
-
-const $linkCard: ViewStyle = {
-  flex: 1,
-  marginRight: spacing.medium,
-}
-
-const $linkCardLastChild: ViewStyle = {
-  flex: 1,
-  marginRight: spacing.medium * 2,
-}
-
-const $accountItems = (isRTL: boolean): ViewStyle => ({
-  columnGap: spacing.medium,
-  rowGap: spacing.medium,
-  paddingLeft: spacing.medium,
-  direction: isRTL ? "rtl" : "ltr",
-})
