@@ -6,6 +6,12 @@ const en = {
     next: "Next",
     continue: "Continue",
   },
+  homeTab: {
+    profile: "profile",
+    myPetitions: "my petitions",
+    search: "search",
+    home: "home",
+  },
   walkthrough: {
     screen1: {
       first:

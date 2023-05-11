@@ -24,7 +24,7 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
       />
       <View style={$container}>
         <TextField placeholderTx="signIn.phoneNumber" keyboardType="phone-pad" />
-        <Button tx="common.continue" style={$next} />
+        <Button tx="common.continue" style={$next} onPress={() => navigation.navigate("HomeTab")} />
       </View>
     </Screen>
   )

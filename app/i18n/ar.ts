@@ -8,6 +8,12 @@ const ar: Translations = {
     next: "التالي",
     continue: "التالي",
   },
+  homeTab: {
+    profile: "الحساب",
+    myPetitions: "حملاتي",
+    search: "بحث",
+    home: "الرئيسية",
+  },
   walkthrough: {
     screen1: {
       first:
