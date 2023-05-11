@@ -13,6 +13,7 @@ import * as Screens from "app/screens"
 import Config from "../config"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import useLanguagePreference from "app/hooks/useLanguagePreference"
+import { HomeNavigator } from "./HomeNavigator"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -40,9 +41,17 @@ export type AppStackParamList = {
   SignUp: undefined
   Thankyou: undefined
   Account: undefined
+  Profile: undefined
+  MyPetitions: undefined
+  Search: undefined
+  Home: undefined
+  EditPersonalInfo: undefined
+	EditOrganizationalInfo: undefined
+	Settings: undefined
 	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
   CreateAccount: undefined
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  HomeTab: undefined
 }
 
 /**
@@ -76,8 +85,16 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="SignUp" component={Screens.SignUpScreen} />
       <Stack.Screen name="Thankyou" component={Screens.ThankyouScreen} />
       <Stack.Screen name="Account" component={Screens.AccountScreen} />
+      <Stack.Screen name="Profile" component={Screens.ProfileScreen} />
+      <Stack.Screen name="MyPetitions" component={Screens.MyPetitionsScreen} />
+      <Stack.Screen name="Search" component={Screens.SearchScreen} />
+      <Stack.Screen name="Home" component={Screens.HomeScreen} />
+      <Stack.Screen name="EditPersonalInfo" component={Screens.EditPersonalInfoScreen} />
+			<Stack.Screen name="EditOrganizationalInfo" component={Screens.EditOrganizationalInfoScreen} />
+			<Stack.Screen name="Settings" component={Screens.SettingsScreen} />
 			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
       <Stack.Screen name="CreateAccount" component={Screens.CreateAccountScreen} />
+      <Stack.Screen name="HomeTab" component={HomeNavigator} />
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )

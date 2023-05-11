@@ -31,37 +31,39 @@ interface AccountItem {
   screenName: keyof AppStackParamList
 }
 
-const accountItems: AccountItem[] = [
-  {
-    id: "myInfo",
-    tx: "accountScreen.myInfo",
-    screenName: "ChooseLanguage",
-  },
-  {
-    id: "customerService",
-    tx: "accountScreen.customerService",
-    screenName: "CreateAccount",
-  },
-  {
-    id: "privatePolicy",
-    tx: "accountScreen.privatePolicy",
-    screenName: "CreateAccount",
-  },
-  {
-    id: "settings",
-    tx: "accountScreen.settings",
-    screenName: "CreateAccount",
-  },
-  {
-    id: "logout",
-    tx: "accountScreen.logout",
-    screenName: "CreateAccount",
-  },
-]
-
 export const AccountScreen: FC<AccountScreenProps> = observer(function AccountScreen() {
   const { isRTL } = useRTL()
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
+
+  // TODO move this logic from backend
+  const isOrganization = true
+  const accountItems: AccountItem[] = [
+    {
+      id: "myInfo",
+      tx: "accountScreen.myInfo",
+      screenName: isOrganization ? "EditOrganizationalInfo" : "EditPersonalInfo",
+    },
+    {
+      id: "customerService",
+      tx: "accountScreen.customerService",
+      screenName: "CreateAccount",
+    },
+    {
+      id: "privatePolicy",
+      tx: "accountScreen.privatePolicy",
+      screenName: "CreateAccount",
+    },
+    {
+      id: "settings",
+      tx: "accountScreen.settings",
+      screenName: "Settings",
+    },
+    {
+      id: "logout",
+      tx: "accountScreen.logout",
+      screenName: "Auth",
+    },
+  ]
 
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
@@ -107,4 +109,3 @@ export const AccountScreen: FC<AccountScreenProps> = observer(function AccountSc
     </Screen>
   )
 })
-

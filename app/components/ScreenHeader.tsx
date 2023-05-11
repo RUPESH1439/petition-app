@@ -119,6 +119,7 @@ const $noSpaceBetween: ViewStyle = {
   justifyContent: "flex-start",
   paddingHorizontal: spacing.medium,
   gap: spacing.medium,
+  marginTop: moderateVerticalScale(2),
 }
 
 const $title: TextStyle = {
