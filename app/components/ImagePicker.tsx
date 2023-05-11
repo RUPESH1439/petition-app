@@ -31,6 +31,9 @@ export const ImagePicker = observer(function ImagePicker(props: ImagePickerProps
     const result = await launchImageLibrary({
       mediaType: "photo",
     })
+    if (result?.didCancel) {
+      return
+    }
     setSelectedImage(result)
     onSelectImage?.(result)
   }
