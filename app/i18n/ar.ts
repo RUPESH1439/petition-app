@@ -88,6 +88,16 @@ const ar: Translations = {
     headingTop: "يتم تحميل عريضة شكرا لك",
     headingBottom: "سيتم نشر الالتماس بعد مراجعته",
   },
+  accountScreen: {
+    title: "الحساب",
+    name: "جمعية التعاون الخيرية",
+    phoneNumber: "07814135918",
+    myInfo: "معلوماتي",
+    customerService: "معلوماتي",
+    privatePolicy: "سياسة \n الخصوصية",
+    settings: "الاعدادات",
+    logout: "تسجيل خروج",
+  },
   errorScreen: {
     title: "هناك خطأ ما",
     friendlySubtitle:
