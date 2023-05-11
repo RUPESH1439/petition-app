@@ -5,12 +5,17 @@ const en = {
     back: "Back",
     next: "Next",
     continue: "Continue",
+    change: "Change",
   },
   homeTab: {
     profile: "profile",
     myPetitions: "my petitions",
     search: "search",
     home: "home",
+  },
+  accountInfo: {
+    organizationInfo: "Organization Info",
+    personalInfo: "My Info",
   },
   walkthrough: {
     screen1: {

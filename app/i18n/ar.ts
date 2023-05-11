@@ -7,12 +7,17 @@ const ar: Translations = {
     back: "خلف",
     next: "التالي",
     continue: "التالي",
+    change: "تغيير",
   },
   homeTab: {
     profile: "الحساب",
     myPetitions: "حملاتي",
     search: "بحث",
     home: "الرئيسية",
+  },
+  accountInfo: {
+    organizationInfo: "معلومات المنظمة",
+    personalInfo: "معلوماتي",
   },
   walkthrough: {
     screen1: {

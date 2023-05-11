@@ -45,7 +45,9 @@ export type AppStackParamList = {
   MyPetitions: undefined
   Search: undefined
   Home: undefined
-  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  EditPersonalInfo: undefined
+	EditOrganizationalInfo: undefined
+	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
   CreateAccount: undefined
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
   HomeTab: undefined
@@ -86,7 +88,9 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="MyPetitions" component={Screens.MyPetitionsScreen} />
       <Stack.Screen name="Search" component={Screens.SearchScreen} />
       <Stack.Screen name="Home" component={Screens.HomeScreen} />
-      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+      <Stack.Screen name="EditPersonalInfo" component={Screens.EditPersonalInfoScreen} />
+			<Stack.Screen name="EditOrganizationalInfo" component={Screens.EditOrganizationalInfoScreen} />
+			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
       <Stack.Screen name="CreateAccount" component={Screens.CreateAccountScreen} />
       <Stack.Screen name="HomeTab" component={HomeNavigator} />
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}

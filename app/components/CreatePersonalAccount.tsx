@@ -72,7 +72,7 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
   const [gender, setGender] = React.useState(_gender)
 
   const dateOfBirth = watch("dateOfBirth")
-  const city = watch("city")
+  // const city = watch("city")
 
   React.useEffect(() => {
     setCities([..._cities])
