@@ -67,6 +67,14 @@ const en = {
     logo: "Logo",
     linkOptional: "Link - Optional",
   },
+  createPersonalAccount: {
+    name: "Name",
+    dateOfBirth: "Date Of Birth",
+    gender: "Gender",
+    governorate: "Governorate",
+    mobileNumber: "Mobile Number",
+  },
+
   welcomeScreen: {
     postscript:
       "psst  — This probably isn't what your app looks like. (Unless your designer handed you these screens, and in that case, ship it!)",

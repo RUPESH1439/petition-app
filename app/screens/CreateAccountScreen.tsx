@@ -3,7 +3,13 @@ import { observer } from "mobx-react-lite"
 import { TextStyle, View, ViewStyle, useWindowDimensions } from "react-native"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
-import { CreateOrganizationAccount, Screen, ScreenHeader } from "app/components"
+import {
+  CreateOrganizationAccount,
+  CreatePersonalAccount,
+  Screen,
+  ScreenHeader,
+} from "app/components"
+
 import { useNavigation } from "@react-navigation/native"
 import { colors, typography } from "app/theme"
 import { TabView, SceneMap, TabBar } from "react-native-tab-view"
@@ -18,7 +24,7 @@ interface CreateAccountScreenProps
   extends NativeStackScreenProps<AppStackScreenProps<"CreateAccount">> {}
 
 const renderScene = SceneMap({
-  personal: CreateOrganizationAccount,
+  personal: CreatePersonalAccount,
   organization: CreateOrganizationAccount,
 })
 
