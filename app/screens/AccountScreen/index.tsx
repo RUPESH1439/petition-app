@@ -50,12 +50,12 @@ const accountItems: AccountItem[] = [
   {
     id: "settings",
     tx: "accountScreen.settings",
-    screenName: "CreateAccount",
+    screenName: "ChooseLanguage",
   },
   {
     id: "logout",
     tx: "accountScreen.logout",
-    screenName: "CreateAccount",
+    screenName: "Auth",
   },
 ]
 
@@ -107,4 +107,3 @@ export const AccountScreen: FC<AccountScreenProps> = observer(function AccountSc
     </Screen>
   )
 })
-

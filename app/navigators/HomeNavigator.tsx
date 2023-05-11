@@ -5,12 +5,13 @@ import {
 } from "@react-navigation/material-top-tabs"
 
 import { SvgXml } from "react-native-svg"
-import { ProfileScreen, MyPetitionsScreen, SearchScreen, HomeScreen } from "app/screens"
+import { MyPetitionsScreen, SearchScreen, HomeScreen, AccountScreen } from "app/screens"
 import icons from "../../assets/svgs"
 import { colors, typography } from "app/theme"
 import { moderateVerticalScale } from "app/utils/scaling"
 import I18n from "i18n-js"
 import { View } from "react-native"
+import useRTL from "app/hooks/useRTL"
 
 const { home, user, search, notes } = icons
 export type HomeNavigatorParamList = {
@@ -22,34 +23,17 @@ export type HomeNavigatorParamList = {
 
 const BottomTab = createMaterialTopTabNavigator<HomeNavigatorParamList>()
 export const HomeNavigator = () => {
+  const { isRTL } = useRTL()
   return (
-    <BottomTab.Navigator tabBarPosition="bottom" screenOptions={screenOptions}>
+    <BottomTab.Navigator tabBarPosition="bottom" screenOptions={screenOptions(isRTL)}>
       <BottomTab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="Home"
+        component={HomeScreen}
         options={{
-          tabBarLabel: I18n.t("homeTab.profile"),
-          tabBarIcon: ({ focused }) => (
-            <View>
-              <SvgXml
-                xml={user}
-                height={moderateVerticalScale(26)}
-                width={moderateVerticalScale(26)}
-                fill={focused ? colors.palette.primary200 : colors.palette.gray100}
-              />
-            </View>
-          ),
-        }}
-      />
-      <BottomTab.Screen
-        name="MyPetitions"
-        component={MyPetitionsScreen}
-        options={{
-          tabBarLabel: I18n.t("homeTab.myPetitions"),
-
+          tabBarLabel: I18n.t("homeTab.home"),
           tabBarIcon: ({ focused }) => (
             <SvgXml
-              xml={notes}
+              xml={home}
               height={moderateVerticalScale(26)}
               width={moderateVerticalScale(26)}
               fill={focused ? colors.palette.primary200 : colors.palette.gray100}
@@ -76,13 +60,14 @@ export const HomeNavigator = () => {
         }}
       />
       <BottomTab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="MyPetitions"
+        component={MyPetitionsScreen}
         options={{
-          tabBarLabel: I18n.t("homeTab.home"),
+          tabBarLabel: I18n.t("homeTab.myPetitions"),
+
           tabBarIcon: ({ focused }) => (
             <SvgXml
-              xml={home}
+              xml={notes}
               height={moderateVerticalScale(26)}
               width={moderateVerticalScale(26)}
               fill={focused ? colors.palette.primary200 : colors.palette.gray100}
@@ -90,11 +75,28 @@ export const HomeNavigator = () => {
           ),
         }}
       />
+      <BottomTab.Screen
+        name="Profile"
+        component={AccountScreen}
+        options={{
+          tabBarLabel: I18n.t("homeTab.profile"),
+          tabBarIcon: ({ focused }) => (
+            <View>
+              <SvgXml
+                xml={user}
+                height={moderateVerticalScale(26)}
+                width={moderateVerticalScale(26)}
+                fill={focused ? colors.palette.primary200 : colors.palette.gray100}
+              />
+            </View>
+          ),
+        }}
+      />
     </BottomTab.Navigator>
   )
 }
 
-const screenOptions: MaterialTopTabNavigationOptions = {
+const screenOptions = (isRTL: boolean): MaterialTopTabNavigationOptions => ({
   tabBarStyle: {
     height: moderateVerticalScale(88),
     shadowColor: "#000",
@@ -105,6 +107,7 @@ const screenOptions: MaterialTopTabNavigationOptions = {
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
     elevation: 3,
+    direction: isRTL ? "rtl" : "ltr",
   },
   tabBarActiveTintColor: colors.palette.primary200,
   tabBarInactiveTintColor: colors.palette.gray100,
@@ -133,4 +136,4 @@ const screenOptions: MaterialTopTabNavigationOptions = {
   tabBarIconStyle: {
     marginRight: moderateVerticalScale(7),
   },
-}
+})
