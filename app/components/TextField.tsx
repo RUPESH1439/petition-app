@@ -283,12 +283,9 @@ const $inputStyle: TextStyle = {
   fontFamily: typography.primary.bold,
   color: colors.palette.neutral100,
   fontSize: moderateVerticalScale(15),
-  height: moderateVerticalScale(30),
   // https://github.com/facebook/react-native/issues/21720#issuecomment-532642093
-  paddingVertical: 8,
-  paddingHorizontal: 8,
   marginVertical: spacing.extraSmall,
-  marginHorizontal: spacing.small,
+  marginHorizontal: spacing.medium,
   lineHeight: moderateVerticalScale(27),
 }
 
