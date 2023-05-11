@@ -56,7 +56,7 @@ export const AccountScreen: FC<AccountScreenProps> = observer(function AccountSc
     {
       id: "settings",
       tx: "accountScreen.settings",
-      screenName: "ChooseLanguage",
+      screenName: "Settings",
     },
     {
       id: "logout",

@@ -17,6 +17,10 @@ const en = {
     organizationInfo: "Organization Info",
     personalInfo: "My Info",
   },
+  settings: {
+    title: "Settings",
+    placeholder: "Language - English",
+  },
   walkthrough: {
     screen1: {
       first:

@@ -19,6 +19,10 @@ const ar: Translations = {
     organizationInfo: "معلومات المنظمة",
     personalInfo: "معلوماتي",
   },
+  settings: {
+    title: "الاعدادات",
+    placeholder: "اللغة - العربية",
+  },
   walkthrough: {
     screen1: {
       first:
