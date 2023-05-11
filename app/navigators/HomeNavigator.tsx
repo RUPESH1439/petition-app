@@ -119,7 +119,7 @@ const screenOptions: MaterialTopTabNavigationOptions = {
     position: "absolute",
     top: 0,
     width: moderateVerticalScale(74),
-    left: moderateVerticalScale(8),
+    left: moderateVerticalScale(4),
     backgroundColor: colors.palette.primary100,
     height: 3,
     borderRadius: 3,
