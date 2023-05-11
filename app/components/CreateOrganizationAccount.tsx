@@ -96,7 +96,13 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
     <View style={$styles}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{}}>
         <Text tx="createOrganizationAccount.header" style={$header} />
-        <ImagePicker titleX="createOrganizationAccount.logo" style={$logo} />
+        <ImagePicker
+          titleX="createOrganizationAccount.logo"
+          style={$logo}
+          onSelectImage={(image) => {
+            console.log("image", image)
+          }}
+        />
         <TextField
           control={control}
           name="organizationNameArabic"
@@ -136,7 +142,12 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
             />
           </View>
           <View style={[$flexOne, $imagePicker]}>
-            <ImagePicker titleX="createOrganizationAccount.permitImage" />
+            <ImagePicker
+              titleX="createOrganizationAccount.permitImage"
+              onSelectImage={(image) => {
+                console.log("image", image)
+              }}
+            />
           </View>
         </View>
 
