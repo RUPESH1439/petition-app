@@ -70,6 +70,13 @@ const ar: Translations = {
     logo: "اللوغو",
     linkOptional: "ارتباط - اختياري",
   },
+  createPersonalAccount: {
+    name: "الإسم",
+    dateOfBirth: "الجنس",
+    gender: "الجنس",
+    governorate: "المحافظة",
+    mobileNumber: "رقم الموبايل",
+  },
   welcomeScreen: {
     postscript:
       "ربما لا يكون هذا هو الشكل الذي يبدو عليه تطبيقك مالم يمنحك المصمم هذه الشاشات وشحنها في هذه الحالة",
