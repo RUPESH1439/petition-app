@@ -9,11 +9,14 @@ import useRTL from "app/hooks/useRTL"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Datepicker } from "./Datepicker"
 
 const schema = z.object({
   name: z.string(),
-  dateOfBirth: z.string(),
+  dateOfBirth: z.date(),
   mobileNumber: z.string(),
+  gender: z.string(),
+  city: z.string(),
 })
 
 export interface CreatePersonalAccountProps {
@@ -32,12 +35,16 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
     control,
     handleSubmit,
     formState: { errors },
+    watch,
+    setValue,
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       name: "",
-      dateOfBirth: "",
+      dateOfBirth: null,
       mobileNumber: "",
+      gender: null,
+      city: null,
     },
   })
   const onSubmit = (data) => console.log(data)
@@ -64,6 +71,9 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
   const [cities, setCities] = React.useState(_cities)
   const [gender, setGender] = React.useState(_gender)
 
+  const dateOfBirth = watch("dateOfBirth")
+  const city = watch("city")
+
   React.useEffect(() => {
     setCities([..._cities])
     setGender([..._gender])
@@ -78,21 +88,21 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
         error={errors?.name ? "auth.signIn" : null}
         placeholderTx="createPersonalAccount.name"
       />
-      <TextField
-        control={control}
-        name="dateOfBirth"
-        status={errors?.dateOfBirth ? "error" : null}
-        error={errors?.dateOfBirth ? "auth.signIn" : null}
+      <Datepicker
+        date={dateOfBirth}
         placeholderTx="createPersonalAccount.dateOfBirth"
-        keyboardType="numeric"
+        onChange={(date) => {
+          setValue("dateOfBirth", date)
+        }}
       />
       <View style={$dropdownGenderList}>
         <Dropdown
           items={gender}
           setItems={setGender}
           placeholderTx="createPersonalAccount.gender"
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          onChange={() => {}}
+          onChange={(value) => {
+            setValue("gender", value)
+          }}
         />
       </View>
 
@@ -101,8 +111,9 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
           items={cities}
           setItems={setCities}
           placeholderTx="createPersonalAccount.governorate"
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          onChange={() => {}}
+          onChange={(value) => {
+            setValue("city", value)
+          }}
         />
       </View>
 
