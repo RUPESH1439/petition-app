@@ -26,7 +26,7 @@ export const CreateAccountScreen: FC<CreateAccountScreenProps> = observer(
   function CreateAccountScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
     const layout = useWindowDimensions()
-    const isRTL = useRTL()
+    const { isRTL } = useRTL()
     const [index, setIndex] = React.useState(0)
 
     const _routes = [
