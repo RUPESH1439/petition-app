@@ -86,6 +86,16 @@ const en = {
     headingTop: "Thank you \npetition is uploaded",
     headingBottom: "petition will be published after being reviewed",
   },
+  accountScreen: {
+    title: "Account",
+    name: "Growth Organization",
+    phoneNumber: "07814135918",
+    myInfo: "My Info",
+    customerService: "Customer\nService",
+    privatePolicy: "Privacy Policy",
+    settings: "Settings",
+    logout: "Logout",
+  },
   errorScreen: {
     title: "Something went wrong!",
     friendlySubtitle:
