@@ -9,6 +9,7 @@ import {
 } from "react-native"
 import { colors, spacing, typography } from "../theme"
 import { Text, TextProps } from "./Text"
+import { moderateScale, moderateVerticalScale } from "app/utils/scaling"
 
 type Presets = keyof typeof $viewPresets
 
@@ -124,7 +125,7 @@ export function Button(props: ButtonProps) {
 }
 
 const $baseViewStyle: ViewStyle = {
-  minHeight: 56,
+  minHeight: moderateVerticalScale(49),
   borderRadius: 30,
   justifyContent: "center",
   alignItems: "center",
@@ -135,7 +136,7 @@ const $baseViewStyle: ViewStyle = {
 }
 
 const $baseTextStyle: TextStyle = {
-  fontSize: 18,
+  fontSize: moderateScale(16),
   lineHeight: 29,
   fontFamily: typography.primary.bold,
   textAlign: "center",
@@ -191,7 +192,10 @@ const $textPresets: Record<Presets, StyleProp<TextStyle>> = {
   reversed: [$baseTextStyle, { color: colors.palette.neutral100 }],
   secondary: $baseTextStyle,
   interest: $baseTextStyle,
-  outlined: [$baseTextStyle, { color: colors.palette.primary100, fontSize: 16, lineHeight: 26 }],
+  outlined: [
+    $baseTextStyle,
+    { color: colors.palette.primary100, fontSize: moderateScale(14), lineHeight: 26 },
+  ],
 }
 
 const $pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {

@@ -4,6 +4,7 @@ import { StyleProp, Text as RNText, TextProps as RNTextProps, TextStyle } from "
 import { translate, TxKeyPath } from "../i18n"
 import { colors, typography } from "../theme"
 import useRTL from "app/hooks/useRTL"
+import { moderateVerticalScale } from "app/utils/scaling"
 
 type Sizes = keyof typeof $sizeStyles
 type Weights = keyof typeof typography.primary
@@ -75,13 +76,13 @@ export function Text(props: TextProps) {
 }
 
 const $sizeStyles = {
-  xxl: { fontSize: 36, lineHeight: 44 } as TextStyle,
-  xl: { fontSize: 24, lineHeight: 48 } as TextStyle,
-  lg: { fontSize: 20, lineHeight: 32 } as TextStyle,
-  md: { fontSize: 18, lineHeight: 26 } as TextStyle,
-  sm: { fontSize: 16, lineHeight: 24 } as TextStyle,
-  xs: { fontSize: 14, lineHeight: 21 } as TextStyle,
-  xxs: { fontSize: 12, lineHeight: 18 } as TextStyle,
+  xxl: { fontSize: moderateVerticalScale(34), lineHeight: 44 } as TextStyle,
+  xl: { fontSize: moderateVerticalScale(22), lineHeight: 48 } as TextStyle,
+  lg: { fontSize: moderateVerticalScale(18), lineHeight: 32 } as TextStyle,
+  md: { fontSize: moderateVerticalScale(16), lineHeight: 26 } as TextStyle,
+  sm: { fontSize: moderateVerticalScale(14), lineHeight: 24 } as TextStyle,
+  xs: { fontSize: moderateVerticalScale(12), lineHeight: 21 } as TextStyle,
+  xxs: { fontSize: moderateVerticalScale(10), lineHeight: 18 } as TextStyle,
 }
 
 const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weight, fontFamily]) => {

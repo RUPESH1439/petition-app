@@ -7,6 +7,7 @@ import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Button, Screen, Text } from "app/components"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { moderateVerticalScale } from "app/utils/scaling"
 
 interface WalkthroughScreen1Props extends AppStackScreenProps<"ChooseLanguage"> {}
 
@@ -47,7 +48,7 @@ const $topContainer: ViewStyle = {
 
 const $textStyle: TextStyle = {
   fontFamily: typography.primary.semibold,
-  fontSize: 16,
+  fontSize: moderateVerticalScale(14),
   lineHeight: 40,
   marginBottom: "10%",
 }

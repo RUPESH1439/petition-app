@@ -13,6 +13,7 @@ import useRTL from "app/hooks/useRTL"
 import I18n from "i18n-js"
 import { Dropdown } from "./Dropdown"
 import { ImagePicker } from "./ImagePicker"
+import { moderateVerticalScale } from "app/utils/scaling"
 
 const schema = z.object({
   organizationNameArabic: z.string(),
@@ -201,11 +202,12 @@ const $container: ViewStyle = {
 
 const $header: TextStyle = {
   fontFamily: typography.primary.extraBold,
-  fontSize: 18,
+  fontSize: moderateVerticalScale(18),
   color: colors.palette.neutral100,
   marginBottom: spacing.medium,
   marginTop: spacing.medium,
   fontWeight: "900",
+  lineHeight: moderateVerticalScale(31),
 }
 
 const $logo: ViewStyle = { height: 130, alignSelf: "center", marginBottom: spacing.medium }

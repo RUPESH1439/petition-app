@@ -5,6 +5,7 @@ import { colors, typography } from "app/theme"
 import { Text } from "app/components/Text"
 import { TxKeyPath } from "app/i18n"
 import { EvilIcons } from "react-native-vector-icons"
+import { moderateVerticalScale } from "app/utils/scaling"
 
 export interface ImagePickerProps {
   /**
@@ -45,6 +46,6 @@ const $container: ViewStyle = {
 
 const $text: TextStyle = {
   fontFamily: typography.primary.bold,
-  fontSize: 17,
+  fontSize: moderateVerticalScale(15),
   color: colors.palette.neutral100,
 }
