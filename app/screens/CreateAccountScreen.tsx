@@ -9,6 +9,7 @@ import { colors, typography } from "app/theme"
 import { TabView, SceneMap, TabBar } from "react-native-tab-view"
 import I18n from "i18n-js"
 import useRTL from "app/hooks/useRTL"
+import { moderateVerticalScale } from "app/utils/scaling"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "app/models"
@@ -78,7 +79,7 @@ const $labelStyle: TextStyle = {
   color: colors.palette.primary100,
   fontFamily: typography.primary.extraBold,
   textTransform: "none",
-  fontSize: 18,
+  fontSize: moderateVerticalScale(16),
 }
 
 const $tabStyle: TextStyle = {

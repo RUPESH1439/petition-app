@@ -4,7 +4,8 @@ import { TextStyle, View, ViewStyle } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackScreenProps } from "app/navigators"
 import { Screen, ScreenHeader, Text } from "app/components"
-import { colors, spacing, typography } from "app/theme"
+import { colors, spacing } from "app/theme"
+import { moderateVerticalScale } from "app/utils/scaling"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "app/models"
 
@@ -42,7 +43,7 @@ const $textContainer: ViewStyle = {
 }
 
 const $textStyle: TextStyle = {
-  fontSize: 20,
+  fontSize: moderateVerticalScale(18),
   textAlign: "center",
   lineHeight: 30,
 }

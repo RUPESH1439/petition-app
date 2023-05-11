@@ -6,6 +6,7 @@ import DropDownPicker from "react-native-dropdown-picker"
 import useRTL from "app/hooks/useRTL"
 import I18n from "i18n-js"
 import { TxKeyPath } from "app/i18n"
+import { moderateVerticalScale } from "app/utils/scaling"
 
 type Item = { label: string; value: string }
 export interface DropdownProps {
@@ -70,7 +71,7 @@ const $dropDownContainer: ViewStyle = {
 
 const $text: TextStyle = {
   fontFamily: typography.primary.bold,
-  fontSize: 17,
+  fontSize: moderateVerticalScale(15),
   color: colors.palette.neutral100,
   paddingHorizontal: 8,
 }

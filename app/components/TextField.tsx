@@ -13,6 +13,7 @@ import { colors, spacing, typography } from "../theme"
 import { Text, TextProps } from "./Text"
 import useRTL from "app/hooks/useRTL"
 import { Control, Controller } from "react-hook-form"
+import { moderateVerticalScale } from "app/utils/scaling"
 
 export interface TextFieldAccessoryProps {
   style: StyleProp<any>
@@ -281,14 +282,14 @@ const $inputStyle: TextStyle = {
   alignSelf: "stretch",
   fontFamily: typography.primary.bold,
   color: colors.palette.neutral100,
-  fontSize: 17,
-  height: 32,
+  fontSize: moderateVerticalScale(15),
+  height: moderateVerticalScale(30),
   // https://github.com/facebook/react-native/issues/21720#issuecomment-532642093
   paddingVertical: 8,
   paddingHorizontal: 8,
   marginVertical: spacing.extraSmall,
   marginHorizontal: spacing.small,
-  lineHeight: 29,
+  lineHeight: moderateVerticalScale(27),
 }
 
 const $helperStyle: TextStyle = {

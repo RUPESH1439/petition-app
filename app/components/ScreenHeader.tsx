@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { AppStackParamList } from "app/navigators"
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
+import { moderateVerticalScale } from "app/utils/scaling"
 
 export interface ScreenHeaderProps {
   /**
@@ -121,7 +122,7 @@ const $noSpaceBetween: ViewStyle = {
 }
 
 const $title: TextStyle = {
-  fontSize: 23,
+  fontSize: moderateVerticalScale(21),
   fontFamily: typography.primary.extraBold,
 }
 
@@ -131,4 +132,4 @@ const $button: ViewStyle = {
   paddingVertical: 2,
 }
 
-const $buttonText: TextStyle = { fontSize: 14 }
+const $buttonText: TextStyle = { fontSize: moderateVerticalScale(12) }
