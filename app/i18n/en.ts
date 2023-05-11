@@ -67,6 +67,14 @@ const en = {
     logo: "Logo",
     linkOptional: "Link - Optional",
   },
+  createPersonalAccount: {
+    name: "Name",
+    dateOfBirth: "Date Of Birth",
+    gender: "Gender",
+    governorate: "Governorate",
+    mobileNumber: "Mobile Number",
+  },
+
   welcomeScreen: {
     postscript:
       "psst  — This probably isn't what your app looks like. (Unless your designer handed you these screens, and in that case, ship it!)",
@@ -77,6 +85,16 @@ const en = {
     title: "New Petition",
     headingTop: "Thank you \npetition is uploaded",
     headingBottom: "petition will be published after being reviewed",
+  },
+  accountScreen: {
+    title: "Account",
+    name: "Growth Organization",
+    phoneNumber: "07814135918",
+    myInfo: "My Info",
+    customerService: "Customer\nService",
+    privatePolicy: "Privacy Policy",
+    settings: "Settings",
+    logout: "Logout",
   },
   errorScreen: {
     title: "Something went wrong!",

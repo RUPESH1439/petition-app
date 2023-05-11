@@ -66,7 +66,7 @@ const $dropDownContainer: ViewStyle = {
   borderWidth: 1,
   backgroundColor: colors.palette.neutral50,
   borderColor: colors.palette.neutral100,
-  paddingVertical: 8,
+  paddingVertical: moderateVerticalScale(5),
 }
 
 const $text: TextStyle = {

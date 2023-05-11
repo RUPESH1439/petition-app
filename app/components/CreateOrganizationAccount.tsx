@@ -14,6 +14,7 @@ import I18n from "i18n-js"
 import { Dropdown } from "./Dropdown"
 import { ImagePicker } from "./ImagePicker"
 import { moderateVerticalScale } from "app/utils/scaling"
+import { Datepicker } from "./Datepicker"
 
 const schema = z.object({
   organizationNameArabic: z.string(),
@@ -23,6 +24,8 @@ const schema = z.object({
   ceoPhone: z.string(),
   organizationPhone: z.string(),
   organizationSocialMediaLinks: z.array(z.string()),
+  establishedDate: z.date(),
+  city: z.string(),
 })
 export interface CreateOrganizationAccountProps {
   /**
@@ -43,17 +46,21 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
   const {
     control,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       organizationNameEnglish: "",
       organizationNameArabic: "",
+      city: "",
       ceoName: "",
       ceoPhone: "",
       organizationPhone: "",
       organizationSocialMediaLinks: [],
       nearestLandMark: "",
+      establisedDate: null,
     },
   })
 
@@ -79,15 +86,23 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
 
   const [cities, setCities] = React.useState(_cities)
 
+  const establisedDate = watch("establisedDate")
+
   React.useEffect(() => {
     setCities([..._cities])
   }, [isRTL])
 
   return (
     <View style={$styles}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{}}>
         <Text tx="createOrganizationAccount.header" style={$header} />
-        <ImagePicker titleX="createOrganizationAccount.logo" style={$logo} />
+        <ImagePicker
+          titleX="createOrganizationAccount.logo"
+          style={$logo}
+          onSelectImage={(image) => {
+            console.log("image", image)
+          }}
+        />
         <TextField
           control={control}
           name="organizationNameArabic"
@@ -108,14 +123,15 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
 
         <View style={$establishedContainer}>
           <View style={$flexOne}>
-            <TextField
-              control={control}
-              name="organizationNameEnglish"
+            <Datepicker
+              style={$textInput}
+              date={establisedDate}
               placeholderTx="createOrganizationAccount.establishedDate"
-              status={errors?.organizationNameEnglish ? "error" : null}
-              error={errors?.organizationNameEnglish ? "auth.signIn" : null}
-              containerStyle={$textInput}
+              onChange={(date) => {
+                setValue("establisedDate", date)
+              }}
             />
+
             <TextField
               control={control}
               name="organizationNameEnglish"
@@ -126,7 +142,12 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
             />
           </View>
           <View style={[$flexOne, $imagePicker]}>
-            <ImagePicker titleX="createOrganizationAccount.permitImage" />
+            <ImagePicker
+              titleX="createOrganizationAccount.permitImage"
+              onSelectImage={(image) => {
+                console.log("image", image)
+              }}
+            />
           </View>
         </View>
 
@@ -135,7 +156,9 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
           setItems={setCities}
           placeholderTx={"createOrganizationAccount.addressCity"}
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          onChange={() => {}}
+          onChange={(value) => {
+            setValue("city", value)
+          }}
           style={$address}
         />
 
@@ -189,7 +212,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
           />
         ))}
 
-        <Button tx="common.continue" onPress={handleSubmit(onSubmit)} />
+        <Button tx="common.continue" onPress={handleSubmit(onSubmit)} style={$continue} />
       </ScrollView>
     </View>
   )
@@ -198,6 +221,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
 const $container: ViewStyle = {
   paddingHorizontal: spacing.medium,
   paddingTop: spacing.medium,
+  paddingBottom: "30%",
 }
 
 const $header: TextStyle = {
@@ -217,7 +241,7 @@ const $address: ViewStyle = {
 }
 
 const $textInput: ViewStyle = {
-  marginBottom: spacing.medium,
+  marginBottom: spacing.extraMedium,
 }
 
 const $establishedContainer: ViewStyle = {
@@ -232,4 +256,8 @@ const $flexOne: ViewStyle = {
 const $imagePicker: ViewStyle = {
   paddingBottom: spacing.medium,
   alignItems: "flex-end",
+}
+
+const $continue: ViewStyle = {
+  marginTop: moderateVerticalScale(20),
 }

@@ -1,11 +1,12 @@
 import * as React from "react"
-import { Pressable, StyleProp, TextStyle, ViewStyle } from "react-native"
+import { Image, ImageStyle, Pressable, StyleProp, TextStyle, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { colors, typography } from "app/theme"
 import { Text } from "app/components/Text"
 import { TxKeyPath } from "app/i18n"
 import { EvilIcons } from "react-native-vector-icons"
 import { moderateVerticalScale } from "app/utils/scaling"
+import { launchImageLibrary, ImagePickerResponse } from "react-native-image-picker"
 
 export interface ImagePickerProps {
   /**
@@ -14,18 +15,37 @@ export interface ImagePickerProps {
   style?: StyleProp<ViewStyle>
 
   titleX?: TxKeyPath
+
+  onSelectImage?: (image: ImagePickerResponse) => void
 }
 
 /**
  * Describe your component here
  */
 export const ImagePicker = observer(function ImagePicker(props: ImagePickerProps) {
-  const { style, titleX } = props
+  const { style, titleX, onSelectImage } = props
   const $styles = [$container, style]
+  const [selectedImage, setSelectedImage] = React.useState<null | ImagePickerResponse>(null)
 
+  const pickImage = async () => {
+    const result = await launchImageLibrary({
+      mediaType: "photo",
+    })
+    if (result?.didCancel) {
+      return
+    }
+    setSelectedImage(result)
+    onSelectImage?.(result)
+  }
+  if (selectedImage) {
+    return (
+      <Pressable style={$styles} onPress={pickImage}>
+        <Image style={$image} source={{ uri: selectedImage.assets?.[0]?.uri }} />
+      </Pressable>
+    )
+  }
   return (
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    <Pressable style={$styles} onPress={() => {}}>
+    <Pressable style={$styles} onPress={pickImage}>
       <EvilIcons name="plus" size={30} />
       <Text style={$text} tx={titleX} />
     </Pressable>
@@ -49,3 +69,5 @@ const $text: TextStyle = {
   fontSize: moderateVerticalScale(15),
   color: colors.palette.neutral100,
 }
+
+const $image: ImageStyle = { height: "100%", width: "100%", borderRadius: 30 }
