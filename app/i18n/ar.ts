@@ -113,6 +113,10 @@ const ar: Translations = {
     settings: "الاعدادات",
     logout: "تسجيل خروج",
   },
+  customerServiceScreen: {
+    title: "خدمة الزبائن",
+    heading: "أخبرنا كيف نستطيع مساعدتك",
+  },
   errorScreen: {
     title: "هناك خطأ ما",
     friendlySubtitle:
