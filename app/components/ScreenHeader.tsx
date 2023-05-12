@@ -100,7 +100,7 @@ const $topContainer = (isRTL: boolean): ViewStyle => ({
   shadowColor: "#00000029",
   shadowOffset: {
     width: 0,
-    height: 1.5,
+    height: 2,
   },
   shadowOpacity: 0.5,
   shadowRadius: 1.5,

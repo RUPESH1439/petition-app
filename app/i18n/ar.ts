@@ -23,6 +23,17 @@ const ar: Translations = {
     title: "الاعدادات",
     placeholder: "اللغة - العربية",
   },
+  home: {
+    header: "الرئيسية",
+  },
+  petition: {
+    views: "مشاهدة",
+    signs: "توقيع",
+    signPetition: "توقيع الحملة",
+    thankyou: "شكرا لك",
+    cancel: "الغاء التوقيع",
+    signupToParticipate: "سجل لتوقع الحملة",
+  },
   walkthrough: {
     screen1: {
       first:
@@ -112,6 +123,16 @@ const ar: Translations = {
     privatePolicy: "سياسة \n الخصوصية",
     settings: "الاعدادات",
     logout: "تسجيل خروج",
+    login: "تسجيل دخول",
+    signUP: "تسجيل",
+  },
+  customerServiceScreen: {
+    title: "خدمة الزبائن",
+    heading: "أخبرنا كيف نستطيع مساعدتك",
+  },
+  privacyPolicyScreen: {
+    title: "سياسة الخصوصية",
+    policy: "نلتزم بحماية معلومات المستخدمين ليستمروا في استخدام المنصة بكل راحة وامان",
   },
   errorScreen: {
     title: "هناك خطأ ما",

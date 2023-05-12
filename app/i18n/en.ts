@@ -21,6 +21,17 @@ const en = {
     title: "Settings",
     placeholder: "Language - English",
   },
+  petition: {
+    views: "Views",
+    signs: "Signs",
+    signPetition: "Sign Petition",
+    thankyou: "Thank You",
+    cancel: "Cancel Sign",
+    signupToParticipate: "Sign Up To Participate",
+  },
+  home: {
+    header: "Home",
+  },
   walkthrough: {
     screen1: {
       first:
@@ -110,6 +121,16 @@ const en = {
     privatePolicy: "Privacy Policy",
     settings: "Settings",
     logout: "Logout",
+    login: "Login",
+    signUP: "Sign Up",
+  },
+  customerServiceScreen: {
+    title: "Customer Service",
+    heading: "Tell Us How We Can Help You",
+  },
+  privacyPolicyScreen: {
+    title: "Privacy Policy",
+    policy: "some text",
   },
   errorScreen: {
     title: "Something went wrong!",

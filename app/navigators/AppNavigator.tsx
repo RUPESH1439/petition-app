@@ -46,9 +46,11 @@ export type AppStackParamList = {
   Search: undefined
   Home: undefined
   EditPersonalInfo: undefined
-	EditOrganizationalInfo: undefined
-	Settings: undefined
-	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  EditOrganizationalInfo: undefined
+  Settings: undefined
+  CustomerService: undefined
+  PrivacyPolicy: undefined
+  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
   CreateAccount: undefined
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
   HomeTab: undefined
@@ -90,9 +92,14 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="Search" component={Screens.SearchScreen} />
       <Stack.Screen name="Home" component={Screens.HomeScreen} />
       <Stack.Screen name="EditPersonalInfo" component={Screens.EditPersonalInfoScreen} />
-			<Stack.Screen name="EditOrganizationalInfo" component={Screens.EditOrganizationalInfoScreen} />
-			<Stack.Screen name="Settings" component={Screens.SettingsScreen} />
-			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+      <Stack.Screen
+        name="EditOrganizationalInfo"
+        component={Screens.EditOrganizationalInfoScreen}
+      />
+      <Stack.Screen name="Settings" component={Screens.SettingsScreen} />
+      <Stack.Screen name="CustomerService" component={Screens.CustomerServiceScreen} />
+      <Stack.Screen name="PrivacyPolicy" component={Screens.PrivacyPolicyScreen} />
+      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
       <Stack.Screen name="CreateAccount" component={Screens.CreateAccountScreen} />
       <Stack.Screen name="HomeTab" component={HomeNavigator} />
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
