@@ -46,7 +46,7 @@ export const AccountScreen: FC<AccountScreenProps> = observer(function AccountSc
     {
       id: "customerService",
       tx: "accountScreen.customerService",
-      screenName: "CreateAccount",
+      screenName: "CustomerService",
     },
     {
       id: "privatePolicy",

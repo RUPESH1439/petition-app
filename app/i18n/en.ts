@@ -113,6 +113,10 @@ const en = {
     login: "Login",
     signUP: "Sign Up",
   },
+  customerServiceScreen: {
+    title: "Customer Service",
+    heading: "Tell Us How We Can Help You",
+  },
   errorScreen: {
     title: "Something went wrong!",
     friendlySubtitle:
