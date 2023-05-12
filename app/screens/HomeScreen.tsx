@@ -1,6 +1,6 @@
 import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
-import { Dimensions, Text, View, ViewStyle } from "react-native"
+import { Dimensions, View, ViewStyle } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { PetitionCard, Screen, ScreenHeader } from "app/components"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -20,9 +20,21 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
       <View style={$container}>
         <FlashList
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
+          renderItem={() => (
             <View style={$cardContainer}>
-              <PetitionCard />
+              <PetitionCard
+                city="Bagdad"
+                category="Environment"
+                viewsCount={12000}
+                signsCount={12000}
+                name="global organization"
+                isOrg={true}
+                status="unsigned"
+                date={new Date()}
+                photoUrl="https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true"
+                title={"justice for student"}
+                description="give the students which failed exam another chance to be sure"
+              />
             </View>
           )}
           estimatedItemSize={200}

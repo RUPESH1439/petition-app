@@ -1,149 +1,176 @@
 import * as React from "react"
-import { Image, ImageStyle, Pressable, StyleProp, TextStyle, View, ViewStyle } from "react-native"
+import { Image, Pressable, StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { colors, spacing, typography } from "app/theme"
+import { colors, spacing } from "app/theme"
 import { Text } from "app/components/Text"
 import { formatDate } from "app/utils/formatDate"
 import { Chip } from "../Chip"
-import { moderateVerticalScale } from "app/utils/scaling"
 import { SvgXml } from "react-native-svg"
 import icons from "../../../assets/svgs"
 import { Analytic } from "./Analytic"
+import {
+  $avatar,
+  $cityText,
+  $container,
+  $dateText,
+  $fourthContainer,
+  $organizationName,
+  $petitionDescription,
+  $petitionTitle,
+  $secondContainer,
+  $thirdContainer,
+  $topContainer,
+  $fifthContainer,
+  $responseButton,
+} from "./styles"
+import { Button } from "../Button"
+import { moderateVerticalScale } from "app/utils/scaling"
+import { TxKeyPath } from "app/i18n"
 
-const { chevronLeft, chevronRight, circleCheckSolid, eyeSolid, users, arrowUp } = icons
+const { chevronLeft, circleCheckSolid, eyeSolid, users, arrowUp } = icons
 export interface PetitionCardProps {
   /**
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
+  date: Date
+  category: string
+  city: string
+  name: string
+  photoUrl?: string
+  title: string
+  description: string
+  viewsCount: number
+  signsCount: number
+  status: "unsigned" | "signed" | "forGuest"
+  isOrg: boolean
 }
 
 /**
  * Describe your component here
  */
 export const PetitionCard = observer(function PetitionCard(props: PetitionCardProps) {
-  const { style } = props
+  const {
+    style,
+    date,
+    category,
+    city,
+    isOrg,
+    name,
+    photoUrl,
+    title,
+    description,
+    viewsCount,
+    signsCount,
+    status,
+  } = props
+
   const $styles = [$container, style]
+
+  let timer
+
+  const getButtonProps = (): {
+    tx: TxKeyPath
+    preset: "default" | "filled" | "secondary" | "interest" | "reversed" | "outlined"
+  } => {
+    switch (status) {
+      case "signed":
+        return {
+          tx: "petition.cancel",
+          preset: "secondary",
+        }
+      case "unsigned":
+        return {
+          tx: "petition.signPetition",
+          preset: "default",
+        }
+      case "forGuest":
+        return {
+          tx: "petition.signupToParticipate",
+          preset: "interest",
+        }
+      default:
+        return {
+          tx: "petition.signPetition",
+          preset: "default",
+        }
+    }
+  }
+
+  const buttonProps = React.useMemo(() => getButtonProps(), [status])
+
+  const [signedPetition, setSignedPetition] = React.useState(false)
+  const [petitionSigned, setPetitionSigned] = React.useState(false)
+
+  React.useEffect(() => {
+    if (signedPetition) {
+      timer = setTimeout(() => {
+        setSignedPetition(false)
+        setPetitionSigned(true)
+      }, 3000)
+    }
+    return () => {
+      if (!timer) return
+      clearTimeout(timer)
+    }
+  }, [signedPetition])
 
   return (
     <View style={$styles}>
       <View style={$topContainer}>
-        <Text text={formatDate(new Date().toISOString(), "dd/MM/yyyy")} style={$dateText} />
-        <Chip text="Environment" />
-        <Text text="Baghdad" style={$cityText} />
+        <Text text={formatDate(date.toISOString(), "dd/MM/yyyy")} style={$dateText} />
+        <Chip text={category} />
+        <Text text={city} style={$cityText} />
       </View>
       <Pressable style={$secondContainer} onPress={() => {}}>
         <SvgXml xml={chevronLeft} height={16} width={16} fill={colors.palette.primary200} />
-        <SvgXml xml={circleCheckSolid} height={16} width={16} fill={colors.palette.primary200} />
-        <Text style={$organizationName} text={"growth organization"} />
-        <Image
-          // TODO Remove this hardcode later
-          source={{
-            uri: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
-          }}
-          style={$avatar}
-        />
+        {!!isOrg && (
+          <SvgXml xml={circleCheckSolid} height={16} width={16} fill={colors.palette.primary200} />
+        )}
+        <Text style={$organizationName} text={name} />
+        {!!photoUrl && !!isOrg && (
+          <Image
+            // TODO Remove this hardcode later
+            source={{
+              uri: photoUrl,
+            }}
+            style={$avatar}
+          />
+        )}
       </Pressable>
       <View style={$thirdContainer}>
-        <Text style={$petitionTitle} text={"justice for student"} />
-        <Text
-          style={$petitionDescription}
-          text={"give the students which failed exam another chance to be sure"}
-        />
+        <Text style={$petitionTitle} text={title} />
+        <Text style={$petitionDescription} text={description} />
       </View>
 
       <View style={$fourthContainer} onPress={() => {}}>
-        <Analytic tx="petition.views" value={1200} svgString={eyeSolid} />
-        <Analytic tx="petition.signs" value={12000} svgString={users} />
+        <Analytic tx="petition.views" value={viewsCount} svgString={eyeSolid} />
+        <Analytic tx="petition.signs" value={signsCount} svgString={users} />
+      </View>
+
+      <View style={$fifthContainer}>
+        <SvgXml xml={arrowUp} height={26} width={23} fill={colors.palette.primary200} />
+        <Button
+          tx={
+            signedPetition
+              ? "petition.thankyou"
+              : petitionSigned
+              ? "petition.cancel"
+              : buttonProps.tx
+          }
+          preset={petitionSigned ? "secondary" : buttonProps.preset}
+          style={[
+            $responseButton,
+            status === "forGuest" ? { paddingHorizontal: spacing.large } : {},
+          ]}
+          textStyle={{ lineHeight: moderateVerticalScale(21), fontSize: moderateVerticalScale(16) }}
+          onPress={() => {
+            if (status === "unsigned") {
+              setSignedPetition(true)
+            }
+          }}
+        />
       </View>
     </View>
   )
 })
-
-const $container: ViewStyle = {
-  justifyContent: "center",
-  backgroundColor: colors.palette.neutral50,
-  paddingBottom: spacing.medium,
-}
-
-const $topContainer: ViewStyle = {
-  flexDirection: "row",
-  paddingHorizontal: spacing.extraMedium,
-  justifyContent: "space-between",
-  alignItems: "center",
-  paddingVertical: moderateVerticalScale(15),
-}
-
-const $cityText: TextStyle = {
-  fontFamily: typography.primary.bold,
-  color: colors.palette.neutral150,
-  lineHeight: moderateVerticalScale(24),
-  fontSize: moderateVerticalScale(14),
-}
-
-const $dateText: TextStyle = {
-  fontFamily: typography.primary.bold,
-  color: colors.palette.neutral150,
-  lineHeight: moderateVerticalScale(24),
-  fontSize: moderateVerticalScale(14),
-}
-
-const $secondContainer: ViewStyle = {
-  flexDirection: "row",
-  alignItems: "center",
-  gap: 10,
-  paddingVertical: moderateVerticalScale(12),
-  borderTopWidth: 0.4,
-  borderBottomWidth: 0.4,
-  borderColor: colors.palette.neutral100,
-  justifyContent: "flex-end",
-  paddingHorizontal: spacing.medium,
-}
-
-const $organizationName: TextStyle = {
-  fontFamily: typography.primary.bold,
-  color: colors.palette.neutral150,
-  lineHeight: moderateVerticalScale(24),
-  fontSize: moderateVerticalScale(14),
-}
-
-const $avatar: ImageStyle = {
-  width: moderateVerticalScale(30),
-  height: moderateVerticalScale(30),
-  borderRadius: moderateVerticalScale(15),
-}
-
-const $thirdContainer: ViewStyle = {
-  alignItems: "flex-end",
-  paddingVertical: spacing.extraMedium,
-  paddingHorizontal: spacing.medium,
-  minHeight: moderateVerticalScale(168),
-}
-
-const $petitionTitle: TextStyle = {
-  color: colors.palette.secondary600,
-  fontFamily: typography.primary.bold,
-  fontSize: moderateVerticalScale(18),
-  lineHeight: moderateVerticalScale(31),
-}
-
-const $petitionDescription: TextStyle = {
-  fontFamily: typography.primary.bold,
-  color: colors.palette.neutral150,
-  lineHeight: moderateVerticalScale(24),
-  fontSize: moderateVerticalScale(14),
-  textAlign: "right",
-  marginTop: moderateVerticalScale(8),
-}
-
-const $fourthContainer: ViewStyle = {
-  flexDirection: "row",
-  alignItems: "center",
-  gap: 10,
-  paddingVertical: moderateVerticalScale(12),
-  borderTopWidth: 0.4,
-  borderBottomWidth: 0.4,
-  borderColor: colors.palette.neutral100,
-  justifyContent: "space-between",
-  paddingHorizontal: spacing.medium,
-}

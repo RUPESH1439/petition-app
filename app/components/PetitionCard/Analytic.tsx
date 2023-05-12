@@ -34,9 +34,8 @@ export const Analytic = observer(function Analytic(props: AnalyticProps) {
 })
 
 const $container: ViewStyle = {
-  // justifyContent: "space-between",
   flexDirection: "row",
-  gap: 5,
+  gap: 7,
   alignItems: "center",
 }
 

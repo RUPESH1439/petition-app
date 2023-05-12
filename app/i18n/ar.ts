@@ -27,9 +27,12 @@ const ar: Translations = {
     header: "الرئيسية",
   },
   petition: {
-    views: "Views",
-    signs: "Signs",
-    signPetition: "Sign Petition",
+    views: "مشاهدة",
+    signs: "توقيع",
+    signPetition: "توقيع الحملة",
+    thankyou: "شكرا لك",
+    cancel: "الغاء التوقيع",
+    signupToParticipate: "سجل لتوقع الحملة",
   },
   walkthrough: {
     screen1: {

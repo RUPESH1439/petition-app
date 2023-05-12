@@ -25,6 +25,9 @@ const en = {
     views: "Views",
     signs: "Signs",
     signPetition: "Sign Petition",
+    thankyou: "Thank You",
+    cancel: "Cancel Sign",
+    signupToParticipate: "Sign Up To Participate",
   },
   home: {
     header: "Home",
