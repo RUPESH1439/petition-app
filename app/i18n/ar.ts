@@ -23,6 +23,17 @@ const ar: Translations = {
     title: "الاعدادات",
     placeholder: "اللغة - العربية",
   },
+  home: {
+    header: "الرئيسية",
+  },
+  petition: {
+    views: "مشاهدة",
+    signs: "توقيع",
+    signPetition: "توقيع الحملة",
+    thankyou: "شكرا لك",
+    cancel: "الغاء التوقيع",
+    signupToParticipate: "سجل لتوقع الحملة",
+  },
   walkthrough: {
     screen1: {
       first:
