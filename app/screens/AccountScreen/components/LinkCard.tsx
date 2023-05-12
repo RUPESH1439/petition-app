@@ -53,7 +53,7 @@ const $container = (variant: Preset): ViewStyle => ({
 
 const $itemContainer: ViewStyle = {
   flexDirection: "row",
-  justifyContent: "space-around",
+  justifyContent: "space-between",
   alignItems: "flex-end",
 }
 

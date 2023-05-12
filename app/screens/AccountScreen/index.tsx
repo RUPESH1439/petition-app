@@ -37,7 +37,7 @@ export const AccountScreen: FC<AccountScreenProps> = observer(function AccountSc
 
   // TODO move this logic from backend
   const isOrganization = true
-  const accountItems: AccountItem[] = [
+  const loggedInAccountItems: AccountItem[] = [
     {
       id: "myInfo",
       tx: "accountScreen.myInfo",
@@ -64,27 +64,46 @@ export const AccountScreen: FC<AccountScreenProps> = observer(function AccountSc
       screenName: "Auth",
     },
   ]
+  const guestAccountItems: AccountItem[] = [
+    {
+      id: "login",
+      tx: "accountScreen.login",
+      screenName: "SignIn",
+    },
+    {
+      id: "signUP",
+      tx: "accountScreen.signUP",
+      screenName: "CreateAccount",
+    },
+  ]
+
+  const isLoggedIn = true
+
+  const accountItems = isLoggedIn ? loggedInAccountItems : guestAccountItems
 
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
       <ScreenHeader tx="accountScreen.title" />
-      <View style={$detailContainer}>
-        <View style={$nameContainer(isRTL)}>
-          <Image
-            // TODO Remove this hardcode later
-            source={{
-              uri: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
-            }}
-            style={$avatar}
-          />
+      {isLoggedIn ? (
+        <View style={$detailContainer}>
+          <View style={$nameContainer(isRTL)}>
+            <Image
+              // TODO Remove this hardcode later
+              source={{
+                uri: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
+              }}
+              style={$avatar}
+            />
 
-          <Text preset="primaryBold" tx="accountScreen.name" style={$detailTextStyle} />
-          <AntDesign name={"checkcircle"} size={24} color={colors.palette.primary100} />
+            <Text preset="primaryBold" tx="accountScreen.name" style={$detailTextStyle} />
+            <AntDesign name={"checkcircle"} size={24} color={colors.palette.primary100} />
+          </View>
+          <View style={$phoneNumberContainer}>
+            <Text tx="accountScreen.phoneNumber" style={[$detailTextStyle, $phoneNumberText]} />
+          </View>
         </View>
-        <View style={$phoneNumberContainer}>
-          <Text tx="accountScreen.phoneNumber" style={[$detailTextStyle, $phoneNumberText]} />
-        </View>
-      </View>
+      ) : null}
+
       <View style={$linksItemsContainer}>
         <FlatList
           data={accountItems}
@@ -101,7 +120,9 @@ export const AccountScreen: FC<AccountScreenProps> = observer(function AccountSc
                 }}
                 preset={item.id === "logout" ? "secondary" : "default"}
               />
-              {index === accountItems.length - 1 ? <View style={$linkCardLastChild} /> : null}
+              {index === accountItems.length - 1 && isLoggedIn ? (
+                <View style={$linkCardLastChild} />
+              ) : null}
             </>
           )}
         />
