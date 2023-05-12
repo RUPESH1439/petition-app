@@ -117,6 +117,10 @@ const en = {
     title: "Customer Service",
     heading: "Tell Us How We Can Help You",
   },
+  privacyPolicyScreen: {
+    title: "Privacy Policy",
+    policy: "some text",
+  },
   errorScreen: {
     title: "Something went wrong!",
     friendlySubtitle:

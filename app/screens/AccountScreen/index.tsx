@@ -51,7 +51,7 @@ export const AccountScreen: FC<AccountScreenProps> = observer(function AccountSc
     {
       id: "privatePolicy",
       tx: "accountScreen.privatePolicy",
-      screenName: "CreateAccount",
+      screenName: "PrivacyPolicy",
     },
     {
       id: "settings",

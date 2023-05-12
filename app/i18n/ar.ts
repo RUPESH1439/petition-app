@@ -119,6 +119,10 @@ const ar: Translations = {
     title: "خدمة الزبائن",
     heading: "أخبرنا كيف نستطيع مساعدتك",
   },
+  privacyPolicyScreen: {
+    title: "سياسة الخصوصية",
+    policy: "نلتزم بحماية معلومات المستخدمين ليستمروا في استخدام المنصة بكل راحة وامان",
+  },
   errorScreen: {
     title: "هناك خطأ ما",
     friendlySubtitle:
