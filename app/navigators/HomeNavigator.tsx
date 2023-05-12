@@ -12,8 +12,9 @@ import { moderateVerticalScale } from "app/utils/scaling"
 import I18n from "i18n-js"
 import { View } from "react-native"
 import useRTL from "app/hooks/useRTL"
+import NotesFilled from "app/components/Icons/NotesFilled"
 
-const { home, user, search, notes } = icons
+const { home, user, search, notes, homeFilled, userFilled, searchFilled } = icons
 export type HomeNavigatorParamList = {
   Profile: undefined
   MyPetitions: undefined
@@ -31,14 +32,22 @@ export const HomeNavigator = () => {
         component={HomeScreen}
         options={{
           tabBarLabel: I18n.t("homeTab.home"),
-          tabBarIcon: ({ focused }) => (
-            <SvgXml
-              xml={home}
-              height={moderateVerticalScale(26)}
-              width={moderateVerticalScale(26)}
-              fill={focused ? colors.palette.primary200 : colors.palette.gray100}
-            />
-          ),
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <SvgXml
+                xml={homeFilled}
+                height={moderateVerticalScale(26)}
+                width={moderateVerticalScale(26)}
+                fill={colors.palette.primary200}
+              />
+            ) : (
+              <SvgXml
+                xml={home}
+                height={moderateVerticalScale(26)}
+                width={moderateVerticalScale(26)}
+                fill={colors.palette.gray100}
+              />
+            ),
         }}
       />
       <BottomTab.Screen
@@ -49,14 +58,22 @@ export const HomeNavigator = () => {
           tabBarIconStyle: {
             marginRight: moderateVerticalScale(10),
           },
-          tabBarIcon: ({ focused }) => (
-            <SvgXml
-              xml={search}
-              height={moderateVerticalScale(26)}
-              width={moderateVerticalScale(26)}
-              fill={focused ? colors.palette.primary200 : colors.palette.gray100}
-            />
-          ),
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <SvgXml
+                xml={searchFilled}
+                height={moderateVerticalScale(26)}
+                width={moderateVerticalScale(26)}
+                fill={colors.palette.primary200}
+              />
+            ) : (
+              <SvgXml
+                xml={search}
+                height={moderateVerticalScale(26)}
+                width={moderateVerticalScale(26)}
+                fill={colors.palette.gray100}
+              />
+            ),
         }}
       />
       <BottomTab.Screen
@@ -65,14 +82,17 @@ export const HomeNavigator = () => {
         options={{
           tabBarLabel: I18n.t("homeTab.myPetitions"),
 
-          tabBarIcon: ({ focused }) => (
-            <SvgXml
-              xml={notes}
-              height={moderateVerticalScale(26)}
-              width={moderateVerticalScale(26)}
-              fill={focused ? colors.palette.primary200 : colors.palette.gray100}
-            />
-          ),
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <NotesFilled height={moderateVerticalScale(26)} width={moderateVerticalScale(26)} />
+            ) : (
+              <SvgXml
+                xml={notes}
+                height={moderateVerticalScale(26)}
+                width={moderateVerticalScale(26)}
+                fill={colors.palette.gray100}
+              />
+            ),
         }}
       />
       <BottomTab.Screen
@@ -80,16 +100,24 @@ export const HomeNavigator = () => {
         component={AccountScreen}
         options={{
           tabBarLabel: I18n.t("homeTab.profile"),
-          tabBarIcon: ({ focused }) => (
-            <View>
+          tabBarIcon: ({ focused }) =>
+            focused ? (
               <SvgXml
-                xml={user}
+                xml={userFilled}
                 height={moderateVerticalScale(26)}
                 width={moderateVerticalScale(26)}
-                fill={focused ? colors.palette.primary200 : colors.palette.gray100}
+                fill={colors.palette.primary200}
               />
-            </View>
-          ),
+            ) : (
+              <View>
+                <SvgXml
+                  xml={user}
+                  height={moderateVerticalScale(26)}
+                  width={moderateVerticalScale(26)}
+                  fill={colors.palette.gray100}
+                />
+              </View>
+            ),
         }}
       />
     </BottomTab.Navigator>

@@ -21,6 +21,14 @@ const en = {
     title: "Settings",
     placeholder: "Language - English",
   },
+  petition: {
+    views: "Views",
+    signs: "Signs",
+    signPetition: "Sign Petition",
+  },
+  home: {
+    header: "Home",
+  },
   walkthrough: {
     screen1: {
       first:
