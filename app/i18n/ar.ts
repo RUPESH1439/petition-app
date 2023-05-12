@@ -112,6 +112,8 @@ const ar: Translations = {
     privatePolicy: "سياسة \n الخصوصية",
     settings: "الاعدادات",
     logout: "تسجيل خروج",
+    login: "تسجيل دخول",
+    signUP: "تسجيل",
   },
   errorScreen: {
     title: "هناك خطأ ما",

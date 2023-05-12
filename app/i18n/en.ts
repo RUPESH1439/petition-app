@@ -110,6 +110,8 @@ const en = {
     privatePolicy: "Privacy Policy",
     settings: "Settings",
     logout: "Logout",
+    login: "Login",
+    signUP: "Sign Up",
   },
   errorScreen: {
     title: "Something went wrong!",
