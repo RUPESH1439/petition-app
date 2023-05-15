@@ -17,7 +17,7 @@ const palette = {
 
   primary100: "#63823B",
   primary200: "#638138",
-  primary300: "#DDA28E",
+  primary300: "#5A7830",
   primary400: "#D28468",
   primary500: "#C76542",
   primary600: "#A54F31",
@@ -44,6 +44,7 @@ const palette = {
   overlay50: "rgba(25, 16, 21, 0.5)",
 
   gray100: "#ABABAB",
+  gray200: "#D0D0D0",
 } as const
 
 export const colors = {

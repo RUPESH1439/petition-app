@@ -27,28 +27,48 @@ export interface ScreenHeaderProps {
   buttonTx?: TxKeyPath
 
   hideBorder?: boolean
+
+  RightAccessory?: React.ReactNode
+
+  BottomAccessory?: React.ReactNode
+
+  bottomStyle?: StyleProp<ViewStyle>
 }
 
 /**
  * Describe your component here
  */
 export const ScreenHeader = observer(function ScreenHeader(props: ScreenHeaderProps) {
-  const { style, presets, onButtonPress, tx, buttonTx, hideBorder } = props
+  const {
+    style,
+    presets,
+    onButtonPress,
+    tx,
+    buttonTx,
+    hideBorder,
+    RightAccessory,
+    BottomAccessory,
+    bottomStyle,
+  } = props
   const $styles = [$container, style]
+  const $bottomStyles = [$bottomContainer, bottomStyle]
   const { isRTL } = useRTL()
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
-
   const renderBackAndTitle = () => {
     return (
-      <View style={[$topContainer(isRTL), $noSpaceBetween]}>
-        <Pressable onPress={() => navigation.goBack()}>
-          <FontAwesome5
-            name={isRTL ? "arrow-right" : "arrow-left"}
-            size={24}
-            color={colors.palette.primary100}
-          />
-        </Pressable>
-        <Text tx={tx} preset="primaryBold" style={$title} />
+      <View style={$topContainer(isRTL)}>
+        <View style={$row}>
+          <Pressable onPress={() => navigation.goBack()}>
+            <FontAwesome5
+              name={isRTL ? "arrow-right" : "arrow-left"}
+              size={24}
+              color={colors.palette.primary100}
+            />
+          </Pressable>
+          <Text tx={tx} preset="primaryBold" style={$title} />
+        </View>
+
+        {!!RightAccessory && <View>{RightAccessory}</View>}
       </View>
     )
   }
@@ -66,6 +86,8 @@ export const ScreenHeader = observer(function ScreenHeader(props: ScreenHeaderPr
             textStyle={$buttonText}
           />
         )}
+
+        {!!RightAccessory && <View>{RightAccessory}</View>}
       </View>
     )
   }
@@ -79,22 +101,20 @@ export const ScreenHeader = observer(function ScreenHeader(props: ScreenHeaderPr
     }
   }
 
-  return <View style={$styles}>{renderContent()}</View>
+  return (
+    <View style={$styles}>
+      {renderContent()}
+      {!!BottomAccessory && <View style={$bottomStyles}>{BottomAccessory}</View>}
+    </View>
+  )
 })
 
 const $container: ViewStyle = {
   justifyContent: "center",
   paddingHorizontal: 0,
-}
-
-const $topContainer = (isRTL: boolean): ViewStyle => ({
-  direction: isRTL ? "rtl" : "ltr",
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
+  paddingTop: spacing.medium,
   borderBottomColor: "#00000029",
   backgroundColor: colors.palette.neutral50,
-  paddingHorizontal: spacing.medium,
   paddingBottom: spacing.small,
   elevation: 2,
   shadowColor: "#00000029",
@@ -104,7 +124,19 @@ const $topContainer = (isRTL: boolean): ViewStyle => ({
   },
   shadowOpacity: 0.5,
   shadowRadius: 1.5,
+}
+
+const $topContainer = (isRTL: boolean): ViewStyle => ({
+  direction: isRTL ? "rtl" : "ltr",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  paddingHorizontal: spacing.medium,
 })
+
+const $bottomContainer: ViewStyle = {
+  paddingHorizontal: spacing.medium,
+}
 
 const $hideBorder = {
   borderBottomWidth: 0,
@@ -113,13 +145,6 @@ const $hideBorder = {
     width: 0,
     height: 0,
   },
-}
-
-const $noSpaceBetween: ViewStyle = {
-  justifyContent: "flex-start",
-  paddingHorizontal: spacing.medium,
-  gap: spacing.medium,
-  marginTop: moderateVerticalScale(2),
 }
 
 const $title: TextStyle = {
@@ -134,3 +159,9 @@ const $button: ViewStyle = {
 }
 
 const $buttonText: TextStyle = { fontSize: moderateVerticalScale(12) }
+
+const $row: ViewStyle = {
+  flexDirection: "row",
+  alignItems: "center",
+  gap: spacing.medium,
+}

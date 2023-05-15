@@ -40,4 +40,5 @@ const $text: TextStyle = {
   fontFamily: typography.primary.bold,
   fontSize: moderateVerticalScale(14),
   color: colors.palette.neutral100,
+  lineHeight: moderateVerticalScale(24),
 }

@@ -8,12 +8,20 @@ const ar: Translations = {
     next: "التالي",
     continue: "التالي",
     change: "تغيير",
+    viewMore: "مشاهدة المزيد",
+    viewLess: "رؤية أقل",
   },
   homeTab: {
     profile: "الحساب",
     myPetitions: "حملاتي",
     search: "بحث",
     home: "الرئيسية",
+  },
+  myPetitions: {
+    header: "حملاتي",
+    newPetition: "إنشاء حملة جديدة",
+    created: "أنشئتها",
+    signed: "وقعتها",
   },
   accountInfo: {
     organizationInfo: "معلومات المنظمة",
@@ -33,6 +41,23 @@ const ar: Translations = {
     thankyou: "شكرا لك",
     cancel: "الغاء التوقيع",
     signupToParticipate: "سجل لتوقع الحملة",
+    share: {
+      message: "Share",
+    },
+    analytics: "الاحصائيات",
+    analyticsSections: {
+      age: "احصائيات العمر",
+      number: "العدد",
+      ageGroup: "الفئة العمرية",
+      youngerThan18: "اقل من 18 سنة",
+      eighteenToThirty: "18 سنة - 30 سنة",
+      thirtyToSixty: "30 سنة - 60 سنة",
+      olderThanSixty: "اكبر من 60 سنة",
+      gender: "احصائيات الجنس",
+      male: "ذكر",
+      female: "انثى",
+      governorate: "احصائيات المحافظة",
+    },
   },
   walkthrough: {
     screen1: {
@@ -113,6 +138,10 @@ const ar: Translations = {
     title: "حملة جديدة",
     headingTop: "يتم تحميل عريضة شكرا لك",
     headingBottom: "سيتم نشر الالتماس بعد مراجعته",
+  },
+  search: {
+    searchPlaceholder: "ابحث عن عريضة او شخص",
+    bodyText: "ابحث عن حملة او شخص",
   },
   accountScreen: {
     title: "الحساب",

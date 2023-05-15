@@ -13,6 +13,9 @@ const $topContainer: ViewStyle = {
   justifyContent: "space-between",
   alignItems: "center",
   paddingVertical: moderateVerticalScale(8),
+  borderTopWidth: 0.4,
+  borderBottomWidth: 0.4,
+  borderColor: colors.palette.neutral100,
 }
 
 const $cityText: TextStyle = {
@@ -34,7 +37,6 @@ const $secondContainer: ViewStyle = {
   alignItems: "center",
   gap: 10,
   paddingVertical: moderateVerticalScale(12),
-  borderTopWidth: 0.4,
   borderBottomWidth: 0.4,
   borderColor: colors.palette.neutral100,
   justifyContent: "flex-end",

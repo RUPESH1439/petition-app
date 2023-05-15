@@ -6,12 +6,20 @@ const en = {
     next: "Next",
     continue: "Continue",
     change: "Change",
+    viewMore: "View More",
+    viewLess: "View Less",
   },
   homeTab: {
     profile: "profile",
     myPetitions: "my petitions",
     search: "search",
     home: "home",
+  },
+  myPetitions: {
+    header: "My Petitions",
+    newPetition: "New Petition",
+    created: "Created",
+    signed: "Signed",
   },
   accountInfo: {
     organizationInfo: "Organization Info",
@@ -28,6 +36,23 @@ const en = {
     thankyou: "Thank You",
     cancel: "Cancel Sign",
     signupToParticipate: "Sign Up To Participate",
+    share: {
+      message: "Share",
+    },
+    analytics: "Analytics",
+    analyticsSections: {
+      age: "Age",
+      number: "Number",
+      ageGroup: "Age Group",
+      youngerThan18: "Younger Than 18 Years",
+      eighteenToThirty: "18 Years - 30 Years",
+      thirtyToSixty: "30 Years - 60 Years",
+      olderThanSixty: "Older Than 60 Years",
+      gender: "Gender",
+      male: "Male",
+      female: "Female",
+      governorate: "Governorate",
+    },
   },
   home: {
     header: "Home",
@@ -112,6 +137,11 @@ const en = {
     headingTop: "Thank you \npetition is uploaded",
     headingBottom: "petition will be published after being reviewed",
   },
+  search: {
+    searchPlaceholder: "Search For A Word Or User",
+    bodyText: "Search For A Petition Or User",
+  },
+
   accountScreen: {
     title: "Account",
     name: "Growth Organization",
