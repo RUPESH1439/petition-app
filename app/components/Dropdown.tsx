@@ -15,27 +15,57 @@ export interface DropdownProps {
    */
   style?: ViewStyle
 
+  dropdownTextStyle?: TextStyle
+
+  dropDownContainerStyle?: ViewStyle
+
   items: Item[]
 
   setItems: React.Dispatch<React.SetStateAction<Item[]>>
 
   placeholderTx?: TxKeyPath
 
+  placeholder?: string
+
+  value?: string
+
   onChange: (value: string) => void
+
+  ArrowDownIconComponent?: any
+
+  ArrowUpIconComponent?: any
+
+  TickIconComponent?: any
 }
 
 /**
  * Describe your component here
  */
 export const Dropdown = observer(function Dropdown(props: DropdownProps) {
-  const { items, setItems, placeholderTx, onChange, style } = props
+  const {
+    items,
+    setItems,
+    placeholderTx,
+    onChange,
+    style,
+    dropdownTextStyle,
+    value: _value,
+    placeholder,
+    dropDownContainerStyle,
+    ArrowDownIconComponent,
+    ArrowUpIconComponent,
+    TickIconComponent,
+  } = props
 
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState(null)
+  const [value, setValue] = React.useState(_value)
 
   const { isRTL } = useRTL()
   const textStyle: TextStyle = { textAlign: isRTL ? "right" : "left" }
 
+  React.useEffect(() => {
+    setValue(_value)
+  }, [_value])
   return (
     <DropDownPicker
       open={open}
@@ -46,11 +76,14 @@ export const Dropdown = observer(function Dropdown(props: DropdownProps) {
       setItems={setItems}
       onChangeValue={onChange}
       rtl={isRTL}
-      placeholderStyle={[$text, textStyle]}
-      textStyle={[$text, textStyle]}
-      placeholder={placeholderTx ? I18n.t(placeholderTx) : ""}
+      ArrowDownIconComponent={ArrowDownIconComponent}
+      ArrowUpIconComponent={ArrowUpIconComponent}
+      TickIconComponent={TickIconComponent}
+      placeholderStyle={[$text, textStyle, dropdownTextStyle]}
+      textStyle={[$text, textStyle, dropdownTextStyle]}
+      placeholder={placeholderTx ? I18n.t(placeholderTx) : placeholder || ""}
       style={[$container, style]}
-      dropDownContainerStyle={$dropDownContainer}
+      dropDownContainerStyle={[$dropDownContainer, dropDownContainerStyle]}
     />
   )
 })
@@ -67,6 +100,7 @@ const $dropDownContainer: ViewStyle = {
   backgroundColor: colors.palette.neutral50,
   borderColor: colors.palette.neutral100,
   paddingVertical: moderateVerticalScale(5),
+  borderRadius: moderateVerticalScale(18),
 }
 
 const $text: TextStyle = {
@@ -74,4 +108,5 @@ const $text: TextStyle = {
   fontSize: moderateVerticalScale(15),
   color: colors.palette.neutral100,
   paddingHorizontal: 8,
+  lineHeight: moderateVerticalScale(23),
 }

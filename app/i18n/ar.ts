@@ -17,6 +17,12 @@ const ar: Translations = {
     search: "بحث",
     home: "الرئيسية",
   },
+  myPetitions: {
+    header: "حملاتي",
+    newPetition: "إنشاء حملة جديدة",
+    created: "أنشئتها",
+    signed: "وقعتها",
+  },
   accountInfo: {
     organizationInfo: "معلومات المنظمة",
     personalInfo: "معلوماتي",
@@ -37,6 +43,20 @@ const ar: Translations = {
     signupToParticipate: "سجل لتوقع الحملة",
     share: {
       message: "Share",
+    },
+    analytics: "الاحصائيات",
+    analyticsSections: {
+      age: "احصائيات العمر",
+      number: "العدد",
+      ageGroup: "الفئة العمرية",
+      youngerThan18: "اقل من 18 سنة",
+      eighteenToThirty: "18 سنة - 30 سنة",
+      thirtyToSixty: "30 سنة - 60 سنة",
+      olderThanSixty: "اكبر من 60 سنة",
+      gender: "احصائيات الجنس",
+      male: "ذكر",
+      female: "انثى",
+      governorate: "احصائيات المحافظة",
     },
   },
   walkthrough: {

@@ -15,6 +15,12 @@ const en = {
     search: "search",
     home: "home",
   },
+  myPetitions: {
+    header: "My Petitions",
+    newPetition: "New Petition",
+    created: "Created",
+    signed: "Signed",
+  },
   accountInfo: {
     organizationInfo: "Organization Info",
     personalInfo: "My Info",
@@ -32,6 +38,20 @@ const en = {
     signupToParticipate: "Sign Up To Participate",
     share: {
       message: "Share",
+    },
+    analytics: "Analytics",
+    analyticsSections: {
+      age: "Age",
+      number: "Number",
+      ageGroup: "Age Group",
+      youngerThan18: "Younger Than 18 Years",
+      eighteenToThirty: "18 Years - 30 Years",
+      thirtyToSixty: "30 Years - 60 Years",
+      olderThanSixty: "Older Than 60 Years",
+      gender: "Gender",
+      male: "Male",
+      female: "Female",
+      governorate: "Governorate",
     },
   },
   home: {
