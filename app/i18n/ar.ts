@@ -8,6 +8,8 @@ const ar: Translations = {
     next: "التالي",
     continue: "التالي",
     change: "تغيير",
+    viewMore: "مشاهدة المزيد",
+    viewLess: "رؤية أقل",
   },
   homeTab: {
     profile: "الحساب",
@@ -33,6 +35,9 @@ const ar: Translations = {
     thankyou: "شكرا لك",
     cancel: "الغاء التوقيع",
     signupToParticipate: "سجل لتوقع الحملة",
+    share: {
+      message: "Share",
+    },
   },
   walkthrough: {
     screen1: {
