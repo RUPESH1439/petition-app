@@ -2,11 +2,14 @@ import React, { FC, useCallback } from "react"
 import { observer } from "mobx-react-lite"
 import { Dimensions, View, ViewStyle } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
-import { PetitionCard, Screen, ScreenHeader } from "app/components"
+import { Dropdown, PetitionCard, Screen, ScreenHeader } from "app/components"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
 import { colors, spacing } from "app/theme"
+import useRTL from "app/hooks/useRTL"
+import { moderateVerticalScale } from "app/utils/scaling"
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 interface HomeScreenProps extends NativeStackScreenProps<AppStackScreenProps<"Home">> {}
 
 const mockData = [
@@ -75,7 +78,7 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   // const { someStore, anotherStore } = useStores()
 
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
-
+  const { isRTL } = useRTL()
   const renderItem = useCallback(({ item }) => {
     const {
       city,
@@ -113,9 +116,50 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
     )
   }, [])
 
+  const mockCities = [
+    { id: "bagdad", nameAr: "بغداد", nameEn: "Baghdad" },
+    { id: "iraq", nameAr: "العراق", nameEn: "Iraq" },
+  ]
+
+  const _cities = mockCities.map(({ id, nameAr, nameEn }) => ({
+    label: isRTL ? nameAr : nameEn,
+    value: id,
+  }))
+
+  const [cities, setCities] = React.useState(_cities)
+
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top"]}>
-      <ScreenHeader tx="home.header" onButtonPress={() => navigation.goBack()} />
+      <ScreenHeader
+        tx="home.header"
+        style={$screenHeader}
+        onButtonPress={() => navigation.goBack()}
+        RightAccessory={
+          <Dropdown
+            items={cities}
+            setItems={setCities}
+            placeholder={cities[0].label}
+            onChange={(value) => {}}
+            dropdownTextStyle={{ color: colors.palette.neutral50 }}
+            style={{
+              width: moderateVerticalScale(125),
+              backgroundColor: colors.palette.primary300,
+            }}
+            dropDownContainerStyle={{
+              backgroundColor: colors.palette.primary300,
+            }}
+            ArrowUpIconComponent={() => (
+              <FontAwesome5 name="chevron-up" size={20} color={colors.palette.neutral50} />
+            )}
+            ArrowDownIconComponent={() => (
+              <FontAwesome5 name="chevron-down" size={20} color={colors.palette.neutral50} />
+            )}
+            TickIconComponent={() => (
+              <FontAwesome5 name="check" size={18} color={colors.palette.neutral50} />
+            )}
+          />
+        }
+      />
       <View style={$container}>
         <FlashList
           showsVerticalScrollIndicator={false}
@@ -136,8 +180,11 @@ const $root: ViewStyle = {
 const $container: ViewStyle = {
   height: Dimensions.get("screen").height * 0.73,
   width: Dimensions.get("screen").width,
+  zIndex: 499,
 }
 
 const $cardContainer: ViewStyle = {
   marginTop: spacing.extraSmall,
 }
+
+const $screenHeader: ViewStyle = { zIndex: 999 }
