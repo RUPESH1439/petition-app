@@ -117,6 +117,11 @@ const en = {
     headingTop: "Thank you \npetition is uploaded",
     headingBottom: "petition will be published after being reviewed",
   },
+  search: {
+    searchPlaceholder: "Search For A Word Or User",
+    bodyText: "Search For A Petition Or User",
+  },
+
   accountScreen: {
     title: "Account",
     name: "Growth Organization",

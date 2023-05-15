@@ -119,6 +119,10 @@ const ar: Translations = {
     headingTop: "يتم تحميل عريضة شكرا لك",
     headingBottom: "سيتم نشر الالتماس بعد مراجعته",
   },
+  search: {
+    searchPlaceholder: "ابحث عن عريضة او شخص",
+    bodyText: "ابحث عن حملة او شخص",
+  },
   accountScreen: {
     title: "الحساب",
     name: "جمعية التعاون الخيرية",
