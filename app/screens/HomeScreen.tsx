@@ -114,7 +114,7 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   }, [])
 
   return (
-    <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
+    <Screen style={$root} preset="fixed" safeAreaEdges={["top"]}>
       <ScreenHeader tx="home.header" onButtonPress={() => navigation.goBack()} />
       <View style={$container}>
         <FlashList
@@ -134,7 +134,7 @@ const $root: ViewStyle = {
 }
 
 const $container: ViewStyle = {
-  height: Dimensions.get("screen").height * 0.7,
+  height: Dimensions.get("screen").height * 0.73,
   width: Dimensions.get("screen").width,
 }
 
