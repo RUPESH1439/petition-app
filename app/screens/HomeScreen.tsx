@@ -9,6 +9,67 @@ import { FlashList } from "@shopify/flash-list"
 import { colors, spacing } from "app/theme"
 interface HomeScreenProps extends NativeStackScreenProps<AppStackScreenProps<"Home">> {}
 
+const mockData = [
+  {
+    city: "Bagdad",
+    category: "Environment",
+    viewsCount: 12000,
+    signsCount: 12000,
+    name: "global organization",
+    isOrg: true,
+    status: "unsigned",
+    isPrivileged: true,
+    date: new Date(),
+    title: "justice for student",
+    description:
+      "give the students which failed exam another chance to be suregive the students which failed exam another chance to be suregive the students which failed exam another chance to be sure",
+    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
+  },
+  {
+    city: "Iraq",
+    category: "Environment",
+    viewsCount: 12000,
+    signsCount: 12000,
+    isAnonymous: true,
+    name: "global organization",
+    isOrg: true,
+    status: "unsigned",
+    isPrivileged: true,
+    date: new Date(),
+    title: "justice for student",
+    description: "give the students which failed exam another chance to be sure",
+    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
+  },
+  {
+    city: "Iraq",
+    category: "Environment",
+    viewsCount: 12000,
+    signsCount: 12000,
+    name: "Muhammad Sali",
+    isOrg: false,
+    status: "signed",
+    isPrivileged: false,
+    date: new Date(),
+    title: "justice for student",
+    description: "give the students which failed exam another chance to be sure",
+    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
+  },
+  {
+    city: "Iraq",
+    category: "Environment",
+    viewsCount: 12000,
+    signsCount: 12000,
+    name: "global organization",
+    isOrg: true,
+    status: "signed",
+    isPrivileged: false,
+    date: new Date(),
+    title: "justice for student",
+    description: "give the students which failed exam another chance to be sure",
+    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
+  },
+]
+
 export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
@@ -20,25 +81,44 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
       <View style={$container}>
         <FlashList
           showsVerticalScrollIndicator={false}
-          renderItem={() => (
-            <View style={$cardContainer}>
-              <PetitionCard
-                city="Bagdad"
-                category="Environment"
-                viewsCount={12000}
-                signsCount={12000}
-                name="global organization"
-                isOrg={true}
-                status="unsigned"
-                date={new Date()}
-                photoUrl="https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true"
-                title={"justice for student"}
-                description="give the students which failed exam another chance to be sure"
-              />
-            </View>
-          )}
+          renderItem={({ item }) => {
+            const {
+              city,
+              category,
+              viewsCount,
+              signsCount,
+              name,
+              isOrg,
+              status,
+              isPrivileged,
+              date,
+              photoUrl,
+              title,
+              description,
+              isAnonymous,
+            } = item ?? {}
+            return (
+              <View style={$cardContainer}>
+                <PetitionCard
+                  city={city}
+                  category={category}
+                  viewsCount={viewsCount}
+                  signsCount={signsCount}
+                  name={name}
+                  isOrg={isOrg}
+                  status={status as "unsigned" | "signed" | "forGuest"}
+                  isPrivileged={isPrivileged}
+                  date={date}
+                  photoUrl={photoUrl}
+                  title={title}
+                  description={description}
+                  isAnonymous={isAnonymous}
+                />
+              </View>
+            )
+          }}
           estimatedItemSize={200}
-          data={[1, 2, 3, 4]}
+          data={mockData}
         />
       </View>
     </Screen>

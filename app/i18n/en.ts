@@ -6,6 +6,8 @@ const en = {
     next: "Next",
     continue: "Continue",
     change: "Change",
+    viewMore: "View More",
+    viewLess: "View Less",
   },
   homeTab: {
     profile: "profile",
@@ -28,6 +30,9 @@ const en = {
     thankyou: "Thank You",
     cancel: "Cancel Sign",
     signupToParticipate: "Sign Up To Participate",
+    share: {
+      message: "Share",
+    },
   },
   home: {
     header: "Home",

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Image, Pressable, StyleProp, View, ViewStyle } from "react-native"
+import { Image, Pressable, Share, StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { colors, spacing } from "app/theme"
 import { Text } from "app/components/Text"
@@ -15,7 +15,6 @@ import {
   $dateText,
   $fourthContainer,
   $organizationName,
-  $petitionDescription,
   $petitionTitle,
   $secondContainer,
   $thirdContainer,
@@ -26,6 +25,8 @@ import {
 import { Button } from "../Button"
 import { moderateVerticalScale } from "app/utils/scaling"
 import { TxKeyPath } from "app/i18n"
+import I18n from "i18n-js"
+import { ViewMoreText } from "../ViewMoreText"
 
 const { chevronLeft, circleCheckSolid, eyeSolid, users, arrowUp } = icons
 export interface PetitionCardProps {
@@ -44,6 +45,8 @@ export interface PetitionCardProps {
   signsCount: number
   status: "unsigned" | "signed" | "forGuest"
   isOrg: boolean
+  isPrivileged: boolean
+  isAnonymous?: boolean
 }
 
 /**
@@ -62,10 +65,14 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
     description,
     viewsCount,
     signsCount,
-    status,
+    status: _status,
+    isPrivileged,
+    isAnonymous,
   } = props
 
   const $styles = [$container, style]
+
+  const [status, setStatus] = React.useState(_status)
 
   let timer
 
@@ -102,13 +109,34 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
   const [signedPetition, setSignedPetition] = React.useState(false)
   const [petitionSigned, setPetitionSigned] = React.useState(false)
 
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: I18n.translate("petition.share.message"),
+      })
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error: any) {
+      console.log("error", error)
+    }
+  }
+
   React.useEffect(() => {
     if (signedPetition) {
       timer = setTimeout(() => {
         setSignedPetition(false)
         setPetitionSigned(true)
+        setStatus("signed")
       }, 3000)
     }
+
     return () => {
       if (!timer) return
       clearTimeout(timer)
@@ -122,34 +150,48 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
         <Chip text={category} />
         <Text text={city} style={$cityText} />
       </View>
-      <Pressable style={$secondContainer} onPress={() => {}}>
-        <SvgXml xml={chevronLeft} height={16} width={16} fill={colors.palette.primary200} />
-        {!!isOrg && (
-          <SvgXml xml={circleCheckSolid} height={16} width={16} fill={colors.palette.primary200} />
-        )}
-        <Text style={$organizationName} text={name} />
-        {!!photoUrl && !!isOrg && (
-          <Image
-            // TODO Remove this hardcode later
-            source={{
-              uri: photoUrl,
-            }}
-            style={$avatar}
-          />
-        )}
-      </Pressable>
+      {!isAnonymous && (
+        <Pressable
+          style={$secondContainer}
+          onPress={() => {
+            console.log("test")
+          }}
+        >
+          <SvgXml xml={chevronLeft} height={16} width={16} fill={colors.palette.primary200} />
+          {!!isOrg && !!isPrivileged && (
+            <SvgXml
+              xml={circleCheckSolid}
+              height={16}
+              width={16}
+              fill={colors.palette.primary200}
+            />
+          )}
+          <Text style={$organizationName} text={name} />
+          {!!photoUrl && !!isOrg && (
+            <Image
+              // TODO Remove this hardcode later
+              source={{
+                uri: photoUrl,
+              }}
+              style={$avatar}
+            />
+          )}
+        </Pressable>
+      )}
       <View style={$thirdContainer}>
         <Text style={$petitionTitle} text={title} />
-        <Text style={$petitionDescription} text={description} />
+        <ViewMoreText text={description} />
       </View>
 
-      <View style={$fourthContainer} onPress={() => {}}>
+      <View style={$fourthContainer}>
         <Analytic tx="petition.views" value={viewsCount} svgString={eyeSolid} />
         <Analytic tx="petition.signs" value={signsCount} svgString={users} />
       </View>
 
       <View style={$fifthContainer}>
-        <SvgXml xml={arrowUp} height={26} width={23} fill={colors.palette.primary200} />
+        <Pressable onPress={onShare}>
+          <SvgXml xml={arrowUp} height={26} width={23} fill={colors.palette.primary200} />
+        </Pressable>
         <Button
           tx={
             signedPetition
@@ -165,8 +207,15 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
           ]}
           textStyle={{ lineHeight: moderateVerticalScale(21), fontSize: moderateVerticalScale(16) }}
           onPress={() => {
-            if (status === "unsigned") {
+            if (status === "forGuest") {
+              return
+            }
+            if (status === "unsigned" && !signedPetition) {
               setSignedPetition(true)
+            } else {
+              setSignedPetition(false)
+              setPetitionSigned(false)
+              setStatus("unsigned")
             }
           }}
         />
