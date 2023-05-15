@@ -17,6 +17,12 @@ const ar: Translations = {
     search: "بحث",
     home: "الرئيسية",
   },
+  myPetitions: {
+    header: "حملاتي",
+    newPetition: "إنشاء حملة جديدة",
+    created: "أنشئتها",
+    signed: "وقعتها",
+  },
   accountInfo: {
     organizationInfo: "معلومات المنظمة",
     personalInfo: "معلوماتي",

@@ -15,6 +15,12 @@ const en = {
     search: "search",
     home: "home",
   },
+  myPetitions: {
+    header: "My Petitions",
+    newPetition: "New Petition",
+    created: "Created",
+    signed: "Signed",
+  },
   accountInfo: {
     organizationInfo: "Organization Info",
     personalInfo: "My Info",
