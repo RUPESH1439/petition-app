@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, useCallback } from "react"
 import { observer } from "mobx-react-lite"
 import { Dimensions, View, ViewStyle } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
@@ -75,48 +75,51 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   // const { someStore, anotherStore } = useStores()
 
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
+
+  const renderItem = useCallback(({ item }) => {
+    const {
+      city,
+      category,
+      viewsCount,
+      signsCount,
+      name,
+      isOrg,
+      status,
+      isPrivileged,
+      date,
+      photoUrl,
+      title,
+      description,
+      isAnonymous,
+    } = item ?? {}
+    return (
+      <View style={$cardContainer}>
+        <PetitionCard
+          city={city}
+          category={category}
+          viewsCount={viewsCount}
+          signsCount={signsCount}
+          name={name}
+          isOrg={isOrg}
+          status={status as "unsigned" | "signed" | "forGuest"}
+          isPrivileged={isPrivileged}
+          date={date}
+          photoUrl={photoUrl}
+          title={title}
+          description={description}
+          isAnonymous={isAnonymous}
+        />
+      </View>
+    )
+  }, [])
+
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
       <ScreenHeader tx="home.header" onButtonPress={() => navigation.goBack()} />
       <View style={$container}>
         <FlashList
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => {
-            const {
-              city,
-              category,
-              viewsCount,
-              signsCount,
-              name,
-              isOrg,
-              status,
-              isPrivileged,
-              date,
-              photoUrl,
-              title,
-              description,
-              isAnonymous,
-            } = item ?? {}
-            return (
-              <View style={$cardContainer}>
-                <PetitionCard
-                  city={city}
-                  category={category}
-                  viewsCount={viewsCount}
-                  signsCount={signsCount}
-                  name={name}
-                  isOrg={isOrg}
-                  status={status as "unsigned" | "signed" | "forGuest"}
-                  isPrivileged={isPrivileged}
-                  date={date}
-                  photoUrl={photoUrl}
-                  title={title}
-                  description={description}
-                  isAnonymous={isAnonymous}
-                />
-              </View>
-            )
-          }}
+          renderItem={renderItem}
           estimatedItemSize={200}
           data={mockData}
         />
@@ -131,7 +134,7 @@ const $root: ViewStyle = {
 }
 
 const $container: ViewStyle = {
-  height: Dimensions.get("screen").height,
+  height: Dimensions.get("screen").height * 0.7,
   width: Dimensions.get("screen").width,
 }
 

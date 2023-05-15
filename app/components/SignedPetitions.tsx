@@ -80,47 +80,50 @@ export const SignedPetitions = observer(function SignedPetitions(props: SignedPe
   const { style } = props
   const $styles = [$container, style]
 
+  const renderItem = React.useCallback(({ item }) => {
+    const {
+      city,
+      category,
+      viewsCount,
+      signsCount,
+      name,
+      isOrg,
+      status,
+      isPrivileged,
+      date,
+      photoUrl,
+      title,
+      description,
+      isAnonymous,
+    } = item ?? {}
+    return (
+      <View style={$cardContainer}>
+        <PetitionCard
+          city={city}
+          category={category}
+          viewsCount={viewsCount}
+          signsCount={signsCount}
+          name={name}
+          isOrg={isOrg}
+          status={status as "unsigned" | "signed" | "forGuest"}
+          isPrivileged={isPrivileged}
+          date={date}
+          photoUrl={photoUrl}
+          title={title}
+          description={description}
+          isAnonymous={isAnonymous}
+        />
+      </View>
+    )
+  }, [])
+
   return (
     <View style={$styles}>
       <View style={$container}>
         <FlashList
+          contentContainerStyle={$flatListContainer}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => {
-            const {
-              city,
-              category,
-              viewsCount,
-              signsCount,
-              name,
-              isOrg,
-              status,
-              isPrivileged,
-              date,
-              photoUrl,
-              title,
-              description,
-              isAnonymous,
-            } = item ?? {}
-            return (
-              <View style={$cardContainer}>
-                <PetitionCard
-                  city={city}
-                  category={category}
-                  viewsCount={viewsCount}
-                  signsCount={signsCount}
-                  name={name}
-                  isOrg={isOrg}
-                  status={status as "unsigned" | "signed" | "forGuest"}
-                  isPrivileged={isPrivileged}
-                  date={date}
-                  photoUrl={photoUrl}
-                  title={title}
-                  description={description}
-                  isAnonymous={isAnonymous}
-                />
-              </View>
-            )
-          }}
+          renderItem={renderItem}
           estimatedItemSize={200}
           data={mockData}
         />
@@ -138,3 +141,5 @@ const $container: ViewStyle = {
 const $cardContainer: ViewStyle = {
   marginTop: spacing.extraSmall,
 }
+
+const $flatListContainer: ViewStyle = { paddingBottom: spacing.extraLarge }

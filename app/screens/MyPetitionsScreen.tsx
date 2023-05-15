@@ -26,13 +26,12 @@ export const MyPetitionsScreen: FC<MyPetitionsScreenProps> = observer(function M
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
   const [index, setIndex] = React.useState(0)
   const layout = useWindowDimensions()
-  const { isRTL } = useRTL()
+  const { isRTL: _ } = useRTL()
 
-  const _routes = [
+  const routes = [
     { key: "createdPetitions", title: I18n.t("myPetitions.created") },
     { key: "signedPetitions", title: I18n.t("myPetitions.signed") },
   ]
-  const routes = isRTL ? _routes.reverse() : _routes
 
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>

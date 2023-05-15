@@ -44,6 +44,20 @@ const ar: Translations = {
     share: {
       message: "Share",
     },
+    analytics: "الاحصائيات",
+    analyticsSections: {
+      age: "احصائيات العمر",
+      number: "العدد",
+      ageGroup: "الفئة العمرية",
+      youngerThan18: "اقل من 18 سنة",
+      eighteenToThirty: "18 سنة - 30 سنة",
+      thirtyToSixty: "30 سنة - 60 سنة",
+      olderThanSixty: "اكبر من 60 سنة",
+      gender: "احصائيات الجنس",
+      male: "ذكر",
+      female: "انثى",
+      governorate: "احصائيات المحافظة",
+    },
   },
   walkthrough: {
     screen1: {

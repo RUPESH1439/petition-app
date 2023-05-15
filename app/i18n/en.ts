@@ -39,6 +39,20 @@ const en = {
     share: {
       message: "Share",
     },
+    analytics: "Analytics",
+    analyticsSections: {
+      age: "Age",
+      number: "Number",
+      ageGroup: "Age Group",
+      youngerThan18: "Younger Than 18 Years",
+      eighteenToThirty: "18 Years - 30 Years",
+      thirtyToSixty: "30 Years - 60 Years",
+      olderThanSixty: "Older Than 60 Years",
+      gender: "Gender",
+      male: "Male",
+      female: "Female",
+      governorate: "Governorate",
+    },
   },
   home: {
     header: "Home",
