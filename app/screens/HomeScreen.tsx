@@ -9,7 +9,7 @@ import { FlashList } from "@shopify/flash-list"
 import { colors, spacing } from "app/theme"
 import useRTL from "app/hooks/useRTL"
 import { moderateVerticalScale } from "app/utils/scaling"
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
+
 interface HomeScreenProps extends NativeStackScreenProps<AppStackScreenProps<"Home">> {}
 
 const mockData = [
@@ -137,26 +137,16 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
         RightAccessory={
           <Dropdown
             items={cities}
+            value={cities[0].value}
             setItems={setCities}
-            placeholder={cities[0].label}
-            onChange={(value) => {}}
+            onChange={(value) => {
+              console.log("value", value)
+            }}
             dropdownTextStyle={{ color: colors.palette.neutral50 }}
             style={{
               width: moderateVerticalScale(125),
-              backgroundColor: colors.palette.primary300,
+              height: moderateVerticalScale(24),
             }}
-            dropDownContainerStyle={{
-              backgroundColor: colors.palette.primary300,
-            }}
-            ArrowUpIconComponent={() => (
-              <FontAwesome5 name="chevron-up" size={20} color={colors.palette.neutral50} />
-            )}
-            ArrowDownIconComponent={() => (
-              <FontAwesome5 name="chevron-down" size={20} color={colors.palette.neutral50} />
-            )}
-            TickIconComponent={() => (
-              <FontAwesome5 name="check" size={18} color={colors.palette.neutral50} />
-            )}
           />
         }
       />

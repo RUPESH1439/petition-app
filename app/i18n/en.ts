@@ -162,6 +162,17 @@ const en = {
     title: "Privacy Policy",
     policy: "some text",
   },
+  createPetition: {
+    header: "New Petition",
+    governorate: "Governorate",
+    category: "Category",
+    title: "Title",
+    description: "Description",
+    imageOptional: "Image - Optional",
+    showName: "Show Name",
+    hideName: "Hide Name",
+    publish: "Publish",
+  },
   errorScreen: {
     title: "Something went wrong!",
     friendlySubtitle:

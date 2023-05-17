@@ -281,12 +281,12 @@ const $inputStyle: TextStyle = {
   flex: 1,
   alignSelf: "stretch",
   fontFamily: typography.primary.bold,
-  color: colors.palette.neutral100,
+  color: colors.palette.primary200,
   fontSize: moderateVerticalScale(15),
-  // https://github.com/facebook/react-native/issues/21720#issuecomment-532642093
-  marginVertical: spacing.extraSmall,
+  marginVertical: spacing.small,
   marginHorizontal: spacing.medium,
   lineHeight: moderateVerticalScale(27),
+  minHeight: moderateVerticalScale(24),
 }
 
 const $helperStyle: TextStyle = {
