@@ -1,12 +1,14 @@
 import * as React from "react"
-import { Image, ImageStyle, Pressable, StyleProp, TextStyle, ViewStyle } from "react-native"
+import { Image, ImageStyle, Pressable, StyleProp, TextStyle, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { colors, typography } from "app/theme"
+import { colors, spacing, typography } from "app/theme"
 import { Text } from "app/components/Text"
 import { TxKeyPath } from "app/i18n"
-import { EvilIcons } from "react-native-vector-icons"
+import EvilIcons from "react-native-vector-icons/EvilIcons"
 import { moderateVerticalScale } from "app/utils/scaling"
 import { launchImageLibrary, ImagePickerResponse } from "react-native-image-picker"
+import useRTL from "app/hooks/useRTL"
+import { $ltr, $rtl } from "app/common/styles"
 
 export interface ImagePickerProps {
   /**
@@ -17,16 +19,20 @@ export interface ImagePickerProps {
   titleX?: TxKeyPath
 
   onSelectImage?: (image: ImagePickerResponse) => void
+
+  iconSize?: number
+
+  labelX?: TxKeyPath
 }
 
 /**
  * Describe your component here
  */
 export const ImagePicker = observer(function ImagePicker(props: ImagePickerProps) {
-  const { style, titleX, onSelectImage } = props
+  const { style, titleX, onSelectImage, iconSize, labelX } = props
   const $styles = [$container, style]
   const [selectedImage, setSelectedImage] = React.useState<null | ImagePickerResponse>(null)
-
+  const { isRTL } = useRTL()
   const pickImage = async () => {
     const result = await launchImageLibrary({
       mediaType: "photo",
@@ -37,24 +43,33 @@ export const ImagePicker = observer(function ImagePicker(props: ImagePickerProps
     setSelectedImage(result)
     onSelectImage?.(result)
   }
-  if (selectedImage) {
+  const renderContainer = () => {
+    if (selectedImage) {
+      return (
+        <Pressable style={$styles} onPress={pickImage}>
+          <Image style={$image} source={{ uri: selectedImage.assets?.[0]?.uri }} />
+        </Pressable>
+      )
+    }
     return (
       <Pressable style={$styles} onPress={pickImage}>
-        <Image style={$image} source={{ uri: selectedImage.assets?.[0]?.uri }} />
+        <EvilIcons name="plus" size={iconSize ?? 30} color={colors.palette.neutral100} />
+        {!!titleX && <Text style={$text} tx={titleX} />}
       </Pressable>
     )
   }
   return (
-    <Pressable style={$styles} onPress={pickImage}>
-      <EvilIcons name="plus" size={30} />
-      <Text style={$text} tx={titleX} />
-    </Pressable>
+    <View style={[$root, isRTL ? $rtl : $ltr]}>
+      {!!labelX && <Text style={[$label, !!selectedImage && $labelSelected]} tx={labelX} />}
+      {renderContainer()}
+    </View>
   )
 })
 
+const $root: ViewStyle = { flex: 1 }
+
 const $container: ViewStyle = {
   width: 130,
-  maxHeight: 130,
   flex: 1,
   borderWidth: 1,
   borderColor: colors.palette.neutral100,
@@ -70,4 +85,16 @@ const $text: TextStyle = {
   color: colors.palette.neutral100,
 }
 
-const $image: ImageStyle = { height: "100%", width: "100%", borderRadius: 30 }
+const $label: TextStyle = {
+  fontFamily: typography.primary.bold,
+  fontSize: moderateVerticalScale(15),
+  color: colors.palette.neutral100,
+  marginBottom: moderateVerticalScale(5),
+  marginLeft: spacing.medium,
+}
+
+const $labelSelected: TextStyle = {
+  color: colors.palette.primary200,
+}
+
+const $image: ImageStyle = { borderRadius: 30, height: "100%", width: "100%" }
