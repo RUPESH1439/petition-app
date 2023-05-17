@@ -15,6 +15,8 @@ export interface DropdownProps {
    */
   style?: ViewStyle
 
+  placeholderStyle?: TextStyle
+
   dropdownTextStyle?: TextStyle
 
   dropDownContainerStyle?: ViewStyle
@@ -55,6 +57,7 @@ export const Dropdown = observer(function Dropdown(props: DropdownProps) {
     ArrowDownIconComponent,
     ArrowUpIconComponent,
     TickIconComponent,
+    placeholderStyle,
   } = props
 
   const [open, setOpen] = React.useState(false)
@@ -79,10 +82,10 @@ export const Dropdown = observer(function Dropdown(props: DropdownProps) {
       ArrowDownIconComponent={ArrowDownIconComponent}
       ArrowUpIconComponent={ArrowUpIconComponent}
       TickIconComponent={TickIconComponent}
-      placeholderStyle={[$text, textStyle, dropdownTextStyle]}
+      placeholderStyle={[$text, $placeholderStyle, dropdownTextStyle, placeholderStyle]}
       textStyle={[$text, textStyle, dropdownTextStyle]}
       placeholder={placeholderTx ? I18n.t(placeholderTx) : placeholder || ""}
-      style={[$container, style]}
+      style={[$container, value ? $containerSelected : $containerUnselected, style]}
       dropDownContainerStyle={[$dropDownContainer, dropDownContainerStyle]}
     />
   )
@@ -91,13 +94,21 @@ export const Dropdown = observer(function Dropdown(props: DropdownProps) {
 const $container: ViewStyle = {
   borderRadius: 30,
   borderWidth: 1,
-  backgroundColor: colors.palette.neutral50,
   borderColor: colors.palette.neutral100,
+}
+
+const $containerSelected: ViewStyle = {
+  backgroundColor: colors.palette.primary300,
+}
+
+const $containerUnselected: ViewStyle = {
+  backgroundColor: colors.palette.neutral50,
 }
 
 const $dropDownContainer: ViewStyle = {
   borderWidth: 1,
-  backgroundColor: colors.palette.neutral50,
+  backgroundColor: colors.palette.primary300,
+
   borderColor: colors.palette.neutral100,
   paddingVertical: moderateVerticalScale(5),
   borderRadius: moderateVerticalScale(18),
@@ -106,7 +117,12 @@ const $dropDownContainer: ViewStyle = {
 const $text: TextStyle = {
   fontFamily: typography.primary.bold,
   fontSize: moderateVerticalScale(15),
-  color: colors.palette.neutral100,
+  color: colors.palette.neutral50,
   paddingHorizontal: 8,
   lineHeight: moderateVerticalScale(23),
 }
+
+const $placeholderStyle: TextStyle = {
+  color: colors.palette.neutral100,
+}
+

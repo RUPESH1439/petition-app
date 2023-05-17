@@ -137,13 +137,12 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
         RightAccessory={
           <Dropdown
             items={cities}
+            value={cities[0].value}
             setItems={setCities}
-            placeholder={cities[0].label}
             onChange={(value) => {}}
             dropdownTextStyle={{ color: colors.palette.neutral50 }}
             style={{
               width: moderateVerticalScale(125),
-              backgroundColor: colors.palette.primary300,
             }}
             dropDownContainerStyle={{
               backgroundColor: colors.palette.primary300,

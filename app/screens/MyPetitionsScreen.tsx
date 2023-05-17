@@ -43,6 +43,7 @@ export const MyPetitionsScreen: FC<MyPetitionsScreenProps> = observer(function M
         RightAccessory={
           <Button
             tx="myPetitions.newPetition"
+            onPress={() => navigation.navigate("CreatePetition")}
             style={$createPetition}
             textStyle={$createPetitionText}
             LeftAccessory={() => (
