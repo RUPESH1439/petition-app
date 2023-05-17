@@ -163,6 +163,17 @@ const ar: Translations = {
     title: "سياسة الخصوصية",
     policy: "نلتزم بحماية معلومات المستخدمين ليستمروا في استخدام المنصة بكل راحة وامان",
   },
+  createPetition: {
+    header: "حملة جديدة",
+    governorate: "المحافظة",
+    category: "فئة",
+    title: "عنوان الحملة",
+    description: "وصف الحملة",
+    imageOptional: "صورة ان وجدت",
+    showName: "اظهار اسمي",
+    hideName: "لا تظهر اسمي",
+    publish: "نشر",
+  },
   errorScreen: {
     title: "هناك خطأ ما",
     friendlySubtitle:

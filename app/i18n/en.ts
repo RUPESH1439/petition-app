@@ -163,10 +163,15 @@ const en = {
     policy: "some text",
   },
   createPetition: {
-    title: "New Petition",
+    header: "New Petition",
     governorate: "Governorate",
-    inputTitle: "Title",
+    category: "Category",
+    title: "Title",
     description: "Description",
+    imageOptional: "Image - Optional",
+    showName: "Show Name",
+    hideName: "Hide Name",
+    publish: "Publish",
   },
   errorScreen: {
     title: "Something went wrong!",

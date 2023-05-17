@@ -69,6 +69,7 @@ export const MyPetitionsScreen: FC<MyPetitionsScreenProps> = observer(function M
                   style={$tabBar}
                   labelStyle={$labelStyle}
                   tabStyle={$tabStyle}
+                  inactiveColor={colors.palette.gray200}
                   indicatorStyle={$indicator}
                 />
               )}

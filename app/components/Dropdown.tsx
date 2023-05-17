@@ -1,12 +1,13 @@
 import * as React from "react"
 import { TextStyle, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { colors, typography } from "app/theme"
+import { colors, spacing, typography } from "app/theme"
 import DropDownPicker from "react-native-dropdown-picker"
 import useRTL from "app/hooks/useRTL"
 import I18n from "i18n-js"
 import { TxKeyPath } from "app/i18n"
 import { moderateVerticalScale } from "app/utils/scaling"
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 
 type Item = { label: string; value: string }
 export interface DropdownProps {
@@ -32,12 +33,6 @@ export interface DropdownProps {
   value?: string
 
   onChange: (value: string) => void
-
-  ArrowDownIconComponent?: any
-
-  ArrowUpIconComponent?: any
-
-  TickIconComponent?: any
 }
 
 /**
@@ -54,9 +49,6 @@ export const Dropdown = observer(function Dropdown(props: DropdownProps) {
     value: _value,
     placeholder,
     dropDownContainerStyle,
-    ArrowDownIconComponent,
-    ArrowUpIconComponent,
-    TickIconComponent,
     placeholderStyle,
   } = props
 
@@ -72,21 +64,28 @@ export const Dropdown = observer(function Dropdown(props: DropdownProps) {
   return (
     <DropDownPicker
       open={open}
+      disableBorderRadius={false}
       value={value}
+      showTickIcon={false}
       items={items}
       setOpen={setOpen}
       setValue={setValue}
       setItems={setItems}
       onChangeValue={onChange}
       rtl={isRTL}
-      ArrowDownIconComponent={ArrowDownIconComponent}
-      ArrowUpIconComponent={ArrowUpIconComponent}
-      TickIconComponent={TickIconComponent}
       placeholderStyle={[$text, $placeholderStyle, dropdownTextStyle, placeholderStyle]}
       textStyle={[$text, textStyle, dropdownTextStyle]}
       placeholder={placeholderTx ? I18n.t(placeholderTx) : placeholder || ""}
       style={[$container, value ? $containerSelected : $containerUnselected, style]}
       dropDownContainerStyle={[$dropDownContainer, dropDownContainerStyle]}
+      ArrowDownIconComponent={() => (
+        <FontAwesome5
+          name="chevron-down"
+          size={20}
+          style={$arrowDown}
+          color={value ? colors.palette.neutral50 : colors.palette.neutral100}
+        />
+      )}
     />
   )
 })
@@ -95,6 +94,8 @@ const $container: ViewStyle = {
   borderRadius: 30,
   borderWidth: 1,
   borderColor: colors.palette.neutral100,
+  paddingVertical: moderateVerticalScale(10),
+  minHeight: moderateVerticalScale(50),
 }
 
 const $containerSelected: ViewStyle = {
@@ -106,12 +107,13 @@ const $containerUnselected: ViewStyle = {
 }
 
 const $dropDownContainer: ViewStyle = {
-  borderWidth: 1,
   backgroundColor: colors.palette.primary300,
-
-  borderColor: colors.palette.neutral100,
-  paddingVertical: moderateVerticalScale(5),
+  borderColor: colors.palette.primary300,
+  paddingVertical: moderateVerticalScale(18),
   borderRadius: moderateVerticalScale(18),
+  borderTopRightRadius: 30,
+  top: 0,
+  flexDirection: "row",
 }
 
 const $text: TextStyle = {
@@ -126,3 +128,6 @@ const $placeholderStyle: TextStyle = {
   color: colors.palette.neutral100,
 }
 
+const $arrowDown: ViewStyle = {
+  marginRight: spacing.extraSmall,
+}
