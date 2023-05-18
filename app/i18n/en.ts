@@ -173,6 +173,12 @@ const en = {
     hideName: "Hide Name",
     publish: "Publish",
   },
+  userPageScreen: {
+    accountName: "Growth Organization",
+    petitions: "Petitions",
+    views: "Views",
+    signs: "Signs",
+  },
   errorScreen: {
     title: "Something went wrong!",
     friendlySubtitle:

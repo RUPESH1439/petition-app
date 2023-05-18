@@ -121,6 +121,12 @@ const ar: Translations = {
     logo: "اللوغو",
     linkOptional: "ارتباط - اختياري",
   },
+  userPageScreen: {
+    accountName: "جمعية التعاون الخيرية",
+    petitions: "توقيع",
+    views: "مشاهدة",
+    signs: "حملة",
+  },
   createPersonalAccount: {
     name: "الإسم",
     dateOfBirth: "الجنس",

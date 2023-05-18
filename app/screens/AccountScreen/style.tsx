@@ -1,5 +1,6 @@
 import { colors, spacing, typography } from "app/theme"
 import { moderateVerticalScale } from "app/utils/scaling"
+import { Dimensions } from "react-native"
 import { ImageStyle, TextStyle, ViewStyle } from "react-native/types"
 
 const $root: ViewStyle = {
@@ -59,6 +60,11 @@ const $accountItems = (isRTL: boolean): ViewStyle => ({
   direction: isRTL ? "rtl" : "ltr",
 })
 
+const $flashListContainer: ViewStyle = {
+  height: Dimensions.get("window").height * 0.45,
+  width: "100%",
+}
+
 export {
   $accountItems,
   $avatar,
@@ -70,5 +76,6 @@ export {
   $nameContainer,
   $phoneNumberContainer,
   $phoneNumberText,
+  $flashListContainer,
   $root,
 }

@@ -38,6 +38,9 @@ import { ViewMoreText } from "../ViewMoreText"
 import { moderateVerticalScale } from "app/utils/scaling"
 import { TxKeyPath } from "app/i18n"
 import useRTL from "app/hooks/useRTL"
+import { useNavigation } from "@react-navigation/native"
+import { AppStackParamList } from "app/navigators"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
 const {
   chevronLeft,
@@ -94,6 +97,8 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
     isPrivileged,
     isAnonymous,
   } = props
+
+  const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
   const $styles = [$container, style]
 
@@ -162,7 +167,7 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
         <Pressable
           style={$secondContainer}
           onPress={() => {
-            console.log("test")
+            navigation.navigate("UserPage")
           }}
         >
           <SvgXml xml={chevronLeft} height={16} width={16} fill={colors.palette.primary200} />
