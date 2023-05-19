@@ -11,6 +11,11 @@ const ar: Translations = {
     viewMore: "مشاهدة المزيد",
     viewLess: "رؤية أقل",
   },
+  errors: {
+    pleaseTry: "الرجاء الاختيار",
+    pleaseFill: "الرجاء ملىء الفراغ",
+    pleaseChoose: "الرجاء الاختيار",
+  },
   homeTab: {
     profile: "الحساب",
     myPetitions: "حملاتي",
@@ -120,6 +125,13 @@ const ar: Translations = {
     permitImage: "صورة الإجازة",
     logo: "اللوغو",
     linkOptional: "ارتباط - اختياري",
+    erros: {
+      establishedDate: "Must be of 4 digits",
+      organizationNameArabic: "Required",
+      organizationNameEnglish: "Required",
+      permitNumber: "Required",
+      addressCity: "Required",
+    },
   },
   userPageScreen: {
     accountName: "جمعية التعاون الخيرية",

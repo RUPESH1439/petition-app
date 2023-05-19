@@ -15,11 +15,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
 const schema = z.object({
-  governorate: z.string(),
-  category: z.string(),
-  title: z.string(),
-  description: z.string(),
-  image: z.string(),
+  governorate: z.string().min(1),
+  category: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().min(1),
+  image: z.string().nullish(),
   showName: z.boolean(),
 })
 
@@ -30,19 +30,19 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
   function CreatePetitionScreen() {
     const {
       control,
-      // handleSubmit,
-      // watch,
+      handleSubmit,
+      watch,
       setValue,
       formState: { errors },
     } = useForm({
       resolver: zodResolver(schema),
       defaultValues: {
-        governorate: "",
-        category: "",
-        title: "",
-        description: "",
-        image: "",
-        showName: false,
+        governorate: undefined,
+        category: undefined,
+        title: undefined,
+        description: undefined,
+        image: undefined,
+        showName: undefined,
       },
     })
 
@@ -57,7 +57,6 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
     }))
 
     const [categories, setCategories] = React.useState(_categories)
-    const [selectedCategory, setSelectedCategory] = React.useState("")
 
     const mockGovernorates = [
       { id: "iraq", nameAr: "العراق", nameEn: "Iraq" },
@@ -71,14 +70,27 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
     }))
 
     const [governorates, setGovernorates] = React.useState(_governorates)
-    const [selectedGovernorate, setSelectedGovernorate] = React.useState("")
 
     React.useEffect(() => {
       setGovernorates([..._governorates])
       setCategories([..._categories])
     }, [isRTL])
-    // Pull in one of our MST stores
-    // const { someStore, anotherStore } = useStores()
+
+    const governorate = watch("governorate")
+    const category = watch("category")
+    const showName = watch("showName")
+
+    const isError =
+      errors?.description ||
+      errors?.title ||
+      (errors?.governorate && !governorate) ||
+      (errors?.category && !category) ||
+      (errors?.showName && showName === null)
+
+    const onSubmit = (data) => {
+      console.log(data)
+      navigation.navigate("Thankyou")
+    }
 
     const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
     return (
@@ -95,22 +107,22 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
               setItems={setGovernorates}
               placeholderTx={"createPetition.governorate"}
               onChange={(value) => {
-                setSelectedGovernorate(value)
                 setValue("governorate", value)
               }}
-              value={selectedGovernorate}
+              value={governorate}
+              error={!governorate && errors?.governorate ? "errors.pleaseChoose" : null}
             />
           </View>
           <View style={$categoryContainer}>
             <Dropdown
               items={categories}
               setItems={setCategories}
-              value={selectedCategory}
+              value={category}
               placeholderTx={"createPetition.category"}
               onChange={(value) => {
-                setSelectedCategory(value)
                 setValue("category", value)
               }}
+              error={!category && errors?.category ? "errors.pleaseChoose" : null}
             />
           </View>
 
@@ -119,7 +131,7 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
             name="title"
             placeholderTx="createPetition.title"
             status={errors?.title ? "error" : null}
-            error={errors?.title ? "auth.signIn" : null}
+            error={errors?.title ? "errors.pleaseFill" : null}
           />
           <TextField
             control={control}
@@ -129,7 +141,7 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
             style={{ height: moderateVerticalScale(145) }}
             multiline
             status={errors?.description ? "error" : null}
-            error={errors?.description ? "auth.signIn" : null}
+            error={errors?.description ? "errors.pleaseFill" : null}
           />
 
           <ImagePicker
@@ -145,13 +157,13 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
             onChange={(showName) => {
               setValue("showName", showName)
             }}
+            error={errors?.showName ? "errors.pleaseChoose" : null}
           />
-
           <Button
+            preset={isError ? "reversed" : "default"}
             tx="createPetition.publish"
-            onPress={() => {
-              navigation.navigate("Thankyou")
-            }}
+            onPress={handleSubmit(onSubmit)}
+            disabled={!!isError}
           />
         </ScrollView>
       </Screen>
