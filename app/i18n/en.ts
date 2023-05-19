@@ -8,6 +8,7 @@ const en = {
     change: "Change",
     viewMore: "View More",
     viewLess: "View Less",
+    confirmation: "Confirmation",
   },
   errors: {
     pleaseTry: "Please Try",
@@ -190,6 +191,12 @@ const en = {
     petitions: "Petitions",
     views: "Views",
     signs: "Signs",
+  },
+  otpScreen: {
+    headerTopPart: "Input The Code We Sent You On",
+    headerBottomPart: "Your Number",
+    changeNum: "change number",
+    notificationText: "Didn't Recieve The Code (0:06)",
   },
   errorScreen: {
     title: "Something went wrong!",

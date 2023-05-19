@@ -192,6 +192,9 @@ const ar: Translations = {
     hideName: "لا تظهر اسمي",
     publish: "نشر",
   },
+  otpScreen: {
+    confirmation: "confirmation",
+  },
   errorScreen: {
     title: "هناك خطأ ما",
     friendlySubtitle:

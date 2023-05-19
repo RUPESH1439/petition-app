@@ -6,6 +6,7 @@ import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Button, Screen, ScreenHeader, TextField } from "app/components"
 import { useNavigation } from "@react-navigation/native"
 import { spacing } from "app/theme"
+import { OtpScreen } from "./OtpScreen"
 
 interface SignInScreenProps extends NativeStackScreenProps<AppStackScreenProps<"SignIn">> {}
 
@@ -24,7 +25,7 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
       />
       <View style={$container}>
         <TextField placeholderTx="signIn.phoneNumber" keyboardType="phone-pad" />
-        <Button tx="common.continue" style={$next} onPress={() => navigation.navigate("HomeTab")} />
+        <Button tx="common.continue" style={$next} onPress={() => navigation.navigate("Otp")} />
       </View>
     </Screen>
   )
