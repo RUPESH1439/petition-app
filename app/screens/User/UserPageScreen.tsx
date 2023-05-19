@@ -6,9 +6,8 @@ import { PetitionCard, Screen, Text } from "app/components"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import { useNavigation } from "@react-navigation/native"
-import { isRTL } from "app/i18n"
+import { TxKeyPath, isRTL } from "app/i18n"
 import AntDesign from "react-native-vector-icons/AntDesign"
-import Feather from "react-native-vector-icons/Feather"
 import { colors } from "app/theme"
 import {
   $analyticsNumbers,
@@ -27,6 +26,10 @@ import {
 } from "./style"
 import { FlashList } from "@shopify/flash-list"
 import { $flashListContainer } from "../AccountScreen/style"
+import { SvgXml } from "react-native-svg"
+import svgs from "assets/svgs"
+
+const { phone, instagram, facebook } = svgs
 
 const mockData = [
   {
@@ -91,7 +94,7 @@ const mockData = [
 
 export const UserPageScreen: FC = observer(function UserPageScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
-  const isOrg = false
+  const isOrg = true
   const renderItem = React.useCallback(({ item }) => {
     const {
       city,
@@ -107,6 +110,7 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
       title,
       description,
     } = item ?? {}
+
     return (
       <View style={$cardContainer}>
         <PetitionCard
@@ -127,6 +131,30 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
       </View>
     )
   }, [])
+
+  const icons: { key: string; icon: string }[] = [
+    { key: "phone", icon: phone },
+    { key: "instagram", icon: instagram },
+    { key: "facebook", icon: facebook },
+  ]
+
+  const analytics: { key: string; title: TxKeyPath; count: number }[] = [
+    {
+      key: "petition",
+      title: "userPageScreen.petitions",
+      count: 1000,
+    },
+    {
+      key: "views",
+      title: "userPageScreen.views",
+      count: 1000,
+    },
+    {
+      key: "signs",
+      title: "userPageScreen.signs",
+      count: 1000,
+    },
+  ]
 
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
@@ -164,24 +192,18 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
         </View>
 
         <View style={$itemsContainer}>
-          <View>
-            <Text style={$analyticsNumbers}>1000</Text>
-            <Text tx="userPageScreen.petitions" style={$analyticsText} />
-          </View>
-          <View>
-            <Text style={$analyticsNumbers}>1000</Text>
-            <Text tx="userPageScreen.views" style={$analyticsText} />
-          </View>
-          <View>
-            <Text style={$analyticsNumbers}>1000</Text>
-            <Text tx="userPageScreen.signs" style={$analyticsText} />
-          </View>
+          {analytics.map(({ key, title, count }) => (
+            <View key={key}>
+              <Text style={$analyticsNumbers}>{count}</Text>
+              <Text tx={title} style={$analyticsText} />
+            </View>
+          ))}
         </View>
 
         <View style={[$itemsContainer, $iconsContainer]}>
-          <Feather name={"phone"} size={40} color={colors.palette.primary100} />
-          <AntDesign name={"instagram"} size={40} color={colors.palette.primary100} />
-          <AntDesign name={"facebook-square"} size={40} color={colors.palette.primary100} />
+          {icons.map(({ key, icon }) => (
+            <SvgXml key={key} xml={icon} height={39} width={39} />
+          ))}
         </View>
       </View>
 
