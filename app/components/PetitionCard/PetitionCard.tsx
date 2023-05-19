@@ -27,6 +27,9 @@ import { moderateVerticalScale } from "app/utils/scaling"
 import { TxKeyPath } from "app/i18n"
 import I18n from "i18n-js"
 import { ViewMoreText } from "../ViewMoreText"
+import { useNavigation } from "@react-navigation/native"
+import { AppStackParamList } from "app/navigators"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
 const { chevronLeft, circleCheckSolid, eyeSolid, users, arrowUp } = icons
 export interface PetitionCardProps {
@@ -69,6 +72,8 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
     isPrivileged,
     isAnonymous,
   } = props
+
+  const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
   const $styles = [$container, style]
 
@@ -154,7 +159,7 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
         <Pressable
           style={$secondContainer}
           onPress={() => {
-            console.log("test")
+            navigation.navigate("UserPage")
           }}
         >
           <SvgXml xml={chevronLeft} height={16} width={16} fill={colors.palette.primary200} />
