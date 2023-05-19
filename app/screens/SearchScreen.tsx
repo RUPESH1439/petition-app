@@ -19,28 +19,28 @@ export const SearchScreen: FC<SearchScreenProps> = observer(function SearchScree
   // const { someStore, anotherStore } = useStores()
 
   return (
-  <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
-    <View style={$topContainer}>
-      <TextField
-        placeholderTx="search.searchPlaceholder"
-        placeholderTextColor={colors.palette.gray200}
-        LeftAccessory={() => (
-          <SvgXml
-            xml={search}
-            height={22}
-            width={22}
-            fill={colors.palette.gray100}
-            style={$searchIcon}
-          />
-        )}
-        style={$textField}
-      />
-    </View>
-    <View style={$textContainer}>
-      <Text tx="search.bodyText" style={$textStyle} />
-    </View>
-  </Screen>
-)
+    <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
+      <View style={$topContainer}>
+        <TextField
+          placeholderTx="search.searchPlaceholder"
+          placeholderTextColor={colors.palette.gray200}
+          LeftAccessory={() => (
+            <SvgXml
+              xml={search}
+              height={22}
+              width={22}
+              fill={colors.palette.gray100}
+              style={$searchIcon}
+            />
+          )}
+          style={$textField}
+        />
+      </View>
+      <View style={$textContainer}>
+        <Text tx="search.bodyText" style={$textStyle} />
+      </View>
+    </Screen>
+  )
 })
 
 const $root: ViewStyle = {
@@ -72,7 +72,7 @@ const $searchIcon: TextStyle = {
 }
 
 const $textField: ViewStyle = {
-  height: moderateVerticalScale(24),
+  minHeight: moderateVerticalScale(14),
 }
 
 const $textContainer: ViewStyle = {

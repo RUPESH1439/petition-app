@@ -9,6 +9,11 @@ const en = {
     viewMore: "View More",
     viewLess: "View Less",
   },
+  errors: {
+    pleaseTry: "Please Try",
+    pleaseFill: "Please Fill The Field",
+    pleaseChoose: "Please Choose",
+  },
   homeTab: {
     profile: "profile",
     myPetitions: "my petitions",
@@ -117,6 +122,13 @@ const en = {
     permitImage: "Permit Image",
     logo: "Logo",
     linkOptional: "Link - Optional",
+    erros: {
+      establishedDate: "Must be of 4 digits",
+      organizationNameArabic: "Required",
+      organizationNameEnglish: "Required",
+      permitNumber: "Required",
+      addressCity: "Required",
+    },
   },
   createPersonalAccount: {
     name: "Name",

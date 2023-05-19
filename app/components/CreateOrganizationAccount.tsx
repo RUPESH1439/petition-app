@@ -14,7 +14,6 @@ import I18n from "i18n-js"
 import { Dropdown } from "./Dropdown"
 import { ImagePicker } from "./ImagePicker"
 import { moderateVerticalScale } from "app/utils/scaling"
-import { Datepicker } from "./Datepicker"
 
 const schema = z.object({
   organizationNameArabic: z.string(),
@@ -46,8 +45,8 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
   const {
     control,
     handleSubmit,
-    watch,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
@@ -77,6 +76,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
   const mockCities = [
     { id: "iraq", nameAr: "العراق", nameEn: "Iraq" },
     { id: "bagdad", nameAr: "بغداد", nameEn: "Baghdad" },
+    { id: "test", nameAr: "بغداد", nameEn: "Test" },
   ]
 
   const _cities = mockCities.map(({ id, nameAr, nameEn }) => ({
@@ -85,8 +85,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
   }))
 
   const [cities, setCities] = React.useState(_cities)
-
-  const establisedDate = watch("establisedDate")
+  const city = watch("city")
 
   React.useEffect(() => {
     setCities([..._cities])
@@ -123,13 +122,13 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
 
         <View style={$establishedContainer}>
           <View style={$flexOne}>
-            <Datepicker
-              style={$textInput}
-              date={establisedDate}
+            <TextField
+              control={control}
+              name="establisedDate"
               placeholderTx="createOrganizationAccount.establishedDate"
-              onChange={(date) => {
-                setValue("establisedDate", date)
-              }}
+              status={errors?.establisedDate ? "error" : null}
+              error={errors?.establisedDate ? "auth.signIn" : null}
+              containerStyle={$textInput}
             />
 
             <TextField
@@ -160,6 +159,8 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
             setValue("city", value)
           }}
           style={$address}
+          value={city}
+          dropDownContainerStyle={{ minHeight: cities.length * 80 }}
         />
 
         <TextField

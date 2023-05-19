@@ -1,6 +1,6 @@
-import React, { FC, useCallback } from "react"
+import React, { FC, useCallback, useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { Dimensions, View, ViewStyle } from "react-native"
+import { Dimensions, TextStyle, View, ViewStyle } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Dropdown, PetitionCard, Screen, ScreenHeader } from "app/components"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -128,6 +128,10 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
 
   const [cities, setCities] = React.useState(_cities)
 
+  useEffect(() => {
+    setCities(_cities)
+  }, [isRTL])
+
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top"]}>
       <ScreenHeader
@@ -144,9 +148,12 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
             }}
             dropdownTextStyle={{ color: colors.palette.neutral50 }}
             style={{
-              width: moderateVerticalScale(125),
-              height: moderateVerticalScale(24),
+              width: moderateVerticalScale(130),
+              height: moderateVerticalScale(38),
             }}
+            dropDownContainerStyle={$dropdownContainer}
+            propTextStyle={$dropDownText}
+            iconStyle={{ marginRight: moderateVerticalScale(8) }}
           />
         }
       />
@@ -178,3 +185,13 @@ const $cardContainer: ViewStyle = {
 }
 
 const $screenHeader: ViewStyle = { zIndex: 999 }
+
+const $dropDownText: TextStyle = {
+  fontSize: moderateVerticalScale(14),
+  lineHeight: moderateVerticalScale(42),
+}
+
+const $dropdownContainer: ViewStyle = {
+  paddingVertical: 7,
+  borderRadius: moderateVerticalScale(24),
+}
