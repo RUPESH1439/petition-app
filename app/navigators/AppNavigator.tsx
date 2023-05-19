@@ -52,6 +52,7 @@ export type AppStackParamList = {
   PrivacyPolicy: undefined
   CreatePetition: undefined
   UserPage: undefined
+	Otp: undefined
 	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
   CreateAccount: undefined
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
@@ -103,6 +104,7 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="PrivacyPolicy" component={Screens.PrivacyPolicyScreen} />
       <Stack.Screen name="CreatePetition" component={Screens.CreatePetitionScreen} />
       <Stack.Screen name="UserPage" component={Screens.UserPageScreen} />
+			<Stack.Screen name="Otp" component={Screens.OtpScreen} />
 			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
       <Stack.Screen name="CreateAccount" component={Screens.CreateAccountScreen} />
       <Stack.Screen name="HomeTab" component={HomeNavigator} />
