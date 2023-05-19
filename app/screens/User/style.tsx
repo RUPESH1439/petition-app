@@ -5,15 +5,15 @@ import { TextStyle, ViewStyle } from "react-native/types"
 
 const $root: ViewStyle = {
   flex: 1,
-  backgroundColor: "#CCCCCC",
+  backgroundColor: colors.palette.gray150,
 }
 
 const $detailContainer: ViewStyle = {
-  backgroundColor: "#fff",
+  backgroundColor: colors.palette.neutral50,
 }
 
 const $cardContainer: ViewStyle = {
-  backgroundColor: "#fff",
+  backgroundColor: colors.palette.neutral150,
   marginTop: moderateVerticalScale(5),
 }
 
