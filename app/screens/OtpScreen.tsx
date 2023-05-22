@@ -16,14 +16,15 @@ interface OtpScreenProps extends NativeStackScreenProps<AppStackScreenProps<"Otp
 export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
-
+  const [values, setValues] = useState([null, null, null, null])
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
   const route = useRoute<RouteProp<AppStackParamList, "Otp">>()
 
-  const [startTimer, setStartTimer] = useState(false)
+  const [startTimer, setStartTimer] = useState(true)
   const [count, setCount] = useState(60)
   const timer = useRef<NodeJS.Timer>()
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     if (!startTimer) {
@@ -50,17 +51,19 @@ export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
   const thirdRef = React.useRef<TextInput>(null)
   const fourthRef = React.useRef<TextInput>(null)
 
-  const handleNext = ({ nativeEvent }) => {
+  const handleNext = ({ nativeEvent }, index) => {
     if (nativeEvent.key === "Backspace") {
-      if (active === 0) return
-      setActive((prev) => prev - 1)
+      if (index === 0) return
+      setActive(index - 1)
       return
     }
-    if (active === 3) return
-
-    setActive((prev) => prev + 1)
+    if (index === 3) {
+      return
+    }
+    setActive(index + 1)
   }
   useEffect(() => {
+    const _newValues = [...values]
     switch (active) {
       case 0:
         firstRef.current.focus()
@@ -77,7 +80,28 @@ export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
         fourthRef.current.focus()
         break
     }
+    setValues(_newValues)
+    // updateValues(null, active)
   }, [active])
+
+  const updateValues = (val, index) => {
+    const _newValues = [...values]
+    _newValues[index] = val ? parseInt(val) : null
+    setValues([..._newValues])
+    if (index === 3) {
+      if (_newValues.includes(null)) {
+        setError(true)
+      } else {
+        const enteredCode = _newValues.join("")
+        if (enteredCode === "1234") {
+          navigation.navigate("HomeTab")
+        } else {
+          setError(true)
+        }
+      }
+    }
+  }
+
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
       <ScreenHeader
@@ -95,56 +119,71 @@ export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
           <Text style={$changeNum} tx="otpScreen.changeNum" />
         </Pressable>
         <View style={$otpContainer}>
-          <TextField
-            containerStyle={$inputContainerStyle}
-            keyboardType="numeric"
-            ref={firstRef}
-            onKeyPress={handleNext}
-            onChange={() => {
-              // setActive(1)
-            }}
-          />
-          <TextField
-            containerStyle={$inputContainerStyle}
-            keyboardType="numeric"
-            ref={secondRef}
-            onKeyPress={handleNext}
-            onChange={() => {
-              // setActive(2)
-            }}
-          />
-          <TextField
-            containerStyle={$inputContainerStyle}
-            keyboardType="numeric"
-            ref={thirdRef}
-            onKeyPress={handleNext}
-            onChange={(val) => {
-              console.log("val", val)
-              // setActive(3)
-            }}
-          />
-          <TextField
-            containerStyle={$inputContainerStyle}
-            keyboardType="numeric"
-            ref={fourthRef}
-            onKeyPress={handleNext}
-            onChange={(val) => {
-              // setActive(0)
-            }}
-          />
+          <View style={$otpInputs}>
+            <TextField
+              containerStyle={[$inputContainerStyle, error && $errorInput]}
+              keyboardType="numeric"
+              inputWrapperStyle={$inputWrapper}
+              ref={firstRef}
+              value={values[0]}
+              clearTextOnFocus
+              onKeyPress={(e) => handleNext(e, 0)}
+              maxLength={1}
+              onChangeText={(val) => updateValues(val, 0)}
+            />
+            <TextField
+              containerStyle={[$inputContainerStyle, error && $errorInput]}
+              keyboardType="numeric"
+              clearTextOnFocus
+              ref={secondRef}
+              inputWrapperStyle={$inputWrapper}
+              value={values[1]}
+              onKeyPress={(e) => handleNext(e, 1)}
+              maxLength={1}
+              onChangeText={(val) => updateValues(val, 1)}
+            />
+            <TextField
+              containerStyle={[$inputContainerStyle, error && $errorInput]}
+              keyboardType="numeric"
+              ref={thirdRef}
+              onKeyPress={(e) => handleNext(e, 2)}
+              value={values[2]}
+              maxLength={1}
+              clearTextOnFocus
+              inputWrapperStyle={$inputWrapper}
+              onChangeText={(val) => updateValues(val, 2)}
+            />
+            <TextField
+              containerStyle={[$inputContainerStyle, error && $errorInput]}
+              keyboardType="numeric"
+              ref={fourthRef}
+              clearTextOnFocus
+              maxLength={1}
+              inputWrapperStyle={$inputWrapper}
+              onKeyPress={(e) => handleNext(e, 3)}
+              value={values[3]}
+              onChangeText={(val) => {
+                updateValues(val, 3)
+              }}
+            />
+          </View>
+          {error && <Text tx="otpScreen.wrongCode" style={$error} />}
         </View>
 
         <Button
           text={
-            startTimer
+            error
+              ? I18n.translate("otpScreen.reEnter")
+              : startTimer
               ? `${I18n.translate("otpScreen.notificationText")} 0:${count}`
               : I18n.translate("otpScreen.sendCodeAgain")
           }
-          disabled={startTimer}
+          disabled={error ? false : startTimer}
+          // eslint-disable-next-line react-native/no-inline-styles
           style={{ width: "100%" }}
-          preset={startTimer ? "reversed" : "default"}
+          preset={error ? "default" : startTimer ? "reversed" : "default"}
           onPress={() => {
-            setStartTimer(true)
+            error ? setError(false) : setStartTimer(true)
           }}
         />
       </View>
@@ -194,10 +233,22 @@ const $changeNum: TextStyle = {
 }
 
 const $otpContainer: ViewStyle = {
+  marginTop: moderateVerticalScale(28),
+  marginBottom: moderateVerticalScale(40),
+  alignItems: "center",
+  gap: moderateVerticalScale(8),
+}
+
+const $otpInputs: ViewStyle = {
   flexDirection: "row",
   gap: moderateScale(8),
-  marginTop: moderateVerticalScale(28),
-  marginBottom: moderateVerticalScale(64),
+}
+
+const $error: TextStyle = {
+  color: colors.palette.angry500,
+  fontSize: moderateVerticalScale(14),
+  fontFamily: typography.primary.bold,
+  lineHeight: moderateVerticalScale(24),
 }
 
 const $inputContainerStyle: ViewStyle = {
@@ -208,11 +259,11 @@ const $inputContainerStyle: ViewStyle = {
   borderColor: colors.palette.neutral50,
 }
 
-const $btnText: TextStyle = {
-  // lineHeight: moderateVerticalScale(27),
-  fontSize: moderateVerticalScale(14),
-  color: colors.palette.neutral100,
-  fontFamily: typography.primary.bold,
-  textAlign: "center",
-  paddingHorizontal: moderateScale(30),
+const $inputWrapper: ViewStyle = {
+  paddingHorizontal: moderateVerticalScale(4),
+}
+
+const $errorInput: ViewStyle = {
+  borderColor: colors.palette.angry500,
+  borderWidth: 1,
 }

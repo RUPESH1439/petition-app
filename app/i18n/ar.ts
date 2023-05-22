@@ -10,6 +10,7 @@ const ar: Translations = {
     change: "تغيير",
     viewMore: "مشاهدة المزيد",
     viewLess: "رؤية أقل",
+    confirmation: "التأكيد",
   },
   errors: {
     pleaseTry: "الرجاء الاختيار",
@@ -194,11 +195,13 @@ const ar: Translations = {
   },
   // TODO change translations
   otpScreen: {
-    headerTopPart: "Input The Code We Sent You On",
-    headerBottomPart: "Your Number",
-    changeNum: "change number",
-    notificationText: "Didn't Recieve The Code",
-    sendCodeAgain: "Send The Code Again",
+    headerTopPart: "ادخل الرمز المرسل لك عبر رسالة",
+    headerBottomPart: "نصية على الرقم",
+    changeNum: "تغيير الرقم",
+    notificationText: "لم استلم الرمز",
+    sendCodeAgain: "اعادة ادخال الرمز",
+    wrongCode: "الرمز خاطئ",
+    reEnter: "اعادة ادخال الرمز",
   },
   errorScreen: {
     title: "هناك خطأ ما",

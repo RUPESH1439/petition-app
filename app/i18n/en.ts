@@ -198,6 +198,8 @@ const en = {
     changeNum: "change number",
     notificationText: "Didn't Recieve The Code",
     sendCodeAgain: "Send The Code Again",
+    wrongCode: "wrong code",
+    reEnter: "Re-Enter Code",
   },
   errorScreen: {
     title: "Something went wrong!",
