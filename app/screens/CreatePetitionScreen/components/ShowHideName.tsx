@@ -1,11 +1,12 @@
 import * as React from "react"
 import { Pressable, StyleProp, TextStyle, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { colors, typography } from "app/theme"
+import { colors, spacing, typography } from "app/theme"
 import { Text } from "app/components/Text"
 import { moderateVerticalScale } from "app/utils/scaling"
 import useRTL from "app/hooks/useRTL"
 import { $ltr, $rtl } from "app/common/styles"
+import { TxKeyPath } from "app/i18n"
 
 const Circle = ({ selected }: { selected: boolean }) => {
   if (!selected) {
@@ -26,39 +27,45 @@ export interface ShowHideNameProps {
   style?: StyleProp<ViewStyle>
 
   onChange?: (showName: boolean) => void
+
+  error?: TxKeyPath
 }
 
 /**
  * Describe your component here
  */
 export const ShowHideName = observer(function ShowHideName(props: ShowHideNameProps) {
-  const { style, onChange } = props
+  const { style, onChange, error } = props
   const { isRTL } = useRTL()
 
   const $styles = [$container, isRTL ? $rtl : $ltr, style]
-  const [showName, setShowName] = React.useState(false)
+  const [showName, setShowName] = React.useState(null)
+  const noShowName = showName === false
   return (
-    <View style={$styles}>
-      <Pressable
-        style={[$input, showName && $inputSelected]}
-        onPress={() => {
-          setShowName(true)
-          onChange?.(true)
-        }}
-      >
-        <Circle selected={showName} />
-        <Text tx="createPetition.showName" style={[$text, showName && $textSelected]}></Text>
-      </Pressable>
-      <Pressable
-        style={[$input, !showName && $inputSelected]}
-        onPress={() => {
-          setShowName(false)
-          onChange?.(false)
-        }}
-      >
-        <Circle selected={!showName} />
-        <Text tx="createPetition.hideName" style={[$text, !showName && $textSelected]}></Text>
-      </Pressable>
+    <View>
+      <View style={$styles}>
+        <Pressable
+          style={[$input, !!error && $errorContainer, showName === true && $inputSelected]}
+          onPress={() => {
+            setShowName(true)
+            onChange?.(true)
+          }}
+        >
+          <Circle selected={showName} />
+          <Text tx="createPetition.showName" style={[$text, showName && $textSelected]}></Text>
+        </Pressable>
+        <Pressable
+          style={[$input, !!error && $errorContainer, noShowName && $inputSelected]}
+          onPress={() => {
+            setShowName(false)
+            onChange?.(false)
+          }}
+        >
+          <Circle selected={noShowName} />
+          <Text tx="createPetition.hideName" style={[$text, noShowName && $textSelected]}></Text>
+        </Pressable>
+      </View>
+      {!!error && <Text tx={error} preset="error" style={$error} />}
     </View>
   )
 })
@@ -134,4 +141,13 @@ const $textSelected: TextStyle = {
 
 const $selectedContainer: ViewStyle = {
   position: "relative",
+}
+
+const $error: TextStyle = {
+  marginTop: 5,
+  marginLeft: spacing.medium,
+}
+
+const $errorContainer: ViewStyle = {
+  borderColor: colors.palette.angry500,
 }

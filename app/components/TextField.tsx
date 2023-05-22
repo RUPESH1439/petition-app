@@ -286,7 +286,7 @@ const $inputStyle: TextStyle = {
   marginVertical: spacing.small,
   marginHorizontal: spacing.medium,
   lineHeight: moderateVerticalScale(27),
-  minHeight: moderateVerticalScale(24),
+  minHeight: moderateVerticalScale(20),
 }
 
 const $helperStyle: TextStyle = {

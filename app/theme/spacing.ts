@@ -13,6 +13,7 @@ export const spacing = {
   extraMedium: moderateVerticalScale(18),
   large: moderateVerticalScale(22),
   extraLarge: moderateVerticalScale(30),
+  mdHuge: moderateVerticalScale(38),
   huge: moderateVerticalScale(46),
   massive: moderateVerticalScale(62),
 } as const

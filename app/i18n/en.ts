@@ -8,6 +8,12 @@ const en = {
     change: "Change",
     viewMore: "View More",
     viewLess: "View Less",
+    confirmation: "Confirmation",
+  },
+  errors: {
+    pleaseTry: "Please Try",
+    pleaseFill: "Please Fill The Field",
+    pleaseChoose: "Please Choose",
   },
   homeTab: {
     profile: "profile",
@@ -117,6 +123,13 @@ const en = {
     permitImage: "Permit Image",
     logo: "Logo",
     linkOptional: "Link - Optional",
+    erros: {
+      establishedDate: "Must be of 4 digits",
+      organizationNameArabic: "Required",
+      organizationNameEnglish: "Required",
+      permitNumber: "Required",
+      addressCity: "Required",
+    },
   },
   createPersonalAccount: {
     name: "Name",
@@ -178,6 +191,15 @@ const en = {
     petitions: "Petitions",
     views: "Views",
     signs: "Signs",
+  },
+  otpScreen: {
+    headerTopPart: "Input The Code We Sent You On",
+    headerBottomPart: "Your Number",
+    changeNum: "change number",
+    notificationText: "Didn't Recieve The Code",
+    sendCodeAgain: "Send The Code Again",
+    wrongCode: "wrong code",
+    reEnter: "Re-Enter Code",
   },
   errorScreen: {
     title: "Something went wrong!",

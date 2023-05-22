@@ -4,7 +4,6 @@ import { TextStyle, View, ViewStyle } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import {
   Button,
-  Datepicker,
   Dropdown,
   ImagePicker,
   Screen,
@@ -35,7 +34,7 @@ const schema = z.object({
   ceoPhone: z.string(),
   organizationPhone: z.string(),
   organizationSocialMediaLinks: z.array(z.string()),
-  establishedDate: z.date(),
+  establishedDate: z.string().length(4),
   city: z.string(),
 })
 
@@ -44,8 +43,8 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
     const {
       control,
       handleSubmit,
-      watch,
       setValue,
+      watch,
       formState: { errors },
     } = useForm({
       resolver: zodResolver(schema),
@@ -58,7 +57,7 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
         organizationPhone: "",
         organizationSocialMediaLinks: [],
         nearestLandMark: "",
-        establisedDate: null,
+        establishedDate: null,
       },
     })
 
@@ -75,6 +74,7 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
     const mockCities = [
       { id: "iraq", nameAr: "العراق", nameEn: "Iraq" },
       { id: "bagdad", nameAr: "بغداد", nameEn: "Baghdad" },
+      { id: "test", nameAr: "بغداد", nameEn: "Test" },
     ]
 
     const _cities = mockCities.map(({ id, nameAr, nameEn }) => ({
@@ -84,13 +84,12 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
 
     const [cities, setCities] = React.useState(_cities)
 
-    const establisedDate = watch("establisedDate")
-
     React.useEffect(() => {
       setCities([..._cities])
     }, [isRTL])
 
     const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
+    const city = watch("city")
     return (
       <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
         <ScreenHeader
@@ -128,18 +127,22 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
 
             <View style={$establishedContainer}>
               <View style={$flexOne}>
-                <Datepicker
-                  style={$textInput}
-                  date={establisedDate}
+                <TextField
+                  control={control}
+                  name="establisedDate"
                   placeholderTx="createOrganizationAccount.establishedDate"
-                  onChange={(date) => {
-                    setValue("establisedDate", date)
-                  }}
+                  status={errors?.establishedDate ? "error" : null}
+                  error={
+                    errors?.establishedDate
+                      ? "createOrganizationAccount.erros.establishedDate"
+                      : null
+                  }
+                  containerStyle={$textInput}
                 />
 
                 <TextField
                   control={control}
-                  name="organizationNameEnglish"
+                  name="permitNumber"
                   placeholderTx="createOrganizationAccount.permitNumber"
                   status={errors?.organizationNameEnglish ? "error" : null}
                   error={errors?.organizationNameEnglish ? "auth.signIn" : null}
@@ -164,7 +167,9 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
               onChange={(value) => {
                 setValue("city", value)
               }}
+              dropDownContainerStyle={{ minHeight: cities.length * 80 }}
               style={$address}
+              value={city}
             />
 
             <TextField
