@@ -1,12 +1,13 @@
-import React, { FC, useEffect } from "react"
+import React, { FC, useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { TextInput, TextStyle, View, ViewStyle } from "react-native"
+import { Pressable, TextInput, TextStyle, View, ViewStyle } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Button, Screen, ScreenHeader, Text, TextField } from "app/components"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useNavigation } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { moderateScale, moderateVerticalScale } from "app/utils/scaling"
 import { colors, spacing, typography } from "app/theme"
+import I18n from "i18n-js"
 
 // import { useStores } from "app/models"
 
@@ -17,6 +18,30 @@ export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
   // const { someStore, anotherStore } = useStores()
 
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
+
+  const route = useRoute<RouteProp<AppStackParamList, "Otp">>()
+
+  const [startTimer, setStartTimer] = useState(false)
+  const [count, setCount] = useState(60)
+  const timer = useRef<NodeJS.Timer>()
+
+  useEffect(() => {
+    if (!startTimer) {
+      clearInterval(timer.current)
+      return
+    }
+    timer.current = setInterval(() => {
+      setCount((prev) => {
+        if (prev > 0) {
+          return prev - 1
+        } else {
+          setCount(60)
+          setStartTimer(false)
+        }
+      })
+    }, 1000)
+    return () => clearInterval(timer.current)
+  }, [startTimer])
 
   const [active, setActive] = React.useState(0)
 
@@ -65,8 +90,10 @@ export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
           <Text tx="otpScreen.headerTopPart" style={$header} />
           <Text tx="otpScreen.headerBottomPart" style={$header} />
         </View>
-        <Text style={$phoneNumber}>07812135918</Text>
-        <Text style={$changeNum} tx="otpScreen.changeNum" />
+        <Text style={$phoneNumber}>{route.params.phone}</Text>
+        <Pressable onPress={() => navigation.goBack()}>
+          <Text style={$changeNum} tx="otpScreen.changeNum" />
+        </Pressable>
         <View style={$otpContainer}>
           <TextField
             containerStyle={$inputContainerStyle}
@@ -107,7 +134,19 @@ export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
           />
         </View>
 
-        <Button tx="otpScreen.notificationText" preset="reversed" textStyle={$btnText} />
+        <Button
+          text={
+            startTimer
+              ? `${I18n.translate("otpScreen.notificationText")} 0:${count}`
+              : I18n.translate("otpScreen.sendCodeAgain")
+          }
+          disabled={startTimer}
+          style={{ width: "100%" }}
+          preset={startTimer ? "reversed" : "default"}
+          onPress={() => {
+            setStartTimer(true)
+          }}
+        />
       </View>
     </Screen>
   )

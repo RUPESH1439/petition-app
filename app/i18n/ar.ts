@@ -192,8 +192,13 @@ const ar: Translations = {
     hideName: "لا تظهر اسمي",
     publish: "نشر",
   },
+  // TODO change translations
   otpScreen: {
-    confirmation: "confirmation",
+    headerTopPart: "Input The Code We Sent You On",
+    headerBottomPart: "Your Number",
+    changeNum: "change number",
+    notificationText: "Didn't Recieve The Code",
+    sendCodeAgain: "Send The Code Again",
   },
   errorScreen: {
     title: "هناك خطأ ما",

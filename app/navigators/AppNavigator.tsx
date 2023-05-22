@@ -52,8 +52,10 @@ export type AppStackParamList = {
   PrivacyPolicy: undefined
   CreatePetition: undefined
   UserPage: undefined
-	Otp: undefined
-	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  Otp: {
+    phone: number
+  }
+  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
   CreateAccount: undefined
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
   HomeTab: undefined

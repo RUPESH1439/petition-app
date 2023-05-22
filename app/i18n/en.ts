@@ -196,7 +196,8 @@ const en = {
     headerTopPart: "Input The Code We Sent You On",
     headerBottomPart: "Your Number",
     changeNum: "change number",
-    notificationText: "Didn't Recieve The Code (0:06)",
+    notificationText: "Didn't Recieve The Code",
+    sendCodeAgain: "Send The Code Again",
   },
   errorScreen: {
     title: "Something went wrong!",
