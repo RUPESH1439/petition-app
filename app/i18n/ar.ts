@@ -10,6 +10,7 @@ const ar: Translations = {
     change: "تغيير",
     viewMore: "مشاهدة المزيد",
     viewLess: "رؤية أقل",
+    confirmation: "التأكيد",
   },
   errors: {
     pleaseTry: "الرجاء الاختيار",
@@ -191,6 +192,16 @@ const ar: Translations = {
     showName: "اظهار اسمي",
     hideName: "لا تظهر اسمي",
     publish: "نشر",
+  },
+  // TODO change translations
+  otpScreen: {
+    headerTopPart: "ادخل الرمز المرسل لك عبر رسالة",
+    headerBottomPart: "نصية على الرقم",
+    changeNum: "تغيير الرقم",
+    notificationText: "لم استلم الرمز",
+    sendCodeAgain: "اعادة ادخال الرمز",
+    wrongCode: "الرمز خاطئ",
+    reEnter: "اعادة ادخال الرمز",
   },
   errorScreen: {
     title: "هناك خطأ ما",

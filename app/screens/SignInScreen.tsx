@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -12,7 +12,7 @@ interface SignInScreenProps extends NativeStackScreenProps<AppStackScreenProps<"
 export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
-
+  const [phone, setPhone] = useState<number | undefined>()
   // Pull in navigation via hook
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
   return (
@@ -23,8 +23,22 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
         onButtonPress={() => navigation.goBack()}
       />
       <View style={$container}>
-        <TextField placeholderTx="signIn.phoneNumber" keyboardType="phone-pad" />
-        <Button tx="common.continue" style={$next} onPress={() => navigation.navigate("HomeTab")} />
+        <TextField
+          placeholderTx="signIn.phoneNumber"
+          keyboardType="phone-pad"
+          onChangeText={(text) => setPhone(parseInt(text))}
+        />
+        <Button
+          tx="common.continue"
+          style={$next}
+          onPress={() => {
+            if (phone) {
+              navigation.navigate("Otp", {
+                phone,
+              })
+            }
+          }}
+        />
       </View>
     </Screen>
   )
