@@ -23,6 +23,7 @@ import {
   $phoneNumberText,
   $root,
 } from "./style"
+import useUser from "app/hooks/userUser"
 interface AccountScreenProps extends NativeStackScreenProps<AppStackScreenProps<"Account">> {}
 
 interface AccountItem {
@@ -33,10 +34,13 @@ interface AccountItem {
 
 export const AccountScreen: FC<AccountScreenProps> = observer(function AccountScreen() {
   const { isRTL } = useRTL()
+  const { user } = useUser()
+  const { id, name, owner } = user ?? {}
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
-
+  const { isPrivileged, phoneNumber, userType } = owner ?? {}
   // TODO move this logic from backend
-  const isOrganization = true
+  const isOrganization = userType === "organization"
+
   const loggedInAccountItems: AccountItem[] = [
     {
       id: "myInfo",
@@ -95,11 +99,13 @@ export const AccountScreen: FC<AccountScreenProps> = observer(function AccountSc
               style={$avatar}
             />
 
-            <Text preset="primaryBold" tx="accountScreen.name" style={$detailTextStyle} />
-            <AntDesign name={"checkcircle"} size={24} color={colors.palette.primary100} />
+            <Text preset="primaryBold" text={name ?? ""} style={$detailTextStyle} />
+            {!!isPrivileged && (
+              <AntDesign name={"checkcircle"} size={24} color={colors.palette.primary100} />
+            )}
           </View>
           <View style={$phoneNumberContainer}>
-            <Text tx="accountScreen.phoneNumber" style={[$detailTextStyle, $phoneNumberText]} />
+            <Text text={phoneNumber ?? ""} style={[$detailTextStyle, $phoneNumberText]} />
           </View>
         </View>
       ) : null}

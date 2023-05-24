@@ -1,12 +1,13 @@
-import React, { FC, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Button, Screen, ScreenHeader, TextField } from "app/components"
 import { useNavigation } from "@react-navigation/native"
-import { spacing } from "app/theme"
-
+import { colors, spacing } from "app/theme"
+import useLogin from "app/hooks/api/useLogin"
+import Snackbar from "react-native-snackbar"
 interface SignInScreenProps extends NativeStackScreenProps<AppStackScreenProps<"SignIn">> {}
 
 export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScreen() {
@@ -15,6 +16,22 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
   const [phone, setPhone] = useState<number | undefined>()
   // Pull in navigation via hook
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
+  const { login, userData, loginError, isLogging } = useLogin(phone?.toString())
+  if (loginError) {
+    Snackbar.show({
+      text: loginError?.message,
+      backgroundColor: colors.palette.angry500,
+      marginBottom: 20,
+    })
+  }
+  useEffect(() => {
+    if (userData?.id) {
+      navigation.navigate("Otp", {
+        phone,
+        userData,
+      })
+    }
+  }, [userData?.id])
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
       <ScreenHeader
@@ -31,11 +48,10 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
         <Button
           tx="common.continue"
           style={$next}
+          loading={isLogging}
           onPress={() => {
             if (phone) {
-              navigation.navigate("Otp", {
-                phone,
-              })
+              login()
             }
           }}
         />

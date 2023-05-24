@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
@@ -10,6 +10,9 @@ import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { spacing } from "app/theme"
+import useUser from "app/hooks/userUser"
+import useGender from "app/hooks/api/useGender"
+import useGovernorate from "app/hooks/api/useGovernorate"
 
 // import { useStores } from "app/models"
 
@@ -27,6 +30,10 @@ interface EditPersonalInfoScreenProps
 export const EditPersonalInfoScreen: FC<EditPersonalInfoScreenProps> = observer(
   function EditPersonalInfoScreen() {
     const { isRTL } = useRTL()
+    const { user } = useUser()
+    const { genderData } = useGender()
+    const { governorateData } = useGovernorate()
+
     const {
       control,
       handleSubmit,
@@ -37,43 +44,46 @@ export const EditPersonalInfoScreen: FC<EditPersonalInfoScreenProps> = observer(
       resolver: zodResolver(schema),
       defaultValues: {
         name: "",
-        dateOfBirth: null,
+        dateOfBirth: "",
         mobileNumber: "",
         gender: null,
         city: null,
       },
     })
     const onSubmit = (data) => console.log(data)
-    const mockCities = [
-      { id: "iraq", nameAr: "العراق", nameEn: "Iraq" },
-      { id: "bagdad", nameAr: "بغداد", nameEn: "Baghdad" },
-    ]
 
-    const mockGenders = [
-      { id: "male", nameAr: "ذكر", nameEn: "male" },
-      { id: "female", nameAr: "بغداد", nameEn: "female" },
-    ]
-
-    const _cities = mockCities.map(({ id, nameAr, nameEn }) => ({
-      label: isRTL ? nameAr : nameEn,
+    const _cities = governorateData?.map(({ id, attributes }) => ({
+      label: isRTL ? attributes?.arName : attributes?.enName,
       value: id,
     }))
 
-    const _gender = mockGenders.map(({ id, nameAr, nameEn }) => ({
-      label: isRTL ? nameAr : nameEn,
+    const _genders = genderData?.map(({ id, attributes }) => ({
+      label: isRTL ? attributes?.arType : attributes?.enType,
       value: id,
     }))
 
     const [cities, setCities] = React.useState(_cities)
-    const [gender, setGender] = React.useState(_gender)
-
-    const dateOfBirth = watch("dateOfBirth")
-    // const city = watch("city")
+    const [genders, setGenders] = React.useState(_genders)
+    const [gender, setGender] = useState<number | null | string>(null)
+    const [city, setCity] = useState<number | null | string>(null)
 
     React.useEffect(() => {
       setCities([..._cities])
-      setGender([..._gender])
+      setGenders([..._genders])
     }, [isRTL])
+
+    React.useEffect(() => {
+      const { name, birthdateYear, gender: __gender, governorate, owner } = user ?? {}
+      if (name) {
+        setValue("name", name)
+      }
+      if (birthdateYear) {
+        setValue("dateOfBirth", birthdateYear)
+      }
+      if (owner?.phoneNumber) {
+        setValue("mobileNumber", owner?.phoneNumber)
+      }
+    }, [user?.id, gender])
 
     const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
     return (
@@ -92,20 +102,22 @@ export const EditPersonalInfoScreen: FC<EditPersonalInfoScreenProps> = observer(
             error={errors?.name ? "auth.signIn" : null}
             placeholderTx="createPersonalAccount.name"
           />
-          <Datepicker
-            date={dateOfBirth}
+          <TextField
+            control={control}
+            name="dateOfBirth"
+            status={errors?.dateOfBirth ? "error" : null}
+            error={errors?.dateOfBirth ? "auth.signIn" : null}
             placeholderTx="createPersonalAccount.dateOfBirth"
-            onChange={(date) => {
-              setValue("dateOfBirth", date)
-            }}
           />
           <View style={$dropdownGenderList}>
             <Dropdown
-              items={gender}
-              setItems={setGender}
+              items={genders}
+              setItems={setGenders}
+              value={gender}
               placeholderTx="createPersonalAccount.gender"
               onChange={(value) => {
                 setValue("gender", value)
+                setGender(value)
               }}
             />
           </View>
@@ -113,10 +125,12 @@ export const EditPersonalInfoScreen: FC<EditPersonalInfoScreenProps> = observer(
           <View style={$dropdownList}>
             <Dropdown
               items={cities}
+              value={city}
               setItems={setCities}
               placeholderTx="createPersonalAccount.governorate"
               onChange={(value) => {
                 setValue("city", value)
+                setCity(value)
               }}
             />
           </View>

@@ -14,6 +14,10 @@ import Config from "../config"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import useLanguagePreference from "app/hooks/useLanguagePreference"
 import { HomeNavigator } from "./HomeNavigator"
+import { OrganizationUser, PersonalUser } from "app/hooks/api/interface"
+import { load } from "app/utils/storage"
+import { STORAGE } from "app/constants/storage"
+import useUser from "app/hooks/userUser"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -54,6 +58,7 @@ export type AppStackParamList = {
   UserPage: undefined
   Otp: {
     phone: number
+    userData: PersonalUser | OrganizationUser
   }
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
   CreateAccount: undefined
@@ -106,8 +111,8 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="PrivacyPolicy" component={Screens.PrivacyPolicyScreen} />
       <Stack.Screen name="CreatePetition" component={Screens.CreatePetitionScreen} />
       <Stack.Screen name="UserPage" component={Screens.UserPageScreen} />
-			<Stack.Screen name="Otp" component={Screens.OtpScreen} />
-			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+      <Stack.Screen name="Otp" component={Screens.OtpScreen} />
+      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
       <Stack.Screen name="CreateAccount" component={Screens.CreateAccountScreen} />
       <Stack.Screen name="HomeTab" component={HomeNavigator} />
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
@@ -120,6 +125,7 @@ export interface NavigationProps
 
 export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
   const colorScheme = useColorScheme()
+  const { user, setUser } = useUser()
 
   useBackButtonHandler((routeName) => exitRoutes.includes(routeName))
 
@@ -129,13 +135,22 @@ export const AppNavigator = observer(function AppNavigator(props: NavigationProp
     await getLanguagePreference()
   }
 
+  const getUserData = async () => {
+    const data = (await load(STORAGE.USER)) as null | PersonalUser | OrganizationUser
+    if (data?.id && !user) {
+      setUser(data)
+    }
+  }
+
   const appState = useRef(AppState.currentState)
 
   useEffect(() => {
     checkPreference()
+    getUserData()
     const subscription = AppState.addEventListener("change", (nextAppState) => {
       appState.current = nextAppState
       checkPreference()
+      getUserData()
     })
 
     return () => {

@@ -24,6 +24,8 @@ import { setupReactotron } from "./services/reactotron"
 import Config from "./config"
 import { RTLContextProvider } from "./contexts/RTLContext"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { LogBox } from "react-native"
+import { UserContextProvider } from "./contexts/UserContext"
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
 setupReactotron({
@@ -38,6 +40,7 @@ setupReactotron({
   // log out any snapshots as they happen (this is useful for debugging but slow)
   logSnapshots: false,
 })
+LogBox.ignoreAllLogs() // Ignore all log notifications
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -108,13 +111,15 @@ function App(props: AppProps) {
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <ErrorBoundary catchErrors={Config.catchErrors}>
-          <RTLContextProvider>
-            <AppNavigator
-              linking={linking}
-              initialState={initialNavigationState}
-              onStateChange={onNavigationStateChange}
-            />
-          </RTLContextProvider>
+          <UserContextProvider>
+            <RTLContextProvider>
+              <AppNavigator
+                linking={linking}
+                initialState={initialNavigationState}
+                onStateChange={onNavigationStateChange}
+              />
+            </RTLContextProvider>
+          </UserContextProvider>
         </ErrorBoundary>
       </SafeAreaProvider>
     </QueryClientProvider>
