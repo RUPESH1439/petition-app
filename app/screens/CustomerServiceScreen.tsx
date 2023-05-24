@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react"
+import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 import { Linking, Pressable, TextStyle, ViewStyle } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
@@ -10,10 +10,6 @@ import useRTL from "app/hooks/useRTL"
 import { colors, spacing, typography } from "app/theme"
 import { moderateVerticalScale } from "app/utils/scaling"
 import useAppInfo from "app/hooks/api/useAppInfo"
-import useGender from "app/hooks/api/useGender"
-import usePetitionCategory from "app/hooks/api/usePetitionCategory"
-import useGovernorate from "app/hooks/api/useGovernorate"
-import useGetOrganization from "app/hooks/api/useGetOrganization"
 
 interface CustomerServiceScreenProps
   extends NativeStackScreenProps<AppStackScreenProps<"CustomerService">> {}
@@ -24,8 +20,6 @@ export const CustomerServiceScreen: FC<CustomerServiceScreenProps> = observer(
     // const { someStore, anotherStore } = useStores()
     const { isRTL } = useRTL()
     const { appInfoData } = useAppInfo()
-    const { getOrganizationData } = useGetOrganization(1)
-    console.log("governorate", getOrganizationData)
 
     const { facebookLink, phone, instagramLink, WebsiteLink } = appInfoData ?? {}
     const contactLinks = [
