@@ -23,7 +23,7 @@ import { customFontsToLoad } from "./theme"
 import { setupReactotron } from "./services/reactotron"
 import Config from "./config"
 import { RTLContextProvider } from "./contexts/RTLContext"
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
 setupReactotron({
@@ -66,6 +66,7 @@ interface AppProps {
   hideSplashScreen: () => Promise<void>
 }
 
+const queryClient = new QueryClient()
 /**
  * This is the root component of our app.
  */
@@ -104,17 +105,19 @@ function App(props: AppProps) {
 
   // otherwise, we're ready to render the app
   return (
-    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <ErrorBoundary catchErrors={Config.catchErrors}>
-        <RTLContextProvider>
-          <AppNavigator
-            linking={linking}
-            initialState={initialNavigationState}
-            onStateChange={onNavigationStateChange}
-          />
-        </RTLContextProvider>
-      </ErrorBoundary>
-    </SafeAreaProvider>
+    <QueryClientProvider client={queryClient}>
+      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+        <ErrorBoundary catchErrors={Config.catchErrors}>
+          <RTLContextProvider>
+            <AppNavigator
+              linking={linking}
+              initialState={initialNavigationState}
+              onStateChange={onNavigationStateChange}
+            />
+          </RTLContextProvider>
+        </ErrorBoundary>
+      </SafeAreaProvider>
+    </QueryClientProvider>
   )
 }
 
