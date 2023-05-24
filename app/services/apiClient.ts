@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export default axios.create({
-  baseURL: "http://localhost:1337/api", // TODO Update this url
+  baseURL: "http://09d8-2400-1a00-b020-8a1e-fdc6-d5a7-b114-ecae.ngrok-free.app/api/", // TODO Update this url
   headers: {
     "Content-type": "application/json",
     Authorization:
