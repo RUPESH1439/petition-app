@@ -7,19 +7,21 @@ import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-naviga
 import { useNavigation } from "@react-navigation/native"
 import { spacing } from "app/theme"
 import { moderateVerticalScale } from "app/utils/scaling"
-import { isRTL } from "app/i18n"
 import { ScrollView } from "react-native-gesture-handler"
 import { ShowHideName } from "./components/ShowHideName"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
+import usePetitionCategory from "app/hooks/api/usePetitionCategory"
+import useGovernorate from "app/hooks/api/useGovernorate"
+import useRTL from "app/hooks/useRTL"
 
 const schema = z.object({
-  governorate: z.string().min(1),
-  category: z.string().min(1),
+  governorate: z.number(),
+  category: z.number(),
   title: z.string().min(1),
   description: z.string().min(1),
-  image: z.string().nullish(),
+  image: z.string().optional(),
   showName: z.boolean(),
 })
 
@@ -37,44 +39,49 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
     } = useForm({
       resolver: zodResolver(schema),
       defaultValues: {
-        governorate: undefined,
-        category: undefined,
-        title: undefined,
-        description: undefined,
-        image: undefined,
-        showName: undefined,
+        governorate: null,
+        category: null,
+        title: null,
+        description: null,
+        image: null,
+        showName: null,
       },
     })
+    const { isRTL } = useRTL()
+    const { petitionCategoryData } = usePetitionCategory()
+    const { governorateData } = useGovernorate()
+    const _categories = React.useMemo(
+      () =>
+        petitionCategoryData?.map(({ attributes, id }) => ({
+          value: id,
+          label: isRTL ? attributes?.arName : attributes?.enName,
+        })) ?? [],
+      [isRTL, petitionCategoryData],
+    )
+    const [categories, setCategories] = React.useState([])
 
-    const mockCategories = [
-      { id: "iraq", nameAr: "العراق", nameEn: "Iraq" },
-      { id: "bagdad", nameAr: "بغداد", nameEn: "Baghdad" },
-    ]
-
-    const _categories = mockCategories.map(({ id, nameAr, nameEn }) => ({
-      label: isRTL ? nameAr : nameEn,
-      value: id,
-    }))
-
-    const [categories, setCategories] = React.useState(_categories)
-
-    const mockGovernorates = [
-      { id: "iraq", nameAr: "العراق", nameEn: "Iraq" },
-      { id: "bagdad", nameAr: "بغداد", nameEn: "Baghdad" },
-      { id: "karbala", nameAr: "بغداد", nameEn: "Karbala" },
-    ]
-
-    const _governorates = mockGovernorates.map(({ id, nameAr, nameEn }) => ({
-      label: isRTL ? nameAr : nameEn,
-      value: id,
-    }))
-
+    const _governorates = React.useMemo(
+      () =>
+        governorateData?.map(({ id, attributes }) => ({
+          label: isRTL ? attributes?.arName : attributes?.enName,
+          value: id,
+        })) ?? [],
+      [isRTL, governorateData],
+    )
     const [governorates, setGovernorates] = React.useState(_governorates)
 
     React.useEffect(() => {
       setGovernorates([..._governorates])
       setCategories([..._categories])
     }, [isRTL])
+
+    React.useEffect(() => {
+      setCategories([..._categories])
+    }, [_categories])
+
+    React.useEffect(() => {
+      setGovernorates([..._governorates])
+    }, [_governorates])
 
     const governorate = watch("governorate")
     const category = watch("category")
@@ -88,8 +95,7 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
       (errors?.showName && showName === null)
 
     const onSubmit = (data) => {
-      console.log(data)
-      navigation.navigate("Thankyou")
+      // navigation.navigate("Thankyou")
     }
 
     const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
@@ -109,7 +115,6 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
               onChange={(value) => {
                 setValue("governorate", value)
               }}
-              value={governorate}
               error={!governorate && errors?.governorate ? "errors.pleaseChoose" : null}
             />
           </View>
@@ -117,7 +122,6 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
             <Dropdown
               items={categories}
               setItems={setCategories}
-              value={category}
               placeholderTx={"createPetition.category"}
               onChange={(value) => {
                 setValue("category", value)

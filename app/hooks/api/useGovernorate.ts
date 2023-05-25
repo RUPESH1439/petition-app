@@ -6,7 +6,7 @@ type GovernorateResponse = Governorate[]
 
 export default function useGovernorate() {
   const {
-    isLoading: isLoadingGovernorate,
+    isFetching: isLoadingGovernorate,
     refetch: getGovernorate,
     data: governorateData,
     error: governorateError,
