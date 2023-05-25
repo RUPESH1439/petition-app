@@ -83,9 +83,46 @@ export interface Gender {
   attributes: GenderAttrs
 }
 
+export interface Petition {
+  id: string
+  attributes: PetitionAttrs
+}
+
+export interface PetitionAttrs {
+  hideName: string
+  description: string
+  title: string
+  image: any
+  createdAt: string
+  governorate: {
+    data: Governorate
+  }
+  category: {
+    data: PetitionCategory
+  }
+  creator: {
+    data: Owner
+  }
+  signers: {
+    data: Owner[]
+  }
+  petition_stat: {
+    data: PetitionStat
+  }
+}
+
+export interface PetitionStat {
+  id: number
+  attributes: PetitionStatAttrs
+}
+export interface PetitionStatAttrs {
+  views: string
+  shares: string
+}
+
 export interface PetitionCategoryAttrs {
   arName?: string
-  erName?: string
+  enName?: string
   createdAt?: string
   updatedAt?: string
   publishedAt?: string
@@ -126,6 +163,8 @@ export interface OwnerAttrs {
   facebookLink: string
   instagramLink: string
   websiteLink: string
+  arName: string
+  enName: string
 }
 export interface Owner {
   id: number

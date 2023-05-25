@@ -9,69 +9,11 @@ import { FlashList } from "@shopify/flash-list"
 import { colors, spacing } from "app/theme"
 import useRTL from "app/hooks/useRTL"
 import { moderateVerticalScale } from "app/utils/scaling"
+import useGetPetitions from "app/hooks/api/useGetPetitions"
+import useUser from "app/hooks/userUser"
+import formatPetitions from "app/utils/api/formatPetitions"
 
 interface HomeScreenProps extends NativeStackScreenProps<AppStackScreenProps<"Home">> {}
-
-const mockData = [
-  {
-    city: "Bagdad",
-    category: "Environment",
-    viewsCount: 12000,
-    signsCount: 12000,
-    name: "global organization",
-    isOrg: true,
-    status: "unsigned",
-    isPrivileged: true,
-    date: new Date(),
-    title: "justice for student",
-    description:
-      "give the students which failed exam another chance to be suregive the students which failed exam another chance to be suregive the students which failed exam another chance to be sure",
-    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
-  },
-  {
-    city: "Iraq",
-    category: "Environment",
-    viewsCount: 12000,
-    signsCount: 12000,
-    isAnonymous: true,
-    name: "global organization",
-    isOrg: true,
-    status: "unsigned",
-    isPrivileged: true,
-    date: new Date(),
-    title: "justice for student",
-    description: "give the students which failed exam another chance to be sure",
-    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
-  },
-  {
-    city: "Iraq",
-    category: "Environment",
-    viewsCount: 12000,
-    signsCount: 12000,
-    name: "Muhammad Sali",
-    isOrg: false,
-    status: "signed",
-    isPrivileged: false,
-    date: new Date(),
-    title: "justice for student",
-    description: "give the students which failed exam another chance to be sure",
-    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
-  },
-  {
-    city: "Iraq",
-    category: "Environment",
-    viewsCount: 12000,
-    signsCount: 12000,
-    name: "global organization",
-    isOrg: true,
-    status: "signed",
-    isPrivileged: false,
-    date: new Date(),
-    title: "justice for student",
-    description: "give the students which failed exam another chance to be sure",
-    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
-  },
-]
 
 export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   // Pull in one of our MST stores
@@ -79,8 +21,15 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
 
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
   const { isRTL } = useRTL()
+  const { user } = useUser()
+  const { petitionsData } = useGetPetitions()
+  const mappedPetitionsData = React.useMemo(
+    () => formatPetitions(petitionsData, isRTL, user?.owner?.id),
+    [petitionsData],
+  )
   const renderItem = useCallback(({ item }) => {
     const {
+      id,
       city,
       category,
       viewsCount,
@@ -96,7 +45,7 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
       isAnonymous,
     } = item ?? {}
     return (
-      <View style={$cardContainer}>
+      <View style={$cardContainer} key={id}>
         <PetitionCard
           city={city}
           category={category}
@@ -104,7 +53,7 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
           signsCount={signsCount}
           name={name}
           isOrg={isOrg}
-          status={status as "unsigned" | "signed" | "forGuest"}
+          status={status}
           isPrivileged={isPrivileged}
           date={date}
           photoUrl={photoUrl}
@@ -162,7 +111,7 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
           showsVerticalScrollIndicator={false}
           renderItem={renderItem}
           estimatedItemSize={200}
-          data={mockData}
+          data={mappedPetitionsData ?? []}
         />
       </View>
     </Screen>
