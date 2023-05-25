@@ -136,7 +136,7 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
       [isRTL, governorateData],
     )
 
-    const mockSocialMediaLinks: {
+    const socialMediaLinks: {
       id: string
       nameAr: string
       nameEn: string
@@ -340,7 +340,7 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
               keyboardType="phone-pad"
             />
 
-            {mockSocialMediaLinks.map(({ id, nameAr, nameEn, name, error }) => (
+            {socialMediaLinks.map(({ id, nameAr, nameEn, name, error }) => (
               <TextField
                 key={id}
                 control={control}

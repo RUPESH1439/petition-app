@@ -47,7 +47,6 @@ export const EditPersonalInfoScreen: FC<EditPersonalInfoScreenProps> = observer(
       governorate,
       owner,
     } = (user ?? {}) as PersonalUser
-    console.log("user", user)
     const { genderData } = useGender()
     const { governorateData } = useGovernorate()
 
