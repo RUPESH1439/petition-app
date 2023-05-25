@@ -7,27 +7,70 @@ export type ID = {
 }
 export interface PersonalUser {
   id: number
-  name: string
-  birthdateYear: string
-  createdAt: string
-  updatedAt: string
+  name?: string
+  birthdateYear?: string
+  createdAt?: string
+  updatedAt?: string
   publishedAt?: null
-  gender: GenderAttrs & ID
+  gender?: GenderAttrs & ID
   governorate?: GovernorateAttrs & ID
   owner: OwnerAttrs & ID
 }
 
 export interface OrganizationUser {
   id: number
-  name: string
-  birthdateYear: string
-  createdAt: string
-  updatedAt: string
+  arName?: string
+  enName?: string
+  nearestLandmark?: string
+  CEOName?: string
+  permitNumber?: string
+  organizationPhone?: string
+  EstablishedYear?: string
+  createdAt?: string
+  updatedAt?: string
   publishedAt?: null
-  gender: GenderAttrs & ID
+  logo?: any // TODO integrate logo
+  permitImage?: any
+  gender?: GenderAttrs & ID
   governorate?: GovernorateAttrs & ID
-  owner: OwnerAttrs & ID
+  owner?: OwnerAttrs & ID
 }
+
+export interface UpdatePersonalUser {
+  name?: string
+  birthdateYear?: string
+  gender?: number
+  phoneNumber?: string
+  governorate?: number
+}
+
+export interface UpdateOrganization {
+  arName?: string
+  enName?: string
+  nearestLandmark?: string
+  CEOName?: string
+  permitNumber?: string
+  organizationPhone?: string
+  EstablishedYear?: string
+  publishedAt?: null
+  logo?: any // TODO integrate logo
+  permitImage?: any
+  gender?: number
+  governorate?: number
+}
+
+export interface UpdateOwner {
+  isPrivileged?: boolean
+  phoneVerified?: boolean
+  phoneNumber?: string
+  lat?: number
+  long?: number
+  facebookLink?: string
+  instagramLink?: string
+  websiteLink?: string
+  signedPetitions?: number[]
+}
+
 export interface GenderAttrs {
   arType?: string
   enType?: string

@@ -26,6 +26,7 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
   control?: Control<any>
   name?: string
   error?: TxKeyPath
+  errorText?: string
   /**
    * A style modifier for different input states.
    */
@@ -113,6 +114,7 @@ export const TextField = forwardRef(function TextField(props: TextFieldProps, re
     control,
     name,
     error,
+    errorText,
     labelTx,
     label,
     labelTxOptions,
@@ -247,7 +249,9 @@ export const TextField = forwardRef(function TextField(props: TextFieldProps, re
         )}
       </View>
 
-      {!!error && <Text tx={error} preset="error" style={$error} />}
+      {(!!error || !!errorText) && (
+        <Text tx={error} text={errorText} preset="error" style={$error} />
+      )}
 
       {!!(helper || helperTx) && (
         <Text

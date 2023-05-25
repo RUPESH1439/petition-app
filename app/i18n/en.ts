@@ -14,6 +14,13 @@ const en = {
     pleaseTry: "Please Try",
     pleaseFill: "Please Fill The Field",
     pleaseChoose: "Please Choose",
+    phone: "Digits Remaining",
+    englishOnly: "English Letters Only",
+    arabicOnly: "Arabic Letters Only",
+    numbersOnly: "Numbers Only",
+    facebookOnly: "Facebook Only",
+    instagramOnly: "Instagram Only",
+    websiteOnly: "Website Only",
   },
   homeTab: {
     profile: "profile",

@@ -34,12 +34,19 @@ interface AccountItem {
 
 export const AccountScreen: FC<AccountScreenProps> = observer(function AccountScreen() {
   const { isRTL } = useRTL()
-  const { user } = useUser()
-  const { id, name, owner } = user ?? {}
+  const { user, logout } = useUser()
+  const { id, name, owner, enName, arName } = (user ?? {}) as any
+
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
   const { isPrivileged, phoneNumber, userType } = owner ?? {}
   // TODO move this logic from backend
   const isOrganization = userType === "organization"
+  let _name
+  if (isOrganization) {
+    _name = isRTL ? arName : enName
+  } else {
+    _name = name
+  }
 
   const loggedInAccountItems: AccountItem[] = [
     {
@@ -81,7 +88,7 @@ export const AccountScreen: FC<AccountScreenProps> = observer(function AccountSc
     },
   ]
 
-  const isLoggedIn = true
+  const isLoggedIn = !!id
 
   const accountItems = isLoggedIn ? loggedInAccountItems : guestAccountItems
 
@@ -91,15 +98,17 @@ export const AccountScreen: FC<AccountScreenProps> = observer(function AccountSc
       {isLoggedIn ? (
         <View style={$detailContainer}>
           <View style={$nameContainer(isRTL)}>
-            <Image
-              // TODO Remove this hardcode later
-              source={{
-                uri: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
-              }}
-              style={$avatar}
-            />
+            {!!isOrganization && (
+              <Image
+                // TODO Remove this hardcode later
+                source={{
+                  uri: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
+                }}
+                style={$avatar}
+              />
+            )}
 
-            <Text preset="primaryBold" text={name ?? ""} style={$detailTextStyle} />
+            <Text preset="primaryBold" text={_name ?? ""} style={$detailTextStyle} />
             {!!isPrivileged && (
               <AntDesign name={"checkcircle"} size={24} color={colors.palette.primary100} />
             )}
@@ -121,7 +130,10 @@ export const AccountScreen: FC<AccountScreenProps> = observer(function AccountSc
               <LinkCard
                 tx={item.tx}
                 style={$linkCard}
-                onPress={() => {
+                onPress={async () => {
+                  if (item.id === "logout") {
+                    await logout()
+                  }
                   navigation.navigate(item.screenName)
                 }}
                 preset={item.id === "logout" ? "secondary" : "default"}

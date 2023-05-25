@@ -26,7 +26,12 @@ export const AuthScreen: FC<AuthScreenProps> = observer(function AuthScreen() {
         style={$englishButton}
         onPress={() => navigation.navigate("CreateAccount")}
       />
-      <Button tx="auth.continueAsGuest" style={$englishButton} preset="secondary" />
+      <Button
+        tx="auth.continueAsGuest"
+        style={$englishButton}
+        preset="secondary"
+        onPress={() => navigation.navigate("HomeTab")}
+      />
     </Screen>
   )
 })

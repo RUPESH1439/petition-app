@@ -16,6 +16,7 @@ const $nameContainer = (isRTL: boolean): ViewStyle => ({
   justifyContent: "center",
   gap: moderateVerticalScale(10),
   direction: isRTL ? "rtl" : "ltr",
+  marginHorizontal: spacing.huge,
 })
 
 const $avatar: ImageStyle = { width: 32, height: 32, borderRadius: 16 }
