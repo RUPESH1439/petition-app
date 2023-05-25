@@ -1,20 +1,63 @@
-import React, { FC, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Button, Screen, ScreenHeader, TextField } from "app/components"
 import { useNavigation } from "@react-navigation/native"
-import { spacing } from "app/theme"
+import { colors, spacing } from "app/theme"
+import useLogin from "app/hooks/api/useLogin"
+import Snackbar from "react-native-snackbar"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import I18n from "i18n-js"
 
 interface SignInScreenProps extends NativeStackScreenProps<AppStackScreenProps<"SignIn">> {}
+
+const schema = z.object({
+  mobileNumber: z.string().length(11),
+})
 
 export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
-  const [phone, setPhone] = useState<number | undefined>()
   // Pull in navigation via hook
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      mobileNumber: null,
+    },
+  })
+  const phone = watch("mobileNumber")
+  const { login, userData, loginError, isLogging } = useLogin(phone)
+  const [canNavigate, setCanNavigate] = useState(false)
+
+  const onSubmit = async (_data) => {
+    login()
+    setCanNavigate(true)
+  }
+  if (loginError) {
+    Snackbar.show({
+      text: loginError?.message,
+      backgroundColor: colors.palette.angry500,
+      marginBottom: 20,
+    })
+  }
+  useEffect(() => {
+    if (userData?.id && canNavigate) {
+      navigation.navigate("Otp", {
+        phone,
+        userData,
+      })
+    }
+  }, [userData?.id, isLogging])
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
       <ScreenHeader
@@ -24,20 +67,20 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
       />
       <View style={$container}>
         <TextField
-          placeholderTx="signIn.phoneNumber"
-          keyboardType="phone-pad"
-          onChangeText={(text) => setPhone(parseInt(text))}
+          control={control}
+          name="mobileNumber"
+          status={errors?.mobileNumber ? "error" : null}
+          errorText={
+            errors?.mobileNumber ? `${11 - phone?.length} ${I18n.translate("errors.phone")}` : null
+          }
+          placeholderTx="createPersonalAccount.mobileNumber"
+          keyboardType="numeric"
         />
         <Button
           tx="common.continue"
           style={$next}
-          onPress={() => {
-            if (phone) {
-              navigation.navigate("Otp", {
-                phone,
-              })
-            }
-          }}
+          loading={isLogging}
+          onPress={handleSubmit(onSubmit)}
         />
       </View>
     </Screen>

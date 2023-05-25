@@ -7,6 +7,8 @@ import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-naviga
 import { useNavigation } from "@react-navigation/native"
 import { colors, spacing, typography } from "app/theme"
 import { moderateVerticalScale } from "app/utils/scaling"
+import useAppInfo from "app/hooks/api/useAppInfo"
+import useRTL from "app/hooks/useRTL"
 // import { useStores } from "app/models"
 
 interface PrivacyPolicyScreenProps
@@ -17,6 +19,10 @@ export const PrivacyPolicyScreen: FC<PrivacyPolicyScreenProps> = observer(
     // Pull in one of our MST stores
     // const { someStore, anotherStore } = useStores()
 
+    const { appInfoData } = useAppInfo()
+    const { PrivacyPolicyAr, PrivacyPolicyEn } = appInfoData ?? {}
+    const { isRTL } = useRTL()
+
     const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
     return (
       <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
@@ -26,7 +32,7 @@ export const PrivacyPolicyScreen: FC<PrivacyPolicyScreenProps> = observer(
           onButtonPress={() => navigation.goBack()}
         />
         <View style={$policyContainer}>
-          <Text style={$textStyle} tx="privacyPolicyScreen.policy" />
+          <Text style={$textStyle} text={(isRTL ? PrivacyPolicyAr : PrivacyPolicyEn) ?? ""} />
         </View>
       </Screen>
     )

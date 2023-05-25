@@ -67,28 +67,28 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
 
   const { isRTL } = useRTL()
 
-  const mockSocialMediaLinks = [
+  const socialMediaLinks = [
     { id: "facebook", nameAr: "العراق", nameEn: "Facebook" },
     { id: "Instagram", nameAr: "العراق", nameEn: "Instagram" },
     { id: "Website", nameAr: "العراق", nameEn: "Website" },
   ]
 
-  const mockCities = [
+  const governorates = [
     { id: "iraq", nameAr: "العراق", nameEn: "Iraq" },
     { id: "bagdad", nameAr: "بغداد", nameEn: "Baghdad" },
     { id: "test", nameAr: "بغداد", nameEn: "Test" },
   ]
 
-  const _cities = mockCities.map(({ id, nameAr, nameEn }) => ({
+  const _governorates = governorates.map(({ id, nameAr, nameEn }) => ({
     label: isRTL ? nameAr : nameEn,
     value: id,
   }))
 
-  const [cities, setCities] = React.useState(_cities)
+  const [cities, setCities] = React.useState(_governorates)
   const city = watch("city")
 
   React.useEffect(() => {
-    setCities([..._cities])
+    setCities([..._governorates])
   }, [isRTL])
 
   return (
@@ -201,7 +201,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
           keyboardType="phone-pad"
         />
 
-        {mockSocialMediaLinks.map(({ id, nameAr, nameEn }) => (
+        {socialMediaLinks.map(({ id, nameAr, nameEn }) => (
           <TextField
             key={id}
             placeholder={`${isRTL ? nameAr : nameEn} ${I18n.t(

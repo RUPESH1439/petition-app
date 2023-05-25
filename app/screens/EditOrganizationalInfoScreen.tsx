@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, useMemo } from "react"
 import { observer } from "mobx-react-lite"
 import { TextStyle, View, ViewStyle } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
@@ -21,75 +21,200 @@ import { ScrollView } from "react-native-gesture-handler"
 import { colors, spacing, typography } from "app/theme"
 import { moderateVerticalScale } from "app/utils/scaling"
 import I18n from "i18n-js"
-// import { useStores } from "app/models"
+import useUser from "app/hooks/userUser"
+import useGovernorate from "app/hooks/api/useGovernorate"
+import { OrganizationUser } from "app/hooks/api/interface"
+import useUpdateUser from "app/hooks/api/useUpdateUser"
+import useUpdateOwner from "app/hooks/api/useUpdateOwner"
+import formatUserData from "app/utils/api/formatUserData"
+import { save } from "app/utils/storage"
+import { STORAGE } from "app/constants/storage"
+import { TxKeyPath } from "app/i18n"
 
 interface EditOrganizationalInfoScreenProps
   extends NativeStackScreenProps<AppStackScreenProps<"EditOrganizationalInfo">> {}
 
 const schema = z.object({
-  organizationNameArabic: z.string(),
-  organizationNameEnglish: z.string(),
-  nearestLandMark: z.string(),
-  ceoName: z.string(),
-  ceoPhone: z.string(),
-  organizationPhone: z.string(),
+  arName: z
+    .string()
+    // eslint-disable-next-line no-useless-escape
+    .regex(/^[\u0600-\u06FF\s!"#$%&'()*+,\-.\/:;<=>?@\[\\\]^_`{|}~]+$/)
+    .min(1),
+  enName: z
+    .string()
+    // eslint-disable-next-line no-useless-escape
+    .regex(/^[a-zA-Z\s!"#$%&'()*+,\-.\/:;<=>?@\[\\\]^_`{|}~]+$/)
+    .min(1),
+  nearestLandmark: z.string().min(1),
+  CEOName: z.string().min(1),
+  ceoPhone: z.string().length(11),
+  organizationPhone: z.string().length(11),
   organizationSocialMediaLinks: z.array(z.string()),
-  establishedDate: z.string().length(4),
-  city: z.string(),
+  EstablishedYear: z.string().length(4),
+  governorate: z.number(),
+  facebookLink: z
+    .string()
+    .regex(/^(?:https?:\/\/)?(?:www\.)?facebook\.com\/(?:[\w.]+\/?)*$/)
+    .nullable(),
+  instagramLink: z
+    .string()
+    .regex(/^(?:https?:\/\/)?(?:www\.)?instagram\.com\/(?:[\w.]+\/?)*$/)
+    .nullable(),
+  websiteLink: z
+    .string()
+    .regex(/^(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9-]+(?:\.[a-zA-Z]{2,})+(?:\/[^\s]*)?$/)
+    .nullable(),
+  permitNumber: z.string().min(1),
 })
 
 export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps> = observer(
   function EditOrganizationalInfoScreen() {
+    const { user, setUser } = useUser()
+    const { isUpdating, updateUser } = useUpdateUser()
+    const { updateOwner } = useUpdateOwner()
+    const { governorateData } = useGovernorate()
+    const {
+      arName,
+      enName,
+      EstablishedYear,
+      permitNumber,
+      nearestLandmark,
+      CEOName,
+      organizationPhone,
+      governorate: __governorate,
+      owner,
+    } = (user ?? {}) as OrganizationUser
+    const { facebookLink, instagramLink, websiteLink, phoneNumber } = owner
     const {
       control,
       handleSubmit,
       setValue,
-      watch,
       formState: { errors },
+      watch,
     } = useForm({
       resolver: zodResolver(schema),
       defaultValues: {
-        organizationNameEnglish: "",
-        organizationNameArabic: "",
-        city: "",
-        ceoName: "",
+        enName: null,
+        arName: null,
+        governorate: null,
+        CEOName: null,
         ceoPhone: "",
-        organizationPhone: "",
+        organizationPhone: null,
         organizationSocialMediaLinks: [],
-        nearestLandMark: "",
-        establishedDate: null,
+        nearestLandmark: null,
+        EstablishedYear: null,
+        permitNumber: null,
+        facebookLink: null,
+        instagramLink: null,
+        websiteLink: null,
       },
     })
 
-    const onSubmit = (data) => console.log(data)
+    const onSubmit = async (data) => {
+      await updateOwner({
+        phoneNumber: watch("ceoPhone"),
+        instagramLink: watch("instagramLink"),
+        facebookLink: watch("facebookLink"),
+        websiteLink: watch("websiteLink"),
+      })
+      const response = await updateUser(data)
+      const formatedUser = formatUserData(response)
+
+      setUser(formatedUser)
+      await save(STORAGE.USER, formatedUser)
+      navigation.goBack()
+    }
 
     const { isRTL } = useRTL()
 
-    const mockSocialMediaLinks = [
-      { id: "facebook", nameAr: "العراق", nameEn: "Facebook" },
-      { id: "Instagram", nameAr: "العراق", nameEn: "Instagram" },
-      { id: "Website", nameAr: "العراق", nameEn: "Website" },
-    ]
+    const _cities = useMemo(
+      () =>
+        governorateData?.map(({ id, attributes }) => ({
+          label: isRTL ? attributes?.arName : attributes?.enName,
+          value: id,
+        })) ?? [],
+      [isRTL, governorateData],
+    )
 
-    const mockCities = [
-      { id: "iraq", nameAr: "العراق", nameEn: "Iraq" },
-      { id: "bagdad", nameAr: "بغداد", nameEn: "Baghdad" },
-      { id: "test", nameAr: "بغداد", nameEn: "Test" },
-    ]
-
-    const _cities = mockCities.map(({ id, nameAr, nameEn }) => ({
-      label: isRTL ? nameAr : nameEn,
-      value: id,
-    }))
+    const socialMediaLinks: {
+      id: string
+      nameAr: string
+      nameEn: string
+      name: string
+      error: TxKeyPath
+    }[] = useMemo(
+      () => [
+        {
+          id: "facebook",
+          nameAr: "العراق",
+          nameEn: "Facebook",
+          name: "facebookLink",
+          error: "errors.facebookOnly",
+        },
+        {
+          id: "Instagram",
+          nameAr: "العراق",
+          nameEn: "Instagram",
+          name: "instagramLink",
+          error: "errors.instagramOnly",
+        },
+        {
+          id: "Website",
+          nameAr: "العراق",
+          nameEn: "Website",
+          name: "websiteLink",
+          error: "errors.websiteOnly",
+        },
+      ],
+      [user?.id],
+    )
 
     const [cities, setCities] = React.useState(_cities)
-
     React.useEffect(() => {
       setCities([..._cities])
     }, [isRTL])
 
+    React.useEffect(() => {
+      setCities([..._cities])
+    }, [_cities])
+
+    React.useEffect(() => {
+      if (arName) {
+        setValue("arName", arName)
+      }
+      if (enName) {
+        setValue("enName", enName)
+      }
+      if (EstablishedYear) {
+        setValue("EstablishedYear", EstablishedYear)
+      }
+      if (permitNumber) {
+        setValue("permitNumber", permitNumber)
+      }
+      if (nearestLandmark) {
+        setValue("nearestLandmark", nearestLandmark)
+      }
+      if (CEOName) {
+        setValue("CEOName", CEOName)
+      }
+      if (phoneNumber) {
+        setValue("ceoPhone", phoneNumber)
+      }
+      if (organizationPhone) {
+        setValue("organizationPhone", organizationPhone)
+      }
+      if (facebookLink) {
+        setValue("facebookLink", facebookLink)
+      }
+      if (instagramLink) {
+        setValue("instagramLink", instagramLink)
+      }
+      if (websiteLink) {
+        setValue("websiteLink", websiteLink)
+      }
+    }, [user?.id])
+
     const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
-    const city = watch("city")
     return (
       <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
         <ScreenHeader
@@ -109,19 +234,19 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
             />
             <TextField
               control={control}
-              name="organizationNameArabic"
+              name="arName"
               placeholderTx="createOrganizationAccount.organizationNameArabic"
-              status={errors?.organizationNameArabic ? "error" : null}
-              error={errors?.organizationNameArabic ? "auth.signIn" : null}
+              status={errors?.arName ? "error" : null}
+              error={errors?.arName ? "errors.arabicOnly" : null}
               containerStyle={$textInput}
             />
 
             <TextField
               control={control}
-              name="organizationNameEnglish"
+              name="enName"
               placeholderTx="createOrganizationAccount.organizationNameEnglish"
-              status={errors?.organizationNameEnglish ? "error" : null}
-              error={errors?.organizationNameEnglish ? "auth.signIn" : null}
+              status={errors?.enName ? "error" : null}
+              error={errors?.enName ? "errors.englishOnly" : null}
               containerStyle={$textInput}
             />
 
@@ -129,23 +254,20 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
               <View style={$flexOne}>
                 <TextField
                   control={control}
-                  name="establisedDate"
+                  name="EstablishedYear"
                   placeholderTx="createOrganizationAccount.establishedDate"
-                  status={errors?.establishedDate ? "error" : null}
-                  error={
-                    errors?.establishedDate
-                      ? "createOrganizationAccount.erros.establishedDate"
-                      : null
-                  }
+                  status={errors?.EstablishedYear ? "error" : null}
+                  error={errors?.EstablishedYear ? "errors.pleaseFill" : null}
                   containerStyle={$textInput}
                 />
 
                 <TextField
                   control={control}
+                  keyboardType="phone-pad"
                   name="permitNumber"
                   placeholderTx="createOrganizationAccount.permitNumber"
-                  status={errors?.organizationNameEnglish ? "error" : null}
-                  error={errors?.organizationNameEnglish ? "auth.signIn" : null}
+                  status={errors?.permitNumber ? "error" : null}
+                  error={errors?.permitNumber ? "errors.numbersOnly" : null}
                   containerStyle={$textInput}
                 />
               </View>
@@ -162,32 +284,32 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
             <Dropdown
               items={cities}
               setItems={setCities}
+              value={__governorate?.id}
               placeholderTx={"createOrganizationAccount.addressCity"}
               // eslint-disable-next-line @typescript-eslint/no-empty-function
               onChange={(value) => {
-                setValue("city", value)
+                setValue("governorate", value)
               }}
               dropDownContainerStyle={{ minHeight: cities.length * 80 }}
               style={$address}
-              value={city}
             />
 
             <TextField
               control={control}
-              name="nearestLandMark"
+              name="nearestLandmark"
               placeholderTx="createOrganizationAccount.addressNearestLandmark"
-              status={errors?.nearestLandMark ? "error" : null}
-              error={errors?.nearestLandMark ? "auth.signIn" : null}
+              status={errors?.nearestLandmark ? "error" : null}
+              error={errors?.nearestLandmark ? "auth.signIn" : null}
               containerStyle={$textInput}
             />
 
             <Text tx="createOrganizationAccount.ceoInfo" style={$header} />
             <TextField
               control={control}
-              name="ceoName"
+              name="CEOName"
               placeholderTx="createOrganizationAccount.name"
-              status={errors?.ceoName ? "error" : null}
-              error={errors?.ceoName ? "auth.signIn" : null}
+              status={errors?.CEOName ? "error" : null}
+              error={errors?.CEOName ? "auth.signIn" : null}
               containerStyle={$textInput}
             />
             <TextField
@@ -195,7 +317,11 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
               name="ceoPhone"
               placeholderTx="createOrganizationAccount.phoeNumber"
               status={errors?.ceoPhone ? "error" : null}
-              error={errors?.ceoPhone ? "auth.signIn" : null}
+              errorText={
+                errors?.ceoPhone
+                  ? `${11 - watch("ceoPhone")?.length} ${I18n.translate("errors.phone")}`
+                  : null
+              }
               containerStyle={$textInput}
             />
 
@@ -205,24 +331,37 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
               name="organizationPhone"
               placeholderTx="createOrganizationAccount.organizationPhoneNumber"
               status={errors?.organizationPhone ? "error" : null}
-              error={errors?.organizationPhone ? "auth.signIn" : null}
+              errorText={
+                errors?.organizationPhone
+                  ? `${11 - watch("organizationPhone")?.length} ${I18n.translate("errors.phone")}`
+                  : null
+              }
               containerStyle={$textInput}
               keyboardType="phone-pad"
             />
 
-            {mockSocialMediaLinks.map(({ id, nameAr, nameEn }) => (
+            {socialMediaLinks.map(({ id, nameAr, nameEn, name, error }) => (
               <TextField
                 key={id}
+                control={control}
+                name={name}
                 placeholder={`${isRTL ? nameAr : nameEn} ${I18n.t(
                   "createOrganizationAccount.linkOptional",
                 )}`}
-                status={errors?.ceoPhone ? "error" : null}
-                error={errors?.ceoPhone ? "auth.signIn" : null}
+                status={errors?.[name] ? "error" : null}
+                error={errors?.[name] ? error : null}
                 containerStyle={$textInput}
+                autoCapitalize="none"
               />
             ))}
 
-            <Button tx="common.change" onPress={handleSubmit(onSubmit)} style={$continue} />
+            <Button
+              loading={isUpdating}
+              disabled={isUpdating}
+              tx="common.change"
+              onPress={handleSubmit(onSubmit)}
+              style={$continue}
+            />
           </ScrollView>
         </View>
       </Screen>

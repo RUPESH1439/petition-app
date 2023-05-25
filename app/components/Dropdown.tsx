@@ -10,7 +10,7 @@ import { moderateVerticalScale } from "app/utils/scaling"
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import { Text } from "./Text"
 
-type Item = { label: string; value: string }
+type Item = { label: string; value: string | number }
 export interface DropdownProps {
   /**
    * An optional style override useful for padding & margin.
@@ -31,7 +31,7 @@ export interface DropdownProps {
 
   placeholder?: string
 
-  value?: string
+  value?: string | number
 
   onChange: (value: string) => void
 

@@ -16,6 +16,13 @@ const ar: Translations = {
     pleaseTry: "الرجاء الاختيار",
     pleaseFill: "الرجاء ملىء الفراغ",
     pleaseChoose: "الرجاء الاختيار",
+    phone: "رقم متبقي",
+    englishOnly: "حروف انجليزية فقط",
+    arabicOnly: "حروف عربية فقط",
+    numbersOnly: "ارقام فقط",
+    facebookOnly: "رابط فيسبوك فقط",
+    instagramOnly: "رابط انستغرام فقط",
+    websiteOnly: "رابط موقع فقط",
   },
   homeTab: {
     profile: "الحساب",

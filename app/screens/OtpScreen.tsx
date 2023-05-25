@@ -8,6 +8,9 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { moderateScale, moderateVerticalScale } from "app/utils/scaling"
 import { colors, spacing, typography } from "app/theme"
 import I18n from "i18n-js"
+import { save } from "app/utils/storage"
+import { STORAGE } from "app/constants/storage"
+import useUser from "app/hooks/userUser"
 
 // import { useStores } from "app/models"
 
@@ -25,6 +28,7 @@ export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
   const [count, setCount] = useState(60)
   const timer = useRef<NodeJS.Timer>()
   const [error, setError] = useState(false)
+  const { setUser } = useUser()
 
   useEffect(() => {
     if (!startTimer) {
@@ -84,7 +88,7 @@ export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
     // updateValues(null, active)
   }, [active])
 
-  const updateValues = (val, index) => {
+  const updateValues = async (val, index) => {
     const _newValues = [...values]
     _newValues[index] = val ? parseInt(val) : null
     setValues([..._newValues])
@@ -94,6 +98,8 @@ export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
       } else {
         const enteredCode = _newValues.join("")
         if (enteredCode === "1234") {
+          await save(STORAGE.USER, userData)
+          setUser(userData)
           navigation.navigate("HomeTab")
         } else {
           setError(true)
@@ -101,6 +107,8 @@ export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
       }
     }
   }
+
+  const { userData } = route?.params ?? {}
 
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>

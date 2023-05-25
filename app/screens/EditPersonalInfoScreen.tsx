@@ -1,8 +1,8 @@
-import React, { FC } from "react"
+import React, { FC, useMemo } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
-import { Button, Datepicker, Dropdown, Screen, ScreenHeader, TextField } from "app/components"
+import { Button, Dropdown, Screen, ScreenHeader, TextField } from "app/components"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import useRTL from "app/hooks/useRTL"
@@ -10,15 +10,25 @@ import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { spacing } from "app/theme"
+import useUser from "app/hooks/userUser"
+import useGender from "app/hooks/api/useGender"
+import useGovernorate from "app/hooks/api/useGovernorate"
+import { save } from "app/utils/storage"
+import { STORAGE } from "app/constants/storage"
+import useUpdateUser from "app/hooks/api/useUpdateUser"
+import formatUserData from "app/utils/api/formatUserData"
+import I18n from "i18n-js"
+import useUpdateOwner from "app/hooks/api/useUpdateOwner"
+import { PersonalUser } from "app/hooks/api/interface"
 
 // import { useStores } from "app/models"
 
 const schema = z.object({
-  name: z.string(),
-  dateOfBirth: z.date(),
-  mobileNumber: z.string(),
-  gender: z.string(),
-  city: z.string(),
+  name: z.string().min(1),
+  birthdateYear: z.string().length(4),
+  mobileNumber: z.string().length(11),
+  gender: z.number(),
+  governorate: z.number(),
 })
 
 interface EditPersonalInfoScreenProps
@@ -27,53 +37,90 @@ interface EditPersonalInfoScreenProps
 export const EditPersonalInfoScreen: FC<EditPersonalInfoScreenProps> = observer(
   function EditPersonalInfoScreen() {
     const { isRTL } = useRTL()
+    const { user, setUser } = useUser()
+    const { isUpdating, updateUser } = useUpdateUser()
+    const { updateOwner } = useUpdateOwner()
+    const {
+      name,
+      birthdateYear,
+      gender: __gender,
+      governorate,
+      owner,
+    } = (user ?? {}) as PersonalUser
+    const { genderData } = useGender()
+    const { governorateData } = useGovernorate()
+
     const {
       control,
       handleSubmit,
       formState: { errors },
-      watch,
       setValue,
+      watch,
     } = useForm({
       resolver: zodResolver(schema),
       defaultValues: {
-        name: "",
-        dateOfBirth: null,
-        mobileNumber: "",
+        name: null,
+        birthdateYear: null,
+        mobileNumber: null,
         gender: null,
-        city: null,
+        governorate: null,
       },
     })
-    const onSubmit = (data) => console.log(data)
-    const mockCities = [
-      { id: "iraq", nameAr: "العراق", nameEn: "Iraq" },
-      { id: "bagdad", nameAr: "بغداد", nameEn: "Baghdad" },
-    ]
+    const mobileNumber = watch("mobileNumber")
+    const onSubmit = async (data) => {
+      await updateOwner({ phoneNumber: mobileNumber })
+      const response = await updateUser(data)
+      const formatedUser = formatUserData(response)
+      setUser(formatedUser)
+      await save(STORAGE.USER, formatedUser)
+      navigation.goBack()
+    }
 
-    const mockGenders = [
-      { id: "male", nameAr: "ذكر", nameEn: "male" },
-      { id: "female", nameAr: "بغداد", nameEn: "female" },
-    ]
+    const _cities = useMemo(
+      () =>
+        governorateData?.map(({ id, attributes }) => ({
+          label: isRTL ? attributes?.arName : attributes?.enName,
+          value: id,
+        })) ?? [],
+      [isRTL, governorateData],
+    )
 
-    const _cities = mockCities.map(({ id, nameAr, nameEn }) => ({
-      label: isRTL ? nameAr : nameEn,
-      value: id,
-    }))
-
-    const _gender = mockGenders.map(({ id, nameAr, nameEn }) => ({
-      label: isRTL ? nameAr : nameEn,
-      value: id,
-    }))
+    const _genders = useMemo(
+      () =>
+        genderData?.map(({ id, attributes }) => ({
+          label: isRTL ? attributes?.arType : attributes?.enType,
+          value: id,
+        })) ?? [],
+      [isRTL, genderData],
+    )
 
     const [cities, setCities] = React.useState(_cities)
-    const [gender, setGender] = React.useState(_gender)
-
-    const dateOfBirth = watch("dateOfBirth")
-    // const city = watch("city")
+    const [genders, setGenders] = React.useState(_genders)
 
     React.useEffect(() => {
       setCities([..._cities])
-      setGender([..._gender])
+      setGenders([..._genders])
     }, [isRTL])
+
+    React.useEffect(() => {
+      setGenders([..._genders])
+    }, [_genders])
+
+    React.useEffect(() => {
+      setCities([..._cities])
+    }, [_cities])
+
+    React.useEffect(() => {
+      if (name) {
+        setValue("name", name)
+      }
+      if (birthdateYear) {
+        setValue("birthdateYear", birthdateYear)
+      }
+      if (owner?.phoneNumber) {
+        setValue("mobileNumber", owner?.phoneNumber)
+      }
+    }, [user?.id])
 
     const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
     return (
@@ -89,20 +136,21 @@ export const EditPersonalInfoScreen: FC<EditPersonalInfoScreenProps> = observer(
             control={control}
             name="name"
             status={errors?.name ? "error" : null}
-            error={errors?.name ? "auth.signIn" : null}
+            error={errors?.name ? "errors.pleaseFill" : null}
             placeholderTx="createPersonalAccount.name"
           />
-          <Datepicker
-            date={dateOfBirth}
+          <TextField
+            control={control}
+            name="birthdateYear"
+            status={errors?.birthdateYear ? "error" : null}
+            error={errors?.birthdateYear ? "errors.pleaseFill" : null}
             placeholderTx="createPersonalAccount.dateOfBirth"
-            onChange={(date) => {
-              setValue("dateOfBirth", date)
-            }}
           />
           <View style={$dropdownGenderList}>
             <Dropdown
-              items={gender}
-              setItems={setGender}
+              items={genders}
+              setItems={setGenders}
+              value={__gender?.id}
               placeholderTx="createPersonalAccount.gender"
               onChange={(value) => {
                 setValue("gender", value)
@@ -113,10 +161,11 @@ export const EditPersonalInfoScreen: FC<EditPersonalInfoScreenProps> = observer(
           <View style={$dropdownList}>
             <Dropdown
               items={cities}
+              value={governorate?.id}
               setItems={setCities}
               placeholderTx="createPersonalAccount.governorate"
               onChange={(value) => {
-                setValue("city", value)
+                setValue("governorate", value)
               }}
             />
           </View>
@@ -125,12 +174,21 @@ export const EditPersonalInfoScreen: FC<EditPersonalInfoScreenProps> = observer(
             control={control}
             name="mobileNumber"
             status={errors?.mobileNumber ? "error" : null}
-            error={errors?.mobileNumber ? "auth.signIn" : null}
+            errorText={
+              errors?.mobileNumber
+                ? `${11 - mobileNumber?.length} ${I18n.translate("errors.phone")}`
+                : null
+            }
             placeholderTx="createPersonalAccount.mobileNumber"
             keyboardType="numeric"
           />
 
-          <Button tx="common.change" style={$continueBtn} onPress={handleSubmit(onSubmit)} />
+          <Button
+            loading={isUpdating}
+            tx="common.change"
+            style={$continueBtn}
+            onPress={handleSubmit(onSubmit)}
+          />
         </View>
       </Screen>
     )
