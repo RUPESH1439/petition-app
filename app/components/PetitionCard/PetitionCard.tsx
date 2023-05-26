@@ -44,7 +44,7 @@ export interface PetitionCardProps {
   photoUrl?: string
   title: string
   description: string
-  viewsCount: number
+  viewsCount: number | string
   signsCount: number
   status: "unsigned" | "signed" | "forGuest"
   isOrg: boolean

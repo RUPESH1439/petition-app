@@ -4,6 +4,9 @@ import { observer } from "mobx-react-lite"
 import { colors, spacing } from "app/theme"
 import { FlashList } from "@shopify/flash-list"
 import { PetitionCard } from "./PetitionCard/PetitionCard"
+import useGetSignedPetitions from "app/hooks/api/useGetSignedPetitions"
+import { IPetition } from "app/hooks/api/interface"
+import useRTL from "app/hooks/useRTL"
 
 export interface SignedPetitionsProps {
   /**
@@ -12,106 +15,44 @@ export interface SignedPetitionsProps {
   style?: StyleProp<ViewStyle>
 }
 
-const mockData = [
-  {
-    city: "Bagdad",
-    category: "Environment",
-    viewsCount: 12000,
-    signsCount: 12000,
-    name: "global organization",
-    isOrg: true,
-    status: "signed",
-    isPrivileged: true,
-    date: new Date(),
-    title: "justice for student",
-    description:
-      "give the students which failed exam another chance to be suregive the students which failed exam another chance to be suregive the students which failed exam another chance to be sure",
-    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
-  },
-  {
-    city: "Iraq",
-    category: "Environment",
-    viewsCount: 12000,
-    signsCount: 12000,
-    isAnonymous: true,
-    name: "global organization",
-    isOrg: true,
-    status: "signed",
-    isPrivileged: true,
-    date: new Date(),
-    title: "justice for student",
-    description: "give the students which failed exam another chance to be sure",
-    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
-  },
-  {
-    city: "Iraq",
-    category: "Environment",
-    viewsCount: 12000,
-    signsCount: 12000,
-    name: "Muhammad Sali",
-    isOrg: false,
-    status: "signed",
-    isPrivileged: false,
-    date: new Date(),
-    title: "justice for student",
-    description: "give the students which failed exam another chance to be sure",
-    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
-  },
-  {
-    city: "Iraq",
-    category: "Environment",
-    viewsCount: 12000,
-    signsCount: 12000,
-    name: "global organization",
-    isOrg: true,
-    status: "signed",
-    isPrivileged: false,
-    date: new Date(),
-    title: "justice for student",
-    description: "give the students which failed exam another chance to be sure",
-    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
-  },
-]
-
 /**
  * Describe your component here
  */
 export const SignedPetitions = observer(function SignedPetitions(props: SignedPetitionsProps) {
   const { style } = props
   const $styles = [$container, style]
-
+  const { petitionsData } = useGetSignedPetitions()
+  const { isRTL } = useRTL()
   const renderItem = React.useCallback(({ item }) => {
     const {
-      city,
-      category,
-      viewsCount,
-      signsCount,
-      name,
-      isOrg,
-      status,
-      isPrivileged,
-      date,
-      photoUrl,
       title,
       description,
-      isAnonymous,
-    } = item ?? {}
+      governorate,
+      category,
+      creator,
+      signers,
+      // eslint-disable-next-line camelcase
+      petition_stat,
+      createdAt,
+      hideName,
+    } = (item ?? {}) as IPetition
     return (
       <View style={$cardContainer}>
         <PetitionCard
-          city={city}
-          category={category}
-          viewsCount={viewsCount}
-          signsCount={signsCount}
-          name={name}
-          isOrg={isOrg}
-          status={status as "unsigned" | "signed" | "forGuest"}
-          isPrivileged={isPrivileged}
-          date={date}
-          photoUrl={photoUrl}
+          city={isRTL ? governorate?.arName : governorate?.enName}
+          category={isRTL ? category?.arName : category?.enName}
+          // eslint-disable-next-line camelcase
+          viewsCount={petition_stat?.views}
+          signsCount={signers?.length}
+          name={isRTL ? creator?.arName : creator?.enName}
+          isOrg={true}
+          status={"signed"}
+          isPrivileged={creator?.isPrivileged}
+          date={new Date(createdAt)}
+          photoUrl={"https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true"}
           title={title}
           description={description}
-          isAnonymous={isAnonymous}
+          isAnonymous={hideName}
         />
       </View>
     )
@@ -125,7 +66,7 @@ export const SignedPetitions = observer(function SignedPetitions(props: SignedPe
           showsVerticalScrollIndicator={false}
           renderItem={renderItem}
           estimatedItemSize={200}
-          data={mockData}
+          data={petitionsData}
         />
       </View>
     </View>

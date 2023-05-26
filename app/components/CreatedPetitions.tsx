@@ -4,6 +4,10 @@ import { observer } from "mobx-react-lite"
 import { colors, spacing } from "app/theme"
 import { MyPetitionCard } from "./PetitionCard/MyPetitionCard"
 import { FlashList } from "@shopify/flash-list"
+import useRTL from "app/hooks/useRTL"
+import useGetCreatedPetitions from "app/hooks/api/useGetCreatedPetitions"
+import formatPetitions from "app/utils/api/formatPetitions"
+import useUser from "app/hooks/userUser"
 
 export interface CreatedPetitionsProps {
   /**
@@ -12,74 +16,19 @@ export interface CreatedPetitionsProps {
   style?: StyleProp<ViewStyle>
 }
 
-const mockData = [
-  {
-    city: "Bagdad",
-    category: "Environment",
-    viewsCount: 12000,
-    signsCount: 12000,
-    name: "global organization",
-    isOrg: true,
-    status: "unsigned",
-    isPrivileged: true,
-    date: new Date(),
-    title: "justice for student",
-    description:
-      "give the students which failed exam another chance to be suregive the students which failed exam another chance to be suregive the students which failed exam another chance to be sure",
-    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
-  },
-  {
-    city: "Iraq",
-    category: "Environment",
-    viewsCount: 12000,
-    signsCount: 12000,
-    isAnonymous: true,
-    name: "global organization",
-    isOrg: true,
-    status: "unsigned",
-    isPrivileged: true,
-    date: new Date(),
-    title: "justice for student",
-    description: "give the students which failed exam another chance to be sure",
-    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
-  },
-  {
-    city: "Iraq",
-    category: "Environment",
-    viewsCount: 12000,
-    signsCount: 12000,
-    name: "Muhammad Sali",
-    isOrg: false,
-    status: "signed",
-    isPrivileged: false,
-    date: new Date(),
-    title: "justice for student",
-    description: "give the students which failed exam another chance to be sure",
-    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
-  },
-  {
-    city: "Iraq",
-    category: "Environment",
-    viewsCount: 12000,
-    signsCount: 12000,
-    name: "global organization",
-    isOrg: true,
-    status: "signed",
-    isPrivileged: false,
-    date: new Date(),
-    title: "justice for student",
-    description: "give the students which failed exam another chance to be sure",
-    photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
-  },
-]
-
 /**
  * Describe your component here
  */
 export const CreatedPetitions = observer(function CreatedPetitions(props: CreatedPetitionsProps) {
   const { style } = props
   const $styles = [$container, style]
-
+  const { isRTL } = useRTL()
+  const { user } = useUser()
+  const { petitionsData } = useGetCreatedPetitions()
+  const petitions = React.useMemo(
+    () => formatPetitions(petitionsData, isRTL, user?.owner?.id),
+    [petitionsData, isRTL, user],
+  )
   const renderItem = React.useCallback(({ item }) => {
     const {
       city,
@@ -125,7 +74,7 @@ export const CreatedPetitions = observer(function CreatedPetitions(props: Create
           showsVerticalScrollIndicator={false}
           renderItem={renderItem}
           estimatedItemSize={200}
-          data={mockData}
+          data={petitions}
         />
       </View>
     </View>

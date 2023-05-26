@@ -1,16 +1,18 @@
-import React, { FC } from "react"
+import React, { FC, useCallback } from "react"
 import { observer } from "mobx-react-lite"
 import { TextStyle, View, ViewStyle, useWindowDimensions } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Button, CreatedPetitions, Screen, ScreenHeader, SignedPetitions } from "app/components"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useNavigation } from "@react-navigation/native"
+import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import { colors, spacing, typography } from "app/theme"
 import { moderateVerticalScale } from "app/utils/scaling"
 import { SceneMap, TabBar, TabView } from "react-native-tab-view"
 import I18n from "i18n-js"
 import useRTL from "app/hooks/useRTL"
+import { useQueryClient } from "@tanstack/react-query"
+import { API_KEYS } from "app/constants/apiKeys"
 interface MyPetitionsScreenProps
   extends NativeStackScreenProps<AppStackScreenProps<"MyPetitions">> {}
 
@@ -25,6 +27,7 @@ export const MyPetitionsScreen: FC<MyPetitionsScreenProps> = observer(function M
 
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
   const [index, setIndex] = React.useState(0)
+  const queryClient = useQueryClient()
   const layout = useWindowDimensions()
   const { isRTL: _ } = useRTL()
 
@@ -32,6 +35,14 @@ export const MyPetitionsScreen: FC<MyPetitionsScreenProps> = observer(function M
     { key: "createdPetitions", title: I18n.t("myPetitions.created") },
     { key: "signedPetitions", title: I18n.t("myPetitions.signed") },
   ]
+
+  useFocusEffect(
+    useCallback(() => {
+      queryClient.invalidateQueries({
+        queryKey: [API_KEYS.GET_CREATED_PETITIONS, API_KEYS.GET_SIGEND_PETITIONS],
+      })
+    }, []),
+  )
 
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>

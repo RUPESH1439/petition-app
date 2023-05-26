@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import apiClient from "app/services/apiClient"
 import { Governorate } from "./interface"
+import { API_KEYS } from "app/constants/apiKeys"
 
 type GovernorateResponse = Governorate[]
 
@@ -11,7 +12,7 @@ export default function useGovernorate() {
     data: governorateData,
     error: governorateError,
   } = useQuery({
-    queryKey: ["getGovernorate"],
+    queryKey: [API_KEYS.GET_GOVERNORATE],
     queryFn: async () => {
       const response = await apiClient.get("/governorates?populate=*")
       return response?.data?.data as GovernorateResponse

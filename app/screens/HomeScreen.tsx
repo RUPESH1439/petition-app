@@ -4,7 +4,7 @@ import { Dimensions, TextStyle, View, ViewStyle } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Dropdown, PetitionCard, Screen, ScreenHeader } from "app/components"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useNavigation } from "@react-navigation/native"
+import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
 import { colors, spacing } from "app/theme"
 import useRTL from "app/hooks/useRTL"
@@ -12,6 +12,8 @@ import { moderateVerticalScale } from "app/utils/scaling"
 import useGetPetitions from "app/hooks/api/useGetPetitions"
 import useUser from "app/hooks/userUser"
 import formatPetitions from "app/utils/api/formatPetitions"
+import { useQueryClient } from "@tanstack/react-query"
+import { API_KEYS } from "app/constants/apiKeys"
 
 interface HomeScreenProps extends NativeStackScreenProps<AppStackScreenProps<"Home">> {}
 
@@ -23,6 +25,8 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   const { isRTL } = useRTL()
   const { user } = useUser()
   const { petitionsData } = useGetPetitions()
+  const queryClient = useQueryClient()
+
   const mappedPetitionsData = React.useMemo(
     () => formatPetitions(petitionsData, isRTL, user?.owner?.id),
     [petitionsData],
@@ -80,6 +84,12 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   useEffect(() => {
     setCities(_cities)
   }, [isRTL])
+
+  useFocusEffect(
+    useCallback(() => {
+      queryClient.invalidateQueries({ queryKey: [API_KEYS.GET_PETITIONS] })
+    }, []),
+  )
 
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top"]}>

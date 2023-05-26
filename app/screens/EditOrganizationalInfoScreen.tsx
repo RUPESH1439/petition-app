@@ -84,7 +84,7 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
       governorate: __governorate,
       owner,
     } = (user ?? {}) as OrganizationUser
-    const { facebookLink, instagramLink, websiteLink, phoneNumber } = owner
+    const { facebookLink, instagramLink, websiteLink, phoneNumber } = owner ?? {}
     const {
       control,
       handleSubmit,

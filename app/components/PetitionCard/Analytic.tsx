@@ -13,7 +13,7 @@ export interface AnalyticProps {
    */
   style?: StyleProp<ViewStyle>
   tx: TxKeyPath
-  value: number
+  value: number | string
   svgString: string
 }
 
