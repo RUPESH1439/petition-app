@@ -3,6 +3,7 @@ import apiClient from "app/services/apiClient"
 import { IError } from "./interface"
 import useUser from "../userUser"
 import formatUserData from "app/utils/api/formatUserData"
+import { API_KEYS } from "app/constants/apiKeys"
 
 export default function useFetchUser() {
   const { user } = useUser()
@@ -14,7 +15,7 @@ export default function useFetchUser() {
     data: userData,
     error: fetchUserError,
   } = useQuery({
-    queryKey: ["fetchUser", isPersonal, userId],
+    queryKey: [API_KEYS.FETCH_USER, isPersonal, userId],
     queryFn: async () => {
       const response = await apiClient
         .get(

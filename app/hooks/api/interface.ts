@@ -59,6 +59,16 @@ export interface UpdateOrganization {
   governorate?: number
 }
 
+export interface CreatePetition {
+  creator?: number
+  title?: string
+  governorate?: number
+  category?: number
+  hideName?: boolean
+  description?: string
+  image?: string
+}
+
 export interface UpdateOwner {
   isPrivileged?: boolean
   phoneVerified?: boolean
@@ -86,6 +96,65 @@ export interface Gender {
 export interface Petition {
   id: string
   attributes: PetitionAttrs
+}
+
+export interface IGovernorate {
+  id: number
+  arName?: string
+  enName?: string
+  isCountry?: boolean
+  createdAt?: boolean
+}
+
+export interface ICategory {
+  id: number
+  arName?: string
+  enName?: string
+  createdAt?: boolean
+}
+
+export interface IPetitionStat {
+  id: number
+  views?: string
+  shares?: string
+  createdAt?: string
+}
+
+export interface IOwner {
+  id: number
+  username?: string
+  email?: string
+  provider?: any
+  confirmed?: boolean
+  blocked?: false
+  createdAt?: string
+  isPrivileged?: boolean
+  phoneVerified?: boolean
+  phoneNumber?: string
+  userType?: string
+  lat?: number
+  long?: number
+  facebookLink?: string
+  instagramLink?: string
+  websiteLink?: string
+  arName?: string
+  enName?: string
+  image?: any
+  signedPetitions?: IPetition[]
+}
+
+export interface IPetition {
+  id: number
+  hideName?: boolean
+  description?: string
+  title?: string
+  image: any
+  createdAt?: string
+  governorate: IGovernorate
+  category: ICategory
+  creator: IOwner
+  signers: IOwner[]
+  petition_stat: IPetitionStat
 }
 
 export interface PetitionAttrs {

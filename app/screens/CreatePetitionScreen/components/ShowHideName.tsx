@@ -29,18 +29,30 @@ export interface ShowHideNameProps {
   onChange?: (showName: boolean) => void
 
   error?: TxKeyPath
+
+  value?: boolean | null
 }
 
 /**
  * Describe your component here
  */
 export const ShowHideName = observer(function ShowHideName(props: ShowHideNameProps) {
-  const { style, onChange, error } = props
+  const { style, onChange, error, value } = props
   const { isRTL } = useRTL()
 
   const $styles = [$container, isRTL ? $rtl : $ltr, style]
   const [showName, setShowName] = React.useState(null)
   const noShowName = showName === false
+
+  React.useEffect(() => {
+    if (value === null) {
+      setShowName(null)
+      return
+    }
+    if (value !== showName) {
+      setShowName(showName)
+    }
+  }, [value])
   return (
     <View>
       <View style={$styles}>
