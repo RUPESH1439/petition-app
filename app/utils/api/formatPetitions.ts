@@ -19,8 +19,7 @@ export default function formatPetitions(
       createdAt,
     } = attributes ?? {}
     const isOrg = creator?.data?.attributes?.userType === "organization"
-    const isSigned =
-      signers?.data?.findIndex((signer) => signer?.id === currentUserId) !== undefined
+    const isSigned = signers?.data?.findIndex((signer) => signer?.id === currentUserId) !== -1
     return {
       id,
       city: isRTL ? governorate?.data?.attributes?.arName : governorate?.data?.attributes?.enName,
@@ -37,6 +36,7 @@ export default function formatPetitions(
       category: isRTL ? category?.data?.attributes?.arName : category?.data?.attributes?.enName,
       status: !currentUserId ? "forGuest" : isSigned ? "signed" : "unsigned",
       isAnonymous: hideName,
+      signers: signers?.data?.map((signer) => signer?.id),
     }
   })
 }

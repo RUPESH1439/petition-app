@@ -30,6 +30,8 @@ import { ViewMoreText } from "../ViewMoreText"
 import { useNavigation } from "@react-navigation/native"
 import { AppStackParamList } from "app/navigators"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import useSignPetition from "app/hooks/api/useSignPetition"
+import useCancelSignPetition from "app/hooks/api/useCancelSignPetition"
 
 const { chevronLeft, circleCheckSolid, eyeSolid, users, arrowUp } = icons
 export interface PetitionCardProps {
@@ -37,6 +39,7 @@ export interface PetitionCardProps {
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
+  id: number
   date: Date
   category: string
   city: string
@@ -50,6 +53,7 @@ export interface PetitionCardProps {
   isOrg: boolean
   isPrivileged: boolean
   isAnonymous?: boolean
+  signers?: number[]
 }
 
 /**
@@ -57,6 +61,7 @@ export interface PetitionCardProps {
  */
 export const PetitionCard = observer(function PetitionCard(props: PetitionCardProps) {
   const {
+    id,
     style,
     date,
     category,
@@ -71,13 +76,15 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
     status: _status,
     isPrivileged,
     isAnonymous,
+    signers,
   } = props
+
+  const { signPetition, signSuccess } = useSignPetition()
+  const { cancelSignPetition, cancelSuccess } = useCancelSignPetition()
 
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
   const $styles = [$container, style]
-
-  const [status, setStatus] = React.useState(_status)
 
   let timer
 
@@ -85,7 +92,7 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
     tx: TxKeyPath
     preset: "default" | "filled" | "secondary" | "interest" | "reversed" | "outlined"
   } => {
-    switch (status) {
+    switch (_status) {
       case "signed":
         return {
           tx: "petition.cancel",
@@ -109,7 +116,7 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
     }
   }
 
-  const buttonProps = React.useMemo(() => getButtonProps(), [status])
+  const buttonProps = React.useMemo(() => getButtonProps(), [_status])
 
   const [signedPetition, setSignedPetition] = React.useState(false)
   const [petitionSigned, setPetitionSigned] = React.useState(false)
@@ -134,11 +141,11 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
   }
 
   React.useEffect(() => {
-    if (signedPetition) {
+    if (signSuccess) {
+      setSignedPetition(true)
       timer = setTimeout(() => {
         setSignedPetition(false)
         setPetitionSigned(true)
-        setStatus("signed")
       }, 3000)
     }
 
@@ -146,7 +153,11 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
       if (!timer) return
       clearTimeout(timer)
     }
-  }, [signedPetition])
+  }, [signSuccess])
+
+  React.useEffect(() => {
+    setPetitionSigned(false)
+  }, [cancelSuccess])
 
   return (
     <View style={$styles}>
@@ -205,22 +216,20 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
               ? "petition.cancel"
               : buttonProps.tx
           }
-          preset={petitionSigned ? "secondary" : buttonProps.preset}
+          preset={signedPetition ? "default" : petitionSigned ? "secondary" : buttonProps.preset}
           style={[
             $responseButton,
-            status === "forGuest" ? { paddingHorizontal: spacing.large } : {},
+            _status === "forGuest" ? { paddingHorizontal: spacing.large } : {},
           ]}
           textStyle={{ lineHeight: moderateVerticalScale(21), fontSize: moderateVerticalScale(16) }}
-          onPress={() => {
-            if (status === "forGuest") {
+          onPress={async () => {
+            if (_status === "forGuest") {
               return
             }
-            if (status === "unsigned" && !signedPetition) {
-              setSignedPetition(true)
+            if (_status === "unsigned" && !signedPetition) {
+              await signPetition({ petitionId: id, signers })
             } else {
-              setSignedPetition(false)
-              setPetitionSigned(false)
-              setStatus("unsigned")
+              await cancelSignPetition({ petitionId: id, signers })
             }
           }}
         />

@@ -44,6 +44,11 @@ export interface UpdatePersonalUser {
   governorate?: number
 }
 
+export interface SignPetitionPayload {
+  petitionId: number
+  signers: number[]
+}
+
 export interface UpdateOrganization {
   arName?: string
   enName?: string

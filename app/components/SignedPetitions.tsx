@@ -25,6 +25,7 @@ export const SignedPetitions = observer(function SignedPetitions(props: SignedPe
   const { isRTL } = useRTL()
   const renderItem = React.useCallback(({ item }) => {
     const {
+      id,
       title,
       description,
       governorate,
@@ -39,6 +40,7 @@ export const SignedPetitions = observer(function SignedPetitions(props: SignedPe
     return (
       <View style={$cardContainer}>
         <PetitionCard
+          id={id}
           city={isRTL ? governorate?.arName : governorate?.enName}
           category={isRTL ? category?.arName : category?.enName}
           // eslint-disable-next-line camelcase
@@ -53,6 +55,7 @@ export const SignedPetitions = observer(function SignedPetitions(props: SignedPe
           title={title}
           description={description}
           isAnonymous={hideName}
+          signers={signers?.map(({ id }) => id)}
         />
       </View>
     )
