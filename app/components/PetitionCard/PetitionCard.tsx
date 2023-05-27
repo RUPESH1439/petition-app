@@ -21,6 +21,7 @@ import {
   $topContainer,
   $fifthContainer,
   $responseButton,
+  $petitionImage,
 } from "./styles"
 import { Button } from "../Button"
 import { moderateVerticalScale } from "app/utils/scaling"
@@ -54,6 +55,7 @@ export interface PetitionCardProps {
   isPrivileged: boolean
   isAnonymous?: boolean
   signers?: number[]
+  petitionImageUrl?: string
 }
 
 /**
@@ -77,11 +79,13 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
     isPrivileged,
     isAnonymous,
     signers,
+    petitionImageUrl,
   } = props
 
   const { signPetition, signSuccess } = useSignPetition()
-  const { cancelSignPetition, cancelSuccess } = useCancelSignPetition()
-
+  const [signedPetition, setSignedPetition] = React.useState(false)
+  const [petitionSigned, setPetitionSigned] = React.useState(false)
+  const { cancelSignPetition } = useCancelSignPetition()
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
   const $styles = [$container, style]
@@ -94,11 +98,13 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
   } => {
     switch (_status) {
       case "signed":
+        setPetitionSigned(true)
         return {
           tx: "petition.cancel",
           preset: "secondary",
         }
       case "unsigned":
+        setPetitionSigned(false)
         return {
           tx: "petition.signPetition",
           preset: "default",
@@ -109,6 +115,7 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
           preset: "interest",
         }
       default:
+        setPetitionSigned(false)
         return {
           tx: "petition.signPetition",
           preset: "default",
@@ -117,9 +124,6 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
   }
 
   const buttonProps = React.useMemo(() => getButtonProps(), [_status])
-
-  const [signedPetition, setSignedPetition] = React.useState(false)
-  const [petitionSigned, setPetitionSigned] = React.useState(false)
 
   const onShare = async () => {
     try {
@@ -155,10 +159,6 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
     }
   }, [signSuccess])
 
-  React.useEffect(() => {
-    setPetitionSigned(false)
-  }, [cancelSuccess])
-
   return (
     <View style={$styles}>
       <View style={$topContainer}>
@@ -183,7 +183,7 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
             />
           )}
           <Text style={$organizationName} text={name} />
-          {!!photoUrl && !!isOrg && (
+          {!!photoUrl && (
             <Image
               source={{
                 uri: photoUrl,
@@ -192,6 +192,14 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
             />
           )}
         </Pressable>
+      )}
+      {!!petitionImageUrl && (
+        <Image
+          source={{
+            uri: petitionImageUrl,
+          }}
+          style={$petitionImage}
+        />
       )}
       <View style={$thirdContainer}>
         <Text style={$petitionTitle} text={title} />

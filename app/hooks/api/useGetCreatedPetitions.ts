@@ -28,8 +28,16 @@ export default function useGetCreatedPetitions() {
             },
           },
           populate: {
+            image: {
+              fields: ["url"],
+            },
             creator: {
               fields: ["arName", "enName", "isPrivileged"],
+              populate: {
+                image: {
+                  fields: ["url"],
+                },
+              },
             },
             petition_stat: {
               fields: ["views", "shares"],

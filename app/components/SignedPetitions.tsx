@@ -36,6 +36,7 @@ export const SignedPetitions = observer(function SignedPetitions(props: SignedPe
       petition_stat,
       createdAt,
       hideName,
+      image,
     } = (item ?? {}) as IPetition
     return (
       <View style={$cardContainer}>
@@ -56,6 +57,7 @@ export const SignedPetitions = observer(function SignedPetitions(props: SignedPe
           description={description}
           isAnonymous={hideName}
           signers={signers?.map(({ id }) => id)}
+          petitionImageUrl={image?.url}
         />
       </View>
     )

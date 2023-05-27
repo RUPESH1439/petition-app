@@ -24,6 +24,9 @@ export default function useGetSignedPetitions() {
             signedPetitions: {
               fields: ["hideName", "description", "title", "createdAt"],
               populate: {
+                image: {
+                  fields: ["url"],
+                },
                 governorate: {
                   fields: ["arName", "enName", "isCountry"],
                 },
