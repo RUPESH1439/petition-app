@@ -201,7 +201,17 @@ const ar: Translations = {
     hideName: "لا تظهر اسمي",
     publish: "نشر",
   },
-  // TODO change translations
+  editPetition: {
+    header: "تعديل الحملة",
+    governorate: "المحافظة",
+    category: "فئة",
+    title: "عنوان الحملة",
+    description: "وصف الحملة",
+    imageOptional: "صورة ان وجدت",
+    showName: "اظهار اسمي",
+    hideName: "لا تظهر اسمي",
+    publish: "نشر",
+  },
   otpScreen: {
     headerTopPart: "ادخل الرمز المرسل لك عبر رسالة",
     headerBottomPart: "نصية على الرقم",

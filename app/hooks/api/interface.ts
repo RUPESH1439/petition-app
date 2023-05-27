@@ -74,6 +74,8 @@ export interface CreatePetition {
   image?: string
 }
 
+export type EditPetition = CreatePetition & ID
+
 export interface UpdateOwner {
   isPrivileged?: boolean
   phoneVerified?: boolean
@@ -99,7 +101,7 @@ export interface Gender {
 }
 
 export interface Petition {
-  id: string
+  id: number
   attributes: PetitionAttrs
 }
 

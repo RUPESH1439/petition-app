@@ -4,19 +4,18 @@ import { ViewStyle, View } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Button, Dropdown, ImagePicker, Screen, ScreenHeader, TextField } from "app/components"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useNavigation } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { spacing } from "app/theme"
 import { moderateVerticalScale } from "app/utils/scaling"
 import { ScrollView } from "react-native-gesture-handler"
-import { ShowHideName } from "../../components/ShowHideName"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import usePetitionCategory from "app/hooks/api/usePetitionCategory"
-import useGovernorate from "app/hooks/api/useGovernorate"
-import useRTL from "app/hooks/useRTL"
-import useCreatePetition from "app/hooks/api/useCreatePetition"
 import useUser from "app/hooks/userUser"
+import { ShowHideName } from "app/components/ShowHideName"
+import useUpdatePetition from "app/hooks/api/useUpdatePetition"
+import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
+import useFormattedPetitionCategories from "app/hooks/useFormattedPetitionCategories"
 
 const schema = z.object({
   governorate: z.number(),
@@ -29,18 +28,17 @@ const schema = z.object({
 
 type ISchema = z.infer<typeof schema>
 
-interface CreatePetitionScreenProps
-  extends NativeStackScreenProps<AppStackScreenProps<"CreatePetition">> {}
+interface EditPetitionScreenProps
+  extends NativeStackScreenProps<AppStackScreenProps<"EditPetition">> {}
 
-export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
-  function CreatePetitionScreen() {
+export const EditPetitionScreen: FC<EditPetitionScreenProps> = observer(
+  function EditPetitionScreen() {
     const {
       control,
       handleSubmit,
       watch,
       setValue,
       formState: { errors },
-      reset,
     } = useForm({
       resolver: zodResolver(schema),
       defaultValues: {
@@ -52,44 +50,22 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
         showName: null,
       },
     })
-    const { isRTL } = useRTL()
     const { user } = useUser()
-    const { petitionCategoryData } = usePetitionCategory()
-    const { governorateData } = useGovernorate()
-    const { createPetition, isCreatingPetition, isSuccess } = useCreatePetition()
-    const _categories = React.useMemo(
-      () =>
-        petitionCategoryData?.map(({ attributes, id }) => ({
-          value: id,
-          label: isRTL ? attributes?.arName : attributes?.enName,
-        })) ?? [],
-      [isRTL, petitionCategoryData],
-    )
-    const [categories, setCategories] = React.useState([])
 
-    const _governorates = React.useMemo(
-      () =>
-        governorateData?.map(({ id, attributes }) => ({
-          label: isRTL ? attributes?.arName : attributes?.enName,
-          value: id,
-        })) ?? [],
-      [isRTL, governorateData],
-    )
-    const [governorates, setGovernorates] = React.useState(_governorates)
+    const route = useRoute<RouteProp<AppStackParamList, "EditPetition">>()
+    const {
+      category: __category,
+      governorate: __governorate,
+      title: __title,
+      description: __description,
+      image: __image,
+      hideName: __hideName,
+    } = route?.params?.petitionData?.attributes ?? {}
 
-    React.useEffect(() => {
-      setGovernorates([..._governorates])
-      setCategories([..._categories])
-    }, [isRTL])
+    const { governorates, setGovernorates } = useFormattedGovernorates()
+    const { categories, setCategories } = useFormattedPetitionCategories()
 
-    React.useEffect(() => {
-      setCategories([..._categories])
-    }, [_categories])
-
-    React.useEffect(() => {
-      setGovernorates([..._governorates])
-    }, [_governorates])
-
+    const { updatePetition, isUpdatingPetition, isSuccess } = useUpdatePetition()
     const governorate = watch("governorate")
     const category = watch("category")
     const showName = watch("showName")
@@ -102,7 +78,8 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
       (errors?.showName && showName === null)
 
     const onSubmit = async (data: ISchema) => {
-      await createPetition({
+      await updatePetition({
+        id: route?.params?.petitionData?.id,
         title: data?.title,
         creator: user?.owner?.id,
         description: data?.description,
@@ -114,16 +91,22 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
 
     useEffect(() => {
       if (isSuccess) {
-        reset()
-
-        navigation.navigate("Thankyou")
+        navigation.goBack()
       }
     }, [isSuccess])
+
+    useEffect(() => {
+      setValue("category", __category?.data?.id)
+      setValue("governorate", __governorate?.data?.id)
+      setValue("title", __title)
+      setValue("description", __description)
+      setValue("showName", !__hideName)
+    }, [route?.params?.petitionData])
     const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
     return (
       <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
         <ScreenHeader
-          tx="createPetition.header"
+          tx="editPetition.header"
           presets="backAndTitle"
           onButtonPress={() => navigation.goBack()}
         />
@@ -132,13 +115,13 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
             <Dropdown
               items={governorates}
               setItems={setGovernorates}
-              placeholderTx={"createPetition.governorate"}
+              placeholderTx={"editPetition.governorate"}
               onChange={(value) => {
                 if (value !== governorate) {
                   setValue("governorate", value)
                 }
               }}
-              value={governorate}
+              value={__governorate?.data?.id}
               error={!governorate && errors?.governorate ? "errors.pleaseChoose" : null}
             />
           </View>
@@ -146,13 +129,13 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
             <Dropdown
               items={categories}
               setItems={setCategories}
-              placeholderTx={"createPetition.category"}
+              placeholderTx={"editPetition.category"}
               onChange={(value) => {
                 if (value !== category) {
                   setValue("category", value)
                 }
               }}
-              value={category}
+              value={__category?.data?.id}
               error={!category && errors?.category ? "errors.pleaseChoose" : null}
             />
           </View>
@@ -160,14 +143,14 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
           <TextField
             control={control}
             name="title"
-            placeholderTx="createPetition.title"
+            placeholderTx="editPetition.title"
             status={errors?.title ? "error" : null}
             error={errors?.title ? "errors.pleaseFill" : null}
           />
           <TextField
             control={control}
             name="description"
-            placeholderTx="createPetition.description"
+            placeholderTx="editPetition.description"
             numberOfLines={5}
             style={{ height: moderateVerticalScale(145) }}
             multiline
@@ -181,7 +164,7 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
               setValue("image", image?.assets?.[0]?.uri)
             }}
             iconSize={moderateVerticalScale(38)}
-            labelX="createPetition.imageOptional"
+            labelX="editPetition.imageOptional"
           />
 
           <ShowHideName
@@ -190,15 +173,15 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
                 setValue("showName", _showName)
               }
             }}
-            value={showName}
+            value={!__hideName}
             error={errors?.showName ? "errors.pleaseChoose" : null}
           />
           <Button
             preset={isError ? "reversed" : "default"}
-            tx="createPetition.publish"
+            tx="editPetition.publish"
             onPress={handleSubmit(onSubmit)}
             disabled={!!isError}
-            loading={isCreatingPetition}
+            loading={isUpdatingPetition}
           />
         </ScrollView>
       </Screen>
