@@ -185,7 +185,6 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
           <Text style={$organizationName} text={name} />
           {!!photoUrl && !!isOrg && (
             <Image
-              // TODO Remove this hardcode later
               source={{
                 uri: photoUrl,
               }}

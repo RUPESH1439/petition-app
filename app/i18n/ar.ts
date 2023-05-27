@@ -46,6 +46,7 @@ const ar: Translations = {
   },
   home: {
     header: "الرئيسية",
+    governorate: "المحافظة",
   },
   petition: {
     views: "مشاهدة",

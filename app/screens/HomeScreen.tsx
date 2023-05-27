@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect } from "react"
+import React, { FC, useCallback } from "react"
 import { observer } from "mobx-react-lite"
 import { Dimensions, TextStyle, View, ViewStyle } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
@@ -14,6 +14,7 @@ import useUser from "app/hooks/userUser"
 import formatPetitions from "app/utils/api/formatPetitions"
 import { useQueryClient } from "@tanstack/react-query"
 import { API_KEYS } from "app/constants/apiKeys"
+import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
 
 interface HomeScreenProps extends NativeStackScreenProps<AppStackScreenProps<"Home">> {}
 
@@ -24,8 +25,10 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
   const { isRTL } = useRTL()
   const { user } = useUser()
-  const { petitionsData } = useGetPetitions()
   const queryClient = useQueryClient()
+  const { governorates, setGovernorates } = useFormattedGovernorates()
+  const [governorateFilter, setGovernorateFilter] = React.useState([])
+  const { petitionsData, fetchPetitions } = useGetPetitions(governorateFilter)
 
   const mappedPetitionsData = React.useMemo(
     () => formatPetitions(petitionsData, isRTL, user?.owner?.id),
@@ -72,21 +75,15 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
     )
   }, [])
 
-  const mockCities = [
-    { id: "bagdad", nameAr: "بغداد", nameEn: "Baghdad" },
-    { id: "iraq", nameAr: "العراق", nameEn: "Iraq" },
-  ]
+  React.useEffect(() => {
+    if (governorateFilter?.length > 0) {
+      fetchPetitions()
+    }
+  }, [governorateFilter])
 
-  const _cities = mockCities.map(({ id, nameAr, nameEn }) => ({
-    label: isRTL ? nameAr : nameEn,
-    value: id,
-  }))
-
-  const [cities, setCities] = React.useState(_cities)
-
-  useEffect(() => {
-    setCities(_cities)
-  }, [isRTL])
+  React.useEffect(() => {
+    setGovernorateFilter([...governorates.map(({ value }) => value)])
+  }, [governorates])
 
   useFocusEffect(
     useCallback(() => {
@@ -102,11 +99,12 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
         onButtonPress={() => navigation.goBack()}
         RightAccessory={
           <Dropdown
-            items={cities}
-            value={cities[0].value}
-            setItems={setCities}
+            items={governorates}
+            placeholderTx="home.governorate"
+            placeholderStyle={$dropdownPlaceholder}
+            setItems={setGovernorates}
             onChange={(value) => {
-              console.log("value", value)
+              setGovernorateFilter([value])
             }}
             dropdownTextStyle={{ color: colors.palette.neutral50 }}
             style={{
@@ -151,6 +149,12 @@ const $screenHeader: ViewStyle = { zIndex: 999 }
 const $dropDownText: TextStyle = {
   fontSize: moderateVerticalScale(14),
   lineHeight: moderateVerticalScale(42),
+}
+
+const $dropdownPlaceholder: TextStyle = {
+  color: colors.palette.neutral100,
+  fontSize: moderateVerticalScale(14),
+  lineHeight: moderateVerticalScale(33),
 }
 
 const $dropdownContainer: ViewStyle = {

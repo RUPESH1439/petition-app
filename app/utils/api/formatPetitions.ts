@@ -31,7 +31,7 @@ export default function formatPetitions(
       isPrivileged: creator?.data?.attributes?.isPrivileged,
       date: new Date(createdAt),
       description,
-      photoUrl: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
+      photoUrl: creator?.data?.attributes?.image?.data?.attributes?.url,
       name: isRTL ? creator?.data?.attributes?.arName : creator?.data?.attributes?.enName,
       category: isRTL ? category?.data?.attributes?.arName : category?.data?.attributes?.enName,
       status: !currentUserId ? "forGuest" : isSigned ? "signed" : "unsigned",

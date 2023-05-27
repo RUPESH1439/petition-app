@@ -35,6 +35,11 @@ export default function useGetSignedPetitions() {
                 },
                 creator: {
                   fields: ["arName", "enName", "isPrivileged"],
+                  populate: {
+                    image: {
+                      fields: ["url"],
+                    },
+                  },
                 },
                 signers: {
                   fields: ["phoneNumber"],

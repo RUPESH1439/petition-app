@@ -69,6 +69,7 @@ const en = {
   },
   home: {
     header: "Home",
+    governorate: "Governorate",
   },
   walkthrough: {
     screen1: {

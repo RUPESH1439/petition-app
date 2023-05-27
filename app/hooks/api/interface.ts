@@ -144,7 +144,7 @@ export interface IOwner {
   websiteLink?: string
   arName?: string
   enName?: string
-  image?: any
+  image?: Image & ID
   signedPetitions?: IPetition[]
 }
 
@@ -162,11 +162,32 @@ export interface IPetition {
   petition_stat: IPetitionStat
 }
 
+export interface Image {
+  name?: string
+  alternativeText?: any
+  caption?: any
+  width?: number
+  height?: number
+  formats?: any
+  hash?: string
+  ext?: string
+  mime?: string
+  size?: number
+  url?: string
+  previewUrl?: any
+  provider?: string
+  provider_metadata?: any
+  createdAt?: string
+  updatedAt?: string
+}
+
 export interface PetitionAttrs {
   hideName: string
   description: string
   title: string
-  image: any
+  image: {
+    data: Image
+  }
   createdAt: string
   governorate: {
     data: Governorate
@@ -239,6 +260,11 @@ export interface OwnerAttrs {
   websiteLink: string
   arName: string
   enName: string
+  image: {
+    data: {
+      attributes: Image
+    }
+  }
 }
 export interface Owner {
   id: number

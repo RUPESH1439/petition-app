@@ -51,7 +51,7 @@ export const SignedPetitions = observer(function SignedPetitions(props: SignedPe
           status={"signed"}
           isPrivileged={creator?.isPrivileged}
           date={new Date(createdAt)}
-          photoUrl={"https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true"}
+          photoUrl={creator?.image?.url}
           title={title}
           description={description}
           isAnonymous={hideName}
