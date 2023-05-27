@@ -42,6 +42,8 @@ import { useNavigation } from "@react-navigation/native"
 import { AppStackParamList } from "app/navigators"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
+import { Petition } from "app/hooks/api/interface"
+import useDeletePetition from "app/hooks/api/useDeletePetition"
 
 const {
   chevronLeft,
@@ -77,6 +79,7 @@ export interface MyPetitionCardProps {
   isPrivileged: boolean
   isAnonymous?: boolean
   petitionImageUrl?: string
+  petition?: Petition
 }
 
 /**
@@ -99,6 +102,7 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
     isPrivileged,
     isAnonymous,
     petitionImageUrl,
+    petition,
   } = props
 
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
@@ -108,6 +112,7 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
   const [isExanded, setIsExpanded] = React.useState(false)
 
   const { governorates } = useFormattedGovernorates()
+  const { deletePetition } = useDeletePetition()
 
   const analytics: Analytics[] = React.useMemo(
     () => [
@@ -244,7 +249,7 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
             style={{ left: moderateVerticalScale(4) }}
           />
         </Pressable>
-        <Pressable>
+        <Pressable onPress={async () => await deletePetition({ id: petition?.id })}>
           <SvgXml
             xml={trashRegular}
             height={moderateVerticalScale(24)}
@@ -252,7 +257,7 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
             fill={colors.palette.primary200}
           />
         </Pressable>
-        <Pressable>
+        <Pressable onPress={() => navigation.navigate("EditPetition", { petitionData: petition })}>
           <SvgXml
             xml={penToSquareRegular}
             height={moderateVerticalScale(24)}

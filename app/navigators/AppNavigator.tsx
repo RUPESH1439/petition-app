@@ -14,7 +14,7 @@ import Config from "../config"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import useLanguagePreference from "app/hooks/useLanguagePreference"
 import { HomeNavigator } from "./HomeNavigator"
-import { OrganizationUser, PersonalUser } from "app/hooks/api/interface"
+import { OrganizationUser, PersonalUser, Petition } from "app/hooks/api/interface"
 import { load } from "app/utils/storage"
 import { STORAGE } from "app/constants/storage"
 import useUser from "app/hooks/userUser"
@@ -59,6 +59,9 @@ export type AppStackParamList = {
   Otp: {
     phone: number
     userData: PersonalUser | OrganizationUser
+  }
+  EditPetition: {
+    petitionData: Petition
   }
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
   CreateAccount: undefined
@@ -112,6 +115,7 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="CreatePetition" component={Screens.CreatePetitionScreen} />
       <Stack.Screen name="UserPage" component={Screens.UserPageScreen} />
       <Stack.Screen name="Otp" component={Screens.OtpScreen} />
+      <Stack.Screen name="EditPetition" component={Screens.EditPetitionScreen} />
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
       <Stack.Screen name="CreateAccount" component={Screens.CreateAccountScreen} />
       <Stack.Screen name="HomeTab" component={HomeNavigator} />

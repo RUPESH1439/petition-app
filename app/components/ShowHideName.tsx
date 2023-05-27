@@ -50,7 +50,7 @@ export const ShowHideName = observer(function ShowHideName(props: ShowHideNamePr
       return
     }
     if (value !== showName) {
-      setShowName(showName)
+      setShowName(value)
     }
   }, [value])
   return (

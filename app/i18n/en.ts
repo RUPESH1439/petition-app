@@ -194,6 +194,17 @@ const en = {
     hideName: "Hide Name",
     publish: "Publish",
   },
+  editPetition: {
+    header: "Edit Petition",
+    governorate: "Governorate",
+    category: "Category",
+    title: "Title",
+    description: "Description",
+    imageOptional: "Image - Optional",
+    showName: "Show Name",
+    hideName: "Hide Name",
+    publish: "Publish",
+  },
   userPageScreen: {
     accountName: "Growth Organization",
     petitions: "Petitions",

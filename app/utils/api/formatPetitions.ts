@@ -5,7 +5,8 @@ export default function formatPetitions(
   isRTL: boolean,
   currentUserId: number,
 ) {
-  return petitionsData?.map(({ id, attributes }) => {
+  return petitionsData?.map((petition) => {
+    const { id, attributes } = petition ?? {}
     const {
       hideName,
       title,
@@ -39,6 +40,7 @@ export default function formatPetitions(
       isAnonymous: hideName,
       signers: signers?.data?.map((signer) => signer?.id),
       petitionImageUrl: image?.data?.attributes?.url,
+      petition,
     }
   })
 }

@@ -45,6 +45,7 @@ export const CreatedPetitions = observer(function CreatedPetitions(props: Create
       description,
       isAnonymous,
       petitionImageUrl,
+      petition,
     } = item ?? {}
     return (
       <View style={$cardContainer}>
@@ -63,6 +64,7 @@ export const CreatedPetitions = observer(function CreatedPetitions(props: Create
           description={description}
           isAnonymous={isAnonymous}
           petitionImageUrl={petitionImageUrl}
+          petition={petition}
         />
       </View>
     )
