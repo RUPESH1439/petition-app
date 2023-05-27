@@ -153,7 +153,7 @@ export interface IPetition {
   hideName?: boolean
   description?: string
   title?: string
-  image: any
+  image?: Image & ID
   createdAt?: string
   governorate: IGovernorate
   category: ICategory
@@ -186,7 +186,10 @@ export interface PetitionAttrs {
   description: string
   title: string
   image: {
-    data: Image
+    data: {
+      id: number
+      attributes: Image
+    }
   }
   createdAt: string
   governorate: {
@@ -262,6 +265,7 @@ export interface OwnerAttrs {
   enName: string
   image: {
     data: {
+      id: number
       attributes: Image
     }
   }

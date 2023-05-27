@@ -16,6 +16,7 @@ import {
   $dateText,
   $fourthContainer,
   $organizationName,
+  $petitionImage,
   $petitionTitle,
   $secondContainer,
   $thirdContainer,
@@ -37,10 +38,10 @@ import {
 import { ViewMoreText } from "../ViewMoreText"
 import { moderateVerticalScale } from "app/utils/scaling"
 import { TxKeyPath } from "app/i18n"
-import useRTL from "app/hooks/useRTL"
 import { useNavigation } from "@react-navigation/native"
 import { AppStackParamList } from "app/navigators"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
 
 const {
   chevronLeft,
@@ -55,7 +56,7 @@ const {
 interface Analytics {
   title: TxKeyPath
   columns: [TxKeyPath, TxKeyPath]
-  data: { count: number; titleX?: TxKeyPath; title?: string }[]
+  data: { count: number; titleX?: TxKeyPath; title?: string; id }[]
 }
 export interface MyPetitionCardProps {
   /**
@@ -75,6 +76,7 @@ export interface MyPetitionCardProps {
   isOrg: boolean
   isPrivileged: boolean
   isAnonymous?: boolean
+  petitionImageUrl?: string
 }
 
 /**
@@ -96,33 +98,16 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
     status: _status,
     isPrivileged,
     isAnonymous,
+    petitionImageUrl,
   } = props
 
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
   const $styles = [$container, style]
 
-  const { isRTL } = useRTL()
-
   const [isExanded, setIsExpanded] = React.useState(false)
 
-  const mockCities = [
-    {
-      id: "iraq",
-      enName: "Iraq",
-      arName: "بغداد",
-    },
-    {
-      id: "bagdad",
-      enName: "Baghdad",
-      arName: "بغداد",
-    },
-    {
-      id: "najaf",
-      enName: "Najaf",
-      arName: "بغداد",
-    },
-  ]
+  const { governorates } = useFormattedGovernorates()
 
   const analytics: Analytics[] = React.useMemo(
     () => [
@@ -130,30 +115,39 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
         title: "petition.analyticsSections.age",
         columns: ["petition.analyticsSections.number", "petition.analyticsSections.ageGroup"],
         data: [
-          { count: 50000, titleX: "petition.analyticsSections.youngerThan18" },
-          { count: 1200, titleX: "petition.analyticsSections.eighteenToThirty" },
-          { count: 1200, titleX: "petition.analyticsSections.thirtyToSixty" },
-          { count: 1200, titleX: "petition.analyticsSections.olderThanSixty" },
+          { count: 50000, titleX: "petition.analyticsSections.youngerThan18", id: "youngerThan18" },
+          {
+            count: 1200,
+            titleX: "petition.analyticsSections.eighteenToThirty",
+            id: "eighteenToThirty",
+          },
+          { count: 1200, titleX: "petition.analyticsSections.thirtyToSixty", id: "thirtyToSixty" },
+          {
+            count: 1200,
+            titleX: "petition.analyticsSections.olderThanSixty",
+            id: "olderThanSixty",
+          },
         ],
       },
       {
         title: "petition.analyticsSections.gender",
         columns: ["petition.analyticsSections.number", "petition.analyticsSections.gender"],
         data: [
-          { count: 50000, titleX: "petition.analyticsSections.male" },
-          { count: 1200, titleX: "petition.analyticsSections.female" },
+          { count: 50000, titleX: "petition.analyticsSections.male", id: "male" },
+          { count: 1200, titleX: "petition.analyticsSections.female", id: "female" },
         ],
       },
       {
         title: "petition.analyticsSections.governorate",
         columns: ["petition.analyticsSections.number", "petition.analyticsSections.gender"],
-        data: mockCities.map(({ enName, arName }) => ({
+        data: governorates.map(({ label, value }) => ({
           count: 5000,
-          title: isRTL ? arName : enName,
+          title: label,
+          id: value,
         })),
       },
     ],
-    [mockCities],
+    [governorates],
   )
 
   return (
@@ -180,9 +174,8 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
             />
           )}
           <Text style={$organizationName} text={name} />
-          {!!photoUrl && !!isOrg && (
+          {!!photoUrl && (
             <Image
-              // TODO Remove this hardcode later
               source={{
                 uri: photoUrl,
               }}
@@ -190,6 +183,14 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
             />
           )}
         </Pressable>
+      )}
+      {!!petitionImageUrl && (
+        <Image
+          source={{
+            uri: petitionImageUrl,
+          }}
+          style={$petitionImage}
+        />
       )}
       <View style={$thirdContainer}>
         <Text style={$petitionTitle} text={title} />
@@ -221,8 +222,8 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
               </View>
 
               <View style={$analyticsMetricContainer}>
-                {data.map(({ count, titleX, title }) => (
-                  <View key={title} style={$analyticsMetricRow}>
+                {data.map(({ count, titleX, title, id }) => (
+                  <View key={id} style={$analyticsMetricRow}>
                     <Text text={count?.toString()} style={$metric}></Text>
                     <Text tx={titleX} text={title} style={$metricTitle}></Text>
                   </View>

@@ -56,11 +56,17 @@ const $avatar: ImageStyle = {
   borderRadius: moderateVerticalScale(15),
 }
 
+const $petitionImage: ImageStyle = {
+  marginHorizontal: spacing.medium,
+  height: moderateVerticalScale(300),
+  marginTop: moderateVerticalScale(18),
+  borderRadius: moderateVerticalScale(15),
+}
+
 const $thirdContainer: ViewStyle = {
   alignItems: "flex-end",
   paddingVertical: spacing.extraMedium,
   paddingHorizontal: spacing.medium,
-  minHeight: moderateVerticalScale(168),
 }
 
 const $petitionTitle: TextStyle = {
@@ -121,4 +127,5 @@ export {
   $topContainer,
   $fifthContainer,
   $responseButton,
+  $petitionImage,
 }

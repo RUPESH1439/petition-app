@@ -17,6 +17,7 @@ export default function formatPetitions(
       // eslint-disable-next-line camelcase
       petition_stat,
       createdAt,
+      image,
     } = attributes ?? {}
     const isOrg = creator?.data?.attributes?.userType === "organization"
     const isSigned = signers?.data?.findIndex((signer) => signer?.id === currentUserId) !== -1
@@ -37,6 +38,7 @@ export default function formatPetitions(
       status: !currentUserId ? "forGuest" : isSigned ? "signed" : "unsigned",
       isAnonymous: hideName,
       signers: signers?.data?.map((signer) => signer?.id),
+      petitionImageUrl: image?.data?.attributes?.url,
     }
   })
 }

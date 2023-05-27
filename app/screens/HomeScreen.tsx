@@ -29,51 +29,55 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   const { governorates, setGovernorates } = useFormattedGovernorates()
   const [governorateFilter, setGovernorateFilter] = React.useState([])
   const { petitionsData, fetchPetitions } = useGetPetitions(governorateFilter)
-
   const mappedPetitionsData = React.useMemo(
     () => formatPetitions(petitionsData, isRTL, user?.owner?.id),
     [petitionsData],
   )
-  const renderItem = useCallback(({ item }) => {
-    const {
-      id,
-      city,
-      category,
-      viewsCount,
-      signsCount,
-      name,
-      isOrg,
-      status,
-      isPrivileged,
-      date,
-      photoUrl,
-      title,
-      description,
-      isAnonymous,
-      signers,
-    } = item ?? {}
-    return (
-      <View style={$cardContainer} key={id}>
-        <PetitionCard
-          id={id}
-          city={city}
-          category={category}
-          viewsCount={viewsCount}
-          signsCount={signsCount}
-          name={name}
-          isOrg={isOrg}
-          status={status}
-          isPrivileged={isPrivileged}
-          date={date}
-          photoUrl={photoUrl}
-          title={title}
-          description={description}
-          isAnonymous={isAnonymous}
-          signers={signers}
-        />
-      </View>
-    )
-  }, [])
+  const renderItem = useCallback(
+    ({ item }) => {
+      const {
+        id,
+        city,
+        category,
+        viewsCount,
+        signsCount,
+        name,
+        isOrg,
+        status,
+        isPrivileged,
+        date,
+        photoUrl,
+        title,
+        description,
+        isAnonymous,
+        signers,
+        petitionImageUrl,
+      } = item ?? {}
+      return (
+        <View style={$cardContainer} key={id}>
+          <PetitionCard
+            id={id}
+            city={city}
+            category={category}
+            viewsCount={viewsCount}
+            signsCount={signsCount}
+            name={name}
+            isOrg={isOrg}
+            status={status}
+            isPrivileged={isPrivileged}
+            date={date}
+            photoUrl={photoUrl}
+            title={title}
+            description={description}
+            isAnonymous={isAnonymous}
+            signers={signers}
+            petitionImageUrl={petitionImageUrl}
+          />
+        </View>
+      )
+    },
+    [governorateFilter],
+  )
 
   React.useEffect(() => {
     if (governorateFilter?.length > 0) {

@@ -56,7 +56,7 @@ export default function useGetPetitions(governorates: number[]) {
       const response = await apiClient.get(`/petitions?${query}`)
       return response?.data?.data as Petition[]
     },
-    enabled: false,
+    enabled: !!governorates,
   })
   return { isPetitionsFetching, fetchPetitions, petitionsData, petitionFetchError }
 }
