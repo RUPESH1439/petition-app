@@ -15,7 +15,7 @@ export default function useGetPetitions(governorates: number[]) {
     queryFn: async () => {
       const query = qs.stringify(
         {
-          sort: ["updatedAt:desc"],
+          sort: ["createdAt:desc"],
           fields: ["hideName", "description", "title", "createdAt"],
           filters: {
             governorate: {

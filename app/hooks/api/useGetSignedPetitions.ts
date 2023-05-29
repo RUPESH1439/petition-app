@@ -22,7 +22,7 @@ export default function useGetSignedPetitions() {
           fields: ["signedPetitions"],
           populate: {
             signedPetitions: {
-              sort: ["updatedAt:desc"],
+              sort: ["createdAt:desc"],
               fields: ["hideName", "description", "title", "createdAt"],
               populate: {
                 image: {
