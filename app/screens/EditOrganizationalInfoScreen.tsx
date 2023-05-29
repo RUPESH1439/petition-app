@@ -23,13 +23,14 @@ import { moderateVerticalScale } from "app/utils/scaling"
 import I18n from "i18n-js"
 import useUser from "app/hooks/userUser"
 import useGovernorate from "app/hooks/api/useGovernorate"
-import { OrganizationUser } from "app/hooks/api/interface"
+import { OrganizationUser, UpdateOwner } from "app/hooks/api/interface"
 import useUpdateUser from "app/hooks/api/useUpdateUser"
 import useUpdateOwner from "app/hooks/api/useUpdateOwner"
 import formatUserData from "app/utils/api/formatUserData"
 import { save } from "app/utils/storage"
 import { STORAGE } from "app/constants/storage"
 import { TxKeyPath } from "app/i18n"
+import useUploadMedia from "app/hooks/api/useUploadMedia"
 
 interface EditOrganizationalInfoScreenProps
   extends NativeStackScreenProps<AppStackScreenProps<"EditOrganizationalInfo">> {}
@@ -65,6 +66,16 @@ const schema = z.object({
     .regex(/^(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9-]+(?:\.[a-zA-Z]{2,})+(?:\/[^\s]*)?$/)
     .nullable(),
   permitNumber: z.string().min(1),
+  logo: z.object({
+    uri: z.string(),
+    type: z.string(),
+    name: z.string(),
+  }),
+  permitImage: z.object({
+    uri: z.string(),
+    type: z.string(),
+    name: z.string(),
+  }),
 })
 
 export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps> = observer(
@@ -73,6 +84,10 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
     const { isUpdating, updateUser } = useUpdateUser()
     const { updateOwner } = useUpdateOwner()
     const { governorateData } = useGovernorate()
+    const { uploadMedia, isUploadingMedia } = useUploadMedia()
+    const [logoChanged, setLogoChanged] = React.useState(false)
+    const [permitImageChanged, setPermitImageChanged] = React.useState(false)
+
     const {
       arName,
       enName,
@@ -83,6 +98,8 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
       organizationPhone,
       governorate: __governorate,
       owner,
+      logo,
+      permitImage,
     } = (user ?? {}) as OrganizationUser
     const { facebookLink, instagramLink, websiteLink, phoneNumber } = owner ?? {}
     const {
@@ -107,22 +124,64 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
         facebookLink: null,
         instagramLink: null,
         websiteLink: null,
+        logo: null,
+        permitImage: null,
       },
     })
 
     const onSubmit = async (data) => {
-      await updateOwner({
-        phoneNumber: watch("ceoPhone"),
-        instagramLink: watch("instagramLink"),
-        facebookLink: watch("facebookLink"),
-        websiteLink: watch("websiteLink"),
-      })
-      const response = await updateUser(data)
-      const formatedUser = formatUserData(response)
+      const { logo, permitImage } = data
 
-      setUser(formatedUser)
-      await save(STORAGE.USER, formatedUser)
-      navigation.goBack()
+      try {
+        let logoId = null
+        let permitImageId = null
+        if (logoChanged) {
+          const logoImageResponse = await uploadMedia({
+            uri: logo?.uri,
+            name: logo?.name,
+            type: logo?.type,
+          })
+          logoId = logoImageResponse.data?.[0]?.id
+        }
+
+        if (permitImageChanged) {
+          const permitImageResp = await uploadMedia({
+            uri: permitImage?.uri,
+            name: permitImage?.name,
+            type: permitImage?.type,
+          })
+          permitImageId = permitImageResp.data?.[0]?.id
+        }
+
+        const updatedUser = { ...data }
+        const updatedOwner: UpdateOwner = {
+          phoneNumber: watch("ceoPhone"),
+          instagramLink: watch("instagramLink"),
+          facebookLink: watch("facebookLink"),
+          websiteLink: watch("websiteLink"),
+          arName: data?.arName,
+          enName: data?.enName,
+        }
+        if (logoId) {
+          updatedUser.logo = logoId
+          updatedOwner.image = logoId
+        }
+        if (!logoId) {
+          delete updatedUser.logo
+        }
+        if (permitImageId) {
+          updatedUser.permitImage = permitImageId
+        }
+        if (!permitImageId) {
+          delete updatedUser.permitImage
+        }
+        await updateOwner(updatedOwner)
+        const response = await updateUser(updatedUser)
+        const formatedUser = formatUserData(response)
+        setUser(formatedUser)
+        await save(STORAGE.USER, formatedUser)
+        navigation.goBack()
+      } catch (err) {}
     }
 
     const { isRTL } = useRTL()
@@ -212,6 +271,20 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
       if (websiteLink) {
         setValue("websiteLink", websiteLink)
       }
+      if (logo) {
+        setValue("logo", {
+          uri: logo?.url,
+          type: logo?.mime,
+          name: logo?.name,
+        })
+      }
+      if (permitImage) {
+        setValue("permitImage", {
+          uri: permitImage?.url,
+          type: permitImage?.mime,
+          name: permitImage?.name,
+        })
+      }
     }, [user?.id])
 
     const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
@@ -228,9 +301,15 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
             <ImagePicker
               titleX="createOrganizationAccount.logo"
               style={$logo}
-              onSelectImage={(image) => {
-                console.log("image", image)
+              onSelectImage={async (image) => {
+                setLogoChanged(true)
+                setValue("logo", {
+                  uri: image?.uri,
+                  name: image?.fileName,
+                  type: image?.type,
+                })
               }}
+              uri={logo?.url}
             />
             <TextField
               control={control}
@@ -274,9 +353,15 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
               <View style={[$flexOne, $imagePicker]}>
                 <ImagePicker
                   titleX="createOrganizationAccount.permitImage"
-                  onSelectImage={(image) => {
-                    console.log("image", image)
+                  onSelectImage={async (image) => {
+                    setPermitImageChanged(true)
+                    setValue("permitImage", {
+                      uri: image?.uri,
+                      name: image?.fileName,
+                      type: image?.type,
+                    })
                   }}
+                  uri={permitImage?.url}
                 />
               </View>
             </View>
@@ -356,8 +441,8 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
             ))}
 
             <Button
-              loading={isUpdating}
-              disabled={isUpdating}
+              loading={isUpdating || isUploadingMedia}
+              disabled={isUpdating || isUploadingMedia}
               tx="common.change"
               onPress={handleSubmit(onSubmit)}
               style={$continue}

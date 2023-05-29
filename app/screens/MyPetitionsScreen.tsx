@@ -39,7 +39,10 @@ export const MyPetitionsScreen: FC<MyPetitionsScreenProps> = observer(function M
   useFocusEffect(
     useCallback(() => {
       queryClient.invalidateQueries({
-        queryKey: [API_KEYS.GET_CREATED_PETITIONS, API_KEYS.GET_SIGEND_PETITIONS],
+        queryKey: [API_KEYS.GET_CREATED_PETITIONS],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [API_KEYS.GET_SIGEND_PETITIONS],
       })
     }, []),
   )

@@ -14,17 +14,55 @@ import I18n from "i18n-js"
 import { Dropdown } from "./Dropdown"
 import { ImagePicker } from "./ImagePicker"
 import { moderateVerticalScale } from "app/utils/scaling"
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { AppStackParamList } from "app/navigators"
+import useCreateUser from "app/hooks/api/useCreateUser"
+import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
+import { TxKeyPath } from "app/i18n"
+import useUploadMedia from "app/hooks/api/useUploadMedia"
 
 const schema = z.object({
-  organizationNameArabic: z.string(),
-  organizationNameEnglish: z.string(),
-  nearestLandMark: z.string(),
-  ceoName: z.string(),
-  ceoPhone: z.string(),
-  organizationPhone: z.string(),
+  arName: z
+    .string()
+    // eslint-disable-next-line no-useless-escape
+    .regex(/^[\u0600-\u06FF\s!"#$%&'()*+,\-.\/:;<=>?@\[\\\]^_`{|}~]+$/)
+    .min(1),
+  enName: z
+    .string()
+    // eslint-disable-next-line no-useless-escape
+    .regex(/^[a-zA-Z\s!"#$%&'()*+,\-.\/:;<=>?@\[\\\]^_`{|}~]+$/)
+    .min(1),
+  nearestLandmark: z.string().min(1),
+  CEOName: z.string().min(1),
+  ceoPhone: z.string().length(11),
+  organizationPhone: z.string().length(11),
   organizationSocialMediaLinks: z.array(z.string()),
-  establishedDate: z.date(),
-  city: z.string(),
+  EstablishedYear: z.string().length(4),
+  governorate: z.number(),
+  facebookLink: z
+    .string()
+    .regex(/^(?:https?:\/\/)?(?:www\.)?facebook\.com\/(?:[\w.]+\/?)*$/)
+    .nullable(),
+  instagramLink: z
+    .string()
+    .regex(/^(?:https?:\/\/)?(?:www\.)?instagram\.com\/(?:[\w.]+\/?)*$/)
+    .nullable(),
+  websiteLink: z
+    .string()
+    .regex(/^(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9-]+(?:\.[a-zA-Z]{2,})+(?:\/[^\s]*)?$/)
+    .nullable(),
+  permitNumber: z.string().min(1),
+  logo: z.object({
+    uri: z.string(),
+    type: z.string(),
+    name: z.string(),
+  }),
+  permitImage: z.object({
+    uri: z.string(),
+    type: z.string(),
+    name: z.string(),
+  }),
 })
 export interface CreateOrganizationAccountProps {
   /**
@@ -40,56 +78,106 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
   props: CreateOrganizationAccountProps,
 ) {
   const { style } = props
+  const { isCreating, createUser, isSuccess } = useCreateUser("organization")
+  const { uploadMedia, isUploadingMedia } = useUploadMedia()
+
+  const { governorates, setGovernorates } = useFormattedGovernorates()
   const $styles = [$container, style]
 
   const {
     control,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
+    watch,
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      organizationNameEnglish: "",
-      organizationNameArabic: "",
-      city: "",
-      ceoName: "",
+      enName: null,
+      arName: null,
+      governorate: null,
+      CEOName: null,
       ceoPhone: "",
       organizationPhone: "",
       organizationSocialMediaLinks: [],
-      nearestLandMark: "",
-      establisedDate: null,
+      nearestLandmark: null,
+      EstablishedYear: null,
+      permitNumber: null,
+      facebookLink: null,
+      instagramLink: null,
+      websiteLink: null,
+      logo: null,
+      permitImage: null,
     },
   })
+  const governorate = watch("governorate")
 
-  const onSubmit = (data) => console.log(data)
+  const onSubmit = async (data) => {
+    const { logo, permitImage } = data
+
+    try {
+      let logoId = null
+      let permitImageId = null
+      const logoImageResponse = await uploadMedia({
+        uri: logo?.uri,
+        name: logo?.name,
+        type: logo?.type,
+      })
+      logoId = logoImageResponse.data?.[0]?.id
+
+      const permitImageResp = await uploadMedia({
+        uri: permitImage?.uri,
+        name: permitImage?.name,
+        type: permitImage?.type,
+      })
+      permitImageId = permitImageResp.data?.[0]?.id
+
+      createUser({ ...data, logo: logoId, permitImage: permitImageId })
+    } catch (err) {}
+  }
 
   const { isRTL } = useRTL()
 
-  const socialMediaLinks = [
-    { id: "facebook", nameAr: "العراق", nameEn: "Facebook" },
-    { id: "Instagram", nameAr: "العراق", nameEn: "Instagram" },
-    { id: "Website", nameAr: "العراق", nameEn: "Website" },
-  ]
-
-  const governorates = [
-    { id: "iraq", nameAr: "العراق", nameEn: "Iraq" },
-    { id: "bagdad", nameAr: "بغداد", nameEn: "Baghdad" },
-    { id: "test", nameAr: "بغداد", nameEn: "Test" },
-  ]
-
-  const _governorates = governorates.map(({ id, nameAr, nameEn }) => ({
-    label: isRTL ? nameAr : nameEn,
-    value: id,
-  }))
-
-  const [cities, setCities] = React.useState(_governorates)
-  const city = watch("city")
+  const socialMediaLinks: {
+    id: string
+    nameAr: string
+    nameEn: string
+    name: string
+    error: TxKeyPath
+  }[] = React.useMemo(
+    () => [
+      {
+        id: "facebook",
+        nameAr: "العراق",
+        nameEn: "Facebook",
+        name: "facebookLink",
+        error: "errors.facebookOnly",
+      },
+      {
+        id: "Instagram",
+        nameAr: "العراق",
+        nameEn: "Instagram",
+        name: "instagramLink",
+        error: "errors.instagramOnly",
+      },
+      {
+        id: "Website",
+        nameAr: "العراق",
+        nameEn: "Website",
+        name: "websiteLink",
+        error: "errors.websiteOnly",
+      },
+    ],
+    [],
+  )
 
   React.useEffect(() => {
-    setCities([..._governorates])
-  }, [isRTL])
+    if (isSuccess) {
+      navigation.navigate("SignIn")
+    }
+  }, [isSuccess])
+
+  const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
   return (
     <View style={$styles}>
@@ -98,25 +186,29 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
         <ImagePicker
           titleX="createOrganizationAccount.logo"
           style={$logo}
-          onSelectImage={(image) => {
-            console.log("image", image)
+          onSelectImage={async (image) => {
+            setValue("logo", {
+              uri: image?.uri,
+              name: image?.fileName,
+              type: image?.type,
+            })
           }}
         />
         <TextField
           control={control}
-          name="organizationNameArabic"
+          name="arName"
           placeholderTx="createOrganizationAccount.organizationNameArabic"
-          status={errors?.organizationNameArabic ? "error" : null}
-          error={errors?.organizationNameArabic ? "auth.signIn" : null}
+          status={errors?.arName ? "error" : null}
+          error={errors?.arName ? "errors.arabicOnly" : null}
           containerStyle={$textInput}
         />
 
         <TextField
           control={control}
-          name="organizationNameEnglish"
+          name="enName"
           placeholderTx="createOrganizationAccount.organizationNameEnglish"
-          status={errors?.organizationNameEnglish ? "error" : null}
-          error={errors?.organizationNameEnglish ? "auth.signIn" : null}
+          status={errors?.enName ? "error" : null}
+          error={errors?.enName ? "errors.englishOnly" : null}
           containerStyle={$textInput}
         />
 
@@ -124,61 +216,66 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
           <View style={$flexOne}>
             <TextField
               control={control}
-              name="establisedDate"
+              name="EstablishedYear"
               placeholderTx="createOrganizationAccount.establishedDate"
-              status={errors?.establisedDate ? "error" : null}
-              error={errors?.establisedDate ? "auth.signIn" : null}
+              status={errors?.EstablishedYear ? "error" : null}
+              error={errors?.EstablishedYear ? "errors.pleaseFill" : null}
               containerStyle={$textInput}
             />
 
             <TextField
               control={control}
-              name="organizationNameEnglish"
+              keyboardType="phone-pad"
+              name="permitNumber"
               placeholderTx="createOrganizationAccount.permitNumber"
-              status={errors?.organizationNameEnglish ? "error" : null}
-              error={errors?.organizationNameEnglish ? "auth.signIn" : null}
+              status={errors?.permitNumber ? "error" : null}
+              error={errors?.permitNumber ? "errors.numbersOnly" : null}
               containerStyle={$textInput}
             />
           </View>
           <View style={[$flexOne, $imagePicker]}>
             <ImagePicker
               titleX="createOrganizationAccount.permitImage"
-              onSelectImage={(image) => {
-                console.log("image", image)
+              onSelectImage={async (image) => {
+                setValue("permitImage", {
+                  uri: image?.uri,
+                  name: image?.fileName,
+                  type: image?.type,
+                })
               }}
             />
           </View>
         </View>
 
         <Dropdown
-          items={cities}
-          setItems={setCities}
+          items={governorates}
+          setItems={setGovernorates}
           placeholderTx={"createOrganizationAccount.addressCity"}
           // eslint-disable-next-line @typescript-eslint/no-empty-function
           onChange={(value) => {
-            setValue("city", value)
+            setValue("governorate", value)
           }}
+          dropDownContainerStyle={{ minHeight: governorates.length * 80 }}
           style={$address}
-          value={city}
-          dropDownContainerStyle={{ minHeight: cities.length * 80 }}
+          error={!governorate && errors?.governorate ? "errors.pleaseChoose" : null}
         />
 
         <TextField
           control={control}
-          name="nearestLandMark"
+          name="nearestLandmark"
           placeholderTx="createOrganizationAccount.addressNearestLandmark"
-          status={errors?.nearestLandMark ? "error" : null}
-          error={errors?.nearestLandMark ? "auth.signIn" : null}
+          status={errors?.nearestLandmark ? "error" : null}
+          error={errors?.nearestLandmark ? "errors.pleaseChoose" : null}
           containerStyle={$textInput}
         />
 
         <Text tx="createOrganizationAccount.ceoInfo" style={$header} />
         <TextField
           control={control}
-          name="ceoName"
+          name="CEOName"
           placeholderTx="createOrganizationAccount.name"
-          status={errors?.ceoName ? "error" : null}
-          error={errors?.ceoName ? "auth.signIn" : null}
+          status={errors?.CEOName ? "error" : null}
+          error={errors?.CEOName ? "errors.pleaseFill" : null}
           containerStyle={$textInput}
         />
         <TextField
@@ -186,7 +283,11 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
           name="ceoPhone"
           placeholderTx="createOrganizationAccount.phoeNumber"
           status={errors?.ceoPhone ? "error" : null}
-          error={errors?.ceoPhone ? "auth.signIn" : null}
+          errorText={
+            errors?.ceoPhone
+              ? `${11 - watch("ceoPhone")?.length} ${I18n.translate("errors.phone")}`
+              : null
+          }
           containerStyle={$textInput}
         />
 
@@ -196,24 +297,37 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
           name="organizationPhone"
           placeholderTx="createOrganizationAccount.organizationPhoneNumber"
           status={errors?.organizationPhone ? "error" : null}
-          error={errors?.organizationPhone ? "auth.signIn" : null}
+          errorText={
+            errors?.organizationPhone
+              ? `${11 - watch("organizationPhone")?.length} ${I18n.translate("errors.phone")}`
+              : null
+          }
           containerStyle={$textInput}
           keyboardType="phone-pad"
         />
 
-        {socialMediaLinks.map(({ id, nameAr, nameEn }) => (
+        {socialMediaLinks.map(({ id, nameAr, nameEn, name, error }) => (
           <TextField
             key={id}
+            control={control}
+            name={name}
             placeholder={`${isRTL ? nameAr : nameEn} ${I18n.t(
               "createOrganizationAccount.linkOptional",
             )}`}
-            status={errors?.ceoPhone ? "error" : null}
-            error={errors?.ceoPhone ? "auth.signIn" : null}
+            status={errors?.[name] ? "error" : null}
+            error={errors?.[name] ? error : null}
             containerStyle={$textInput}
+            autoCapitalize="none"
           />
         ))}
 
-        <Button tx="common.continue" onPress={handleSubmit(onSubmit)} style={$continue} />
+        <Button
+          loading={isCreating || isUploadingMedia}
+          disabled={isCreating || isUploadingMedia}
+          tx="common.continue"
+          onPress={handleSubmit(onSubmit)}
+          style={$continue}
+        />
       </ScrollView>
     </View>
   )

@@ -29,7 +29,7 @@ export interface OrganizationUser {
   createdAt?: string
   updatedAt?: string
   publishedAt?: null
-  logo?: any // TODO integrate logo
+  logo?: Image // TODO integrate logo
   permitImage?: any
   gender?: GenderAttrs & ID
   governorate?: GovernorateAttrs & ID
@@ -43,6 +43,8 @@ export interface UpdatePersonalUser {
   phoneNumber?: string
   governorate?: number
 }
+
+export type CreatePersonalUser = UpdatePersonalUser
 
 export interface SignPetitionPayload {
   petitionId: number
@@ -58,11 +60,13 @@ export interface UpdateOrganization {
   organizationPhone?: string
   EstablishedYear?: string
   publishedAt?: null
-  logo?: any // TODO integrate logo
-  permitImage?: any
+  logo?: number
+  permitImage?: number
   gender?: number
   governorate?: number
 }
+
+export type CreateOrganization = UpdateOrganization
 
 export interface UploadMedia {
   uri: string
@@ -97,6 +101,9 @@ export interface UpdateOwner {
   instagramLink?: string
   websiteLink?: string
   signedPetitions?: number[]
+  arName?: string
+  enName?: string
+  image?: number
 }
 
 export interface GenderAttrs {

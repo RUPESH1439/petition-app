@@ -31,7 +31,7 @@ export const SearchScreen: FC<SearchScreenProps> = observer(function SearchScree
   const { petitionsData } = useSearchPetition(debouncedSearch)
   const mappedPetitionsData = React.useMemo(
     () => formatPetitions(petitionsData, isRTL, user?.owner?.id),
-    [petitionsData],
+    [petitionsData, isRTL],
   )
   let timer
 

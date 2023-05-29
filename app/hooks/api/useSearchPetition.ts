@@ -15,7 +15,7 @@ export default function useSearchPetition(searchText: string) {
     queryFn: async () => {
       const query = qs.stringify(
         {
-          sort: ["updatedAt:desc"],
+          sort: ["createdAt:desc"],
           fields: ["hideName", "description", "title", "createdAt"],
           filters: {
             $or: [
