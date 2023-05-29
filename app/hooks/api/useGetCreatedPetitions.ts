@@ -19,6 +19,7 @@ export default function useGetCreatedPetitions() {
     queryFn: async () => {
       const query = qs.stringify(
         {
+          sort: ["updatedAt:desc"],
           fields: ["hideName", "description", "title", "createdAt"],
           filters: {
             creator: {

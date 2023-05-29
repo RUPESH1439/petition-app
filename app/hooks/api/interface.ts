@@ -64,6 +64,17 @@ export interface UpdateOrganization {
   governorate?: number
 }
 
+export interface UploadMedia {
+  uri: string
+  type: string
+  name: string
+}
+
+export interface MediaResponse {
+  id: number
+  url?: string
+}
+
 export interface CreatePetition {
   creator?: number
   title?: string
@@ -71,7 +82,7 @@ export interface CreatePetition {
   category?: number
   hideName?: boolean
   description?: string
-  image?: string
+  image?: number
 }
 
 export type EditPetition = CreatePetition & ID

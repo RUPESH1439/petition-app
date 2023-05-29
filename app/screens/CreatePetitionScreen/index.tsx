@@ -12,19 +12,25 @@ import { ShowHideName } from "../../components/ShowHideName"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import usePetitionCategory from "app/hooks/api/usePetitionCategory"
-import useGovernorate from "app/hooks/api/useGovernorate"
-import useRTL from "app/hooks/useRTL"
 import useCreatePetition from "app/hooks/api/useCreatePetition"
 import useUser from "app/hooks/userUser"
+import useUploadMedia from "app/hooks/api/useUploadMedia"
+import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
+import useFormattedPetitionCategories from "app/hooks/useFormattedPetitionCategories"
 
 const schema = z.object({
   governorate: z.number(),
   category: z.number(),
   title: z.string().min(1),
   description: z.string().min(1),
-  image: z.string().nullish(),
   showName: z.boolean(),
+  image: z
+    .object({
+      uri: z.string(),
+      type: z.string(),
+      name: z.string(),
+    })
+    .optional(),
 })
 
 type ISchema = z.infer<typeof schema>
@@ -48,47 +54,16 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
         category: null,
         title: null,
         description: null,
-        image: null,
         showName: null,
+        image: undefined,
       },
     })
-    const { isRTL } = useRTL()
+    const { uploadMedia, isUploadingMedia } = useUploadMedia()
     const { user } = useUser()
-    const { petitionCategoryData } = usePetitionCategory()
-    const { governorateData } = useGovernorate()
+
     const { createPetition, isCreatingPetition, isSuccess } = useCreatePetition()
-    const _categories = React.useMemo(
-      () =>
-        petitionCategoryData?.map(({ attributes, id }) => ({
-          value: id,
-          label: isRTL ? attributes?.arName : attributes?.enName,
-        })) ?? [],
-      [isRTL, petitionCategoryData],
-    )
-    const [categories, setCategories] = React.useState([])
-
-    const _governorates = React.useMemo(
-      () =>
-        governorateData?.map(({ id, attributes }) => ({
-          label: isRTL ? attributes?.arName : attributes?.enName,
-          value: id,
-        })) ?? [],
-      [isRTL, governorateData],
-    )
-    const [governorates, setGovernorates] = React.useState(_governorates)
-
-    React.useEffect(() => {
-      setGovernorates([..._governorates])
-      setCategories([..._categories])
-    }, [isRTL])
-
-    React.useEffect(() => {
-      setCategories([..._categories])
-    }, [_categories])
-
-    React.useEffect(() => {
-      setGovernorates([..._governorates])
-    }, [_governorates])
+    const { governorates, setGovernorates } = useFormattedGovernorates()
+    const { categories, setCategories } = useFormattedPetitionCategories()
 
     const governorate = watch("governorate")
     const category = watch("category")
@@ -102,14 +77,28 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
       (errors?.showName && showName === null)
 
     const onSubmit = async (data: ISchema) => {
-      await createPetition({
-        title: data?.title,
-        creator: user?.owner?.id,
-        description: data?.description,
-        category: data?.category,
-        hideName: !data?.showName,
-        governorate: data?.governorate,
-      })
+      const { image } = data
+      try {
+        let imageId = null
+        if (image) {
+          const resp = await uploadMedia({
+            uri: image?.uri,
+            name: image?.name,
+            type: image?.type,
+          })
+          imageId = resp.data?.[0]?.id
+        }
+
+        await createPetition({
+          title: data?.title,
+          creator: user?.owner?.id,
+          description: data?.description,
+          category: data?.category,
+          hideName: !data?.showName,
+          governorate: data?.governorate,
+          image: imageId,
+        })
+      } catch (err) {}
     }
 
     useEffect(() => {
@@ -177,8 +166,12 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
 
           <ImagePicker
             style={$image}
-            onSelectImage={(image) => {
-              setValue("image", image?.assets?.[0]?.uri)
+            onSelectImage={async (image) => {
+              setValue("image", {
+                uri: image?.uri,
+                name: image?.fileName,
+                type: image?.type,
+              })
             }}
             iconSize={moderateVerticalScale(38)}
             labelX="createPetition.imageOptional"
@@ -198,7 +191,7 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
             tx="createPetition.publish"
             onPress={handleSubmit(onSubmit)}
             disabled={!!isError}
-            loading={isCreatingPetition}
+            loading={isCreatingPetition || isUploadingMedia}
           />
         </ScrollView>
       </Screen>
