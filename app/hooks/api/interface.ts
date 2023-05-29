@@ -64,6 +64,14 @@ export interface UpdateOrganization {
   governorate?: number
 }
 
+export interface UploadMedia {
+  files: Blob
+  fileInfo: {
+    name: string
+    folder: null
+  }
+}
+
 export interface CreatePetition {
   creator?: number
   title?: string

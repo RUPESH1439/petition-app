@@ -6,7 +6,7 @@ import { Text } from "app/components/Text"
 import { TxKeyPath } from "app/i18n"
 import EvilIcons from "react-native-vector-icons/EvilIcons"
 import { moderateVerticalScale } from "app/utils/scaling"
-import { launchImageLibrary, ImagePickerResponse } from "react-native-image-picker"
+import { launchImageLibrary, Asset } from "react-native-image-picker"
 import useRTL from "app/hooks/useRTL"
 import { $ltr, $rtl } from "app/common/styles"
 
@@ -18,7 +18,7 @@ export interface ImagePickerProps {
 
   titleX?: TxKeyPath
 
-  onSelectImage?: (image: ImagePickerResponse) => void
+  onSelectImage?: (image: Asset & { blob: Blob }) => void
 
   iconSize?: number
 
@@ -31,23 +31,28 @@ export interface ImagePickerProps {
 export const ImagePicker = observer(function ImagePicker(props: ImagePickerProps) {
   const { style, titleX, onSelectImage, iconSize, labelX } = props
   const $styles = [$container, style]
-  const [selectedImage, setSelectedImage] = React.useState<null | ImagePickerResponse>(null)
+  const [selectedImage, setSelectedImage] = React.useState<null | (Asset & { blob: Blob })>(null)
   const { isRTL } = useRTL()
   const pickImage = async () => {
     const result = await launchImageLibrary({
       mediaType: "photo",
+      includeBase64: true,
     })
     if (result?.didCancel) {
       return
     }
-    setSelectedImage(result)
-    onSelectImage?.(result)
+    const asset = result?.assets?.[0]
+    const response = await fetch(asset?.uri)
+    const _blob = await response.blob()
+    const _image = { ...asset, blob: _blob }
+    setSelectedImage(_image)
+    onSelectImage?.(_image)
   }
   const renderContainer = () => {
     if (selectedImage) {
       return (
         <Pressable style={$styles} onPress={pickImage}>
-          <Image style={$image} source={{ uri: selectedImage.assets?.[0]?.uri }} />
+          <Image style={$image} source={{ uri: selectedImage?.uri }} />
         </Pressable>
       )
     }

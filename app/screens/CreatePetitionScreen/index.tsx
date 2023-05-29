@@ -12,11 +12,11 @@ import { ShowHideName } from "../../components/ShowHideName"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import usePetitionCategory from "app/hooks/api/usePetitionCategory"
-import useGovernorate from "app/hooks/api/useGovernorate"
-import useRTL from "app/hooks/useRTL"
 import useCreatePetition from "app/hooks/api/useCreatePetition"
 import useUser from "app/hooks/userUser"
+import useUploadMedia from "app/hooks/api/useUploadMedia"
+import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
+import useFormattedPetitionCategories from "app/hooks/useFormattedPetitionCategories"
 
 const schema = z.object({
   governorate: z.number(),
@@ -52,43 +52,12 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
         showName: null,
       },
     })
-    const { isRTL } = useRTL()
+    const { uploadMedia } = useUploadMedia()
     const { user } = useUser()
-    const { petitionCategoryData } = usePetitionCategory()
-    const { governorateData } = useGovernorate()
+
     const { createPetition, isCreatingPetition, isSuccess } = useCreatePetition()
-    const _categories = React.useMemo(
-      () =>
-        petitionCategoryData?.map(({ attributes, id }) => ({
-          value: id,
-          label: isRTL ? attributes?.arName : attributes?.enName,
-        })) ?? [],
-      [isRTL, petitionCategoryData],
-    )
-    const [categories, setCategories] = React.useState([])
-
-    const _governorates = React.useMemo(
-      () =>
-        governorateData?.map(({ id, attributes }) => ({
-          label: isRTL ? attributes?.arName : attributes?.enName,
-          value: id,
-        })) ?? [],
-      [isRTL, governorateData],
-    )
-    const [governorates, setGovernorates] = React.useState(_governorates)
-
-    React.useEffect(() => {
-      setGovernorates([..._governorates])
-      setCategories([..._categories])
-    }, [isRTL])
-
-    React.useEffect(() => {
-      setCategories([..._categories])
-    }, [_categories])
-
-    React.useEffect(() => {
-      setGovernorates([..._governorates])
-    }, [_governorates])
+    const { governorates, setGovernorates } = useFormattedGovernorates()
+    const { categories, setCategories } = useFormattedPetitionCategories()
 
     const governorate = watch("governorate")
     const category = watch("category")
@@ -102,14 +71,15 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
       (errors?.showName && showName === null)
 
     const onSubmit = async (data: ISchema) => {
-      await createPetition({
-        title: data?.title,
-        creator: user?.owner?.id,
-        description: data?.description,
-        category: data?.category,
-        hideName: !data?.showName,
-        governorate: data?.governorate,
-      })
+      console.log("data", data)
+      // await createPetition({
+      //   title: data?.title,
+      //   creator: user?.owner?.id,
+      //   description: data?.description,
+      //   category: data?.category,
+      //   hideName: !data?.showName,
+      //   governorate: data?.governorate,
+      // })
     }
 
     useEffect(() => {
@@ -177,8 +147,18 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
 
           <ImagePicker
             style={$image}
-            onSelectImage={(image) => {
-              setValue("image", image?.assets?.[0]?.uri)
+            onSelectImage={async (image) => {
+              // setValue("image", image?.assets?.[0])
+              console.log("image", image?.uri, image?.blob, image?.fileName)
+              const resp = await uploadMedia({
+                files: image?.blob,
+                fileInfo: {
+                  name: image?.fileName,
+                  folder: null,
+                },
+              })
+              console.log("resp", resp)
+              // console.log("asset", asset?.base64)
             }}
             iconSize={moderateVerticalScale(38)}
             labelX="createPetition.imageOptional"
