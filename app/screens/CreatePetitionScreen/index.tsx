@@ -23,8 +23,14 @@ const schema = z.object({
   category: z.number(),
   title: z.string().min(1),
   description: z.string().min(1),
-  image: z.string().nullish(),
   showName: z.boolean(),
+  image: z
+    .object({
+      uri: z.string(),
+      type: z.string(),
+      name: z.string(),
+    })
+    .optional(),
 })
 
 type ISchema = z.infer<typeof schema>
@@ -48,11 +54,11 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
         category: null,
         title: null,
         description: null,
-        image: null,
         showName: null,
+        image: undefined,
       },
     })
-    const { uploadMedia } = useUploadMedia()
+    const { uploadMedia, isUploadingMedia } = useUploadMedia()
     const { user } = useUser()
 
     const { createPetition, isCreatingPetition, isSuccess } = useCreatePetition()
@@ -71,15 +77,28 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
       (errors?.showName && showName === null)
 
     const onSubmit = async (data: ISchema) => {
-      console.log("data", data)
-      // await createPetition({
-      //   title: data?.title,
-      //   creator: user?.owner?.id,
-      //   description: data?.description,
-      //   category: data?.category,
-      //   hideName: !data?.showName,
-      //   governorate: data?.governorate,
-      // })
+      const { image } = data
+      try {
+        let imageId = null
+        if (image) {
+          const resp = await uploadMedia({
+            uri: image?.uri,
+            name: image?.name,
+            type: image?.type,
+          })
+          imageId = resp.data?.[0]?.id
+        }
+
+        await createPetition({
+          title: data?.title,
+          creator: user?.owner?.id,
+          description: data?.description,
+          category: data?.category,
+          hideName: !data?.showName,
+          governorate: data?.governorate,
+          image: imageId,
+        })
+      } catch (err) {}
     }
 
     useEffect(() => {
@@ -148,17 +167,11 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
           <ImagePicker
             style={$image}
             onSelectImage={async (image) => {
-              // setValue("image", image?.assets?.[0])
-              console.log("image", image?.uri, image?.blob, image?.fileName)
-              const resp = await uploadMedia({
-                files: image?.blob,
-                fileInfo: {
-                  name: image?.fileName,
-                  folder: null,
-                },
+              setValue("image", {
+                uri: image?.uri,
+                name: image?.fileName,
+                type: image?.type,
               })
-              console.log("resp", resp)
-              // console.log("asset", asset?.base64)
             }}
             iconSize={moderateVerticalScale(38)}
             labelX="createPetition.imageOptional"
@@ -178,7 +191,7 @@ export const CreatePetitionScreen: FC<CreatePetitionScreenProps> = observer(
             tx="createPetition.publish"
             onPress={handleSubmit(onSubmit)}
             disabled={!!isError}
-            loading={isCreatingPetition}
+            loading={isCreatingPetition || isUploadingMedia}
           />
         </ScrollView>
       </Screen>

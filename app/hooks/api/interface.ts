@@ -65,11 +65,14 @@ export interface UpdateOrganization {
 }
 
 export interface UploadMedia {
-  files: Blob
-  fileInfo: {
-    name: string
-    folder: null
-  }
+  uri: string
+  type: string
+  name: string
+}
+
+export interface MediaResponse {
+  id: number
+  url?: string
 }
 
 export interface CreatePetition {
@@ -79,7 +82,7 @@ export interface CreatePetition {
   category?: number
   hideName?: boolean
   description?: string
-  image?: string
+  image?: number
 }
 
 export type EditPetition = CreatePetition & ID
