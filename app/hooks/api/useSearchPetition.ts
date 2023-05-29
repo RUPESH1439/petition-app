@@ -1,39 +1,48 @@
 import { useQuery } from "@tanstack/react-query"
 import apiClient from "app/services/apiClient"
 import qs from "qs"
-import useUser from "../userUser"
 import { Petition } from "./interface"
 import { API_KEYS } from "app/constants/apiKeys"
 
-export default function useGetCreatedPetitions() {
-  const { user } = useUser()
-  const userId = user?.owner?.id
+export default function useSearchPetition(searchText: string) {
   const {
     isFetching: isPetitionsFetching,
     refetch: fetchPetitions,
     data: petitionsData,
     error: petitionFetchError,
   } = useQuery({
-    queryKey: [API_KEYS.GET_CREATED_PETITIONS, userId],
-    enabled: !!userId,
+    queryKey: [API_KEYS.GET_SEARCH_PETITION, searchText],
     queryFn: async () => {
       const query = qs.stringify(
         {
           sort: ["updatedAt:desc"],
           fields: ["hideName", "description", "title", "createdAt"],
           filters: {
-            creator: {
-              id: {
-                $eq: userId,
+            $or: [
+              {
+                title: {
+                  $contains: searchText,
+                },
               },
-            },
+              {
+                creator: {
+                  arName: {
+                    $contains: searchText,
+                  },
+                },
+              },
+              {
+                creator: {
+                  enName: {
+                    $contains: searchText,
+                  },
+                },
+              },
+            ],
           },
           populate: {
-            image: {
-              fields: ["url"],
-            },
             creator: {
-              fields: ["arName", "enName", "isPrivileged"],
+              fields: ["arName", "enName", "isPrivileged", "userType"],
               populate: {
                 image: {
                   fields: ["url"],
@@ -52,6 +61,9 @@ export default function useGetCreatedPetitions() {
             signers: {
               fields: ["phoneNumber"],
             },
+            image: {
+              fields: ["url"],
+            },
           },
         },
         {
@@ -61,6 +73,8 @@ export default function useGetCreatedPetitions() {
       const response = await apiClient.get(`/petitions?${query}`)
       return response?.data?.data as Petition[]
     },
+    enabled: !!searchText,
   })
+
   return { isPetitionsFetching, fetchPetitions, petitionsData, petitionFetchError }
 }
