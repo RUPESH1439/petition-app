@@ -68,7 +68,7 @@ export const EditPersonalInfoScreen: FC<EditPersonalInfoScreenProps> = observer(
     })
     const mobileNumber = watch("mobileNumber")
     const onSubmit = async (data) => {
-      await updateOwner({ phoneNumber: mobileNumber })
+      await updateOwner({ phoneNumber: mobileNumber, arName: data?.name, enName: data?.name })
       const response = await updateUser(data)
       const formatedUser = formatUserData(response)
       setUser(formatedUser)

@@ -31,7 +31,7 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   const { petitionsData, fetchPetitions } = useGetPetitions(governorateFilter)
   const mappedPetitionsData = React.useMemo(
     () => formatPetitions(petitionsData, isRTL, user?.owner?.id),
-    [petitionsData],
+    [petitionsData, isRTL],
   )
   const renderItem = useCallback(
     ({ item }) => {

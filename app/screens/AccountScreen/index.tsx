@@ -35,8 +35,7 @@ interface AccountItem {
 export const AccountScreen: FC<AccountScreenProps> = observer(function AccountScreen() {
   const { isRTL } = useRTL()
   const { user, logout } = useUser()
-  const { id, name, owner, enName, arName } = (user ?? {}) as any
-
+  const { id, name, owner, enName, arName, logo } = (user ?? {}) as any
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
   const { isPrivileged, phoneNumber, userType } = owner ?? {}
   // TODO move this logic from backend
@@ -91,18 +90,17 @@ export const AccountScreen: FC<AccountScreenProps> = observer(function AccountSc
   const isLoggedIn = !!id
 
   const accountItems = isLoggedIn ? loggedInAccountItems : guestAccountItems
-
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
       <ScreenHeader tx="accountScreen.title" />
       {isLoggedIn ? (
         <View style={$detailContainer}>
           <View style={$nameContainer(isRTL)}>
-            {!!isOrganization && (
+            {!!isOrganization && logo && (
               <Image
                 // TODO Remove this hardcode later
                 source={{
-                  uri: "https://ui-avatars.com/api/?name=Delfina+Ghimire&rounded=true?bold=true",
+                  uri: logo?.url,
                 }}
                 style={$avatar}
               />

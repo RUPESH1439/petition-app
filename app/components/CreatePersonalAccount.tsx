@@ -5,18 +5,23 @@ import { spacing } from "app/theme"
 import { TextField } from "./TextField"
 import { Button } from "./Button"
 import { Dropdown } from "./Dropdown"
-import useRTL from "app/hooks/useRTL"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Datepicker } from "./Datepicker"
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { AppStackParamList } from "app/navigators"
+import useFormattedGenders from "app/hooks/useFormattedGenders"
+import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
+import I18n from "i18n-js"
+import useCreateUser from "app/hooks/api/useCreateUser"
 
 const schema = z.object({
-  name: z.string(),
-  dateOfBirth: z.date(),
-  mobileNumber: z.string(),
-  gender: z.string(),
-  city: z.string(),
+  name: z.string().min(1),
+  birthdateYear: z.string().length(4),
+  phoneNumber: z.string().length(11),
+  gender: z.number(),
+  governorate: z.number(),
 })
 
 export interface CreatePersonalAccountProps {
@@ -30,54 +35,40 @@ export interface CreatePersonalAccountProps {
  * Describe your component here
  */
 export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
-  const { isRTL } = useRTL()
+  const { genders, setGenders } = useFormattedGenders()
+  const { governorates, setGovernorates } = useFormattedGovernorates()
+  const { isCreating, createUser, isSuccess } = useCreateUser("personal")
+  const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
+
   const {
     control,
     handleSubmit,
     formState: { errors },
-    watch,
     setValue,
+    watch,
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: "",
-      dateOfBirth: null,
-      mobileNumber: "",
+      name: null,
+      birthdateYear: null,
+      phoneNumber: null,
       gender: null,
-      city: null,
+      governorate: null,
     },
   })
-  const onSubmit = (data) => console.log(data)
-  const mockCities = [
-    { id: "iraq", nameAr: "العراق", nameEn: "Iraq" },
-    { id: "bagdad", nameAr: "بغداد", nameEn: "Baghdad" },
-  ]
+  const phoneNumber = watch("phoneNumber")
+  const onSubmit = async (data) => {
+    await createUser(data)
+  }
 
-  const mockGenders = [
-    { id: "male", nameAr: "ذكر", nameEn: "male" },
-    { id: "female", nameAr: "بغداد", nameEn: "female" },
-  ]
-
-  const _cities = mockCities.map(({ id, nameAr, nameEn }) => ({
-    label: isRTL ? nameAr : nameEn,
-    value: id,
-  }))
-
-  const _gender = mockGenders.map(({ id, nameAr, nameEn }) => ({
-    label: isRTL ? nameAr : nameEn,
-    value: id,
-  }))
-
-  const [cities, setCities] = React.useState(_cities)
-  const [gender, setGender] = React.useState(_gender)
-
-  const dateOfBirth = watch("dateOfBirth")
-  // const city = watch("city")
+  const governorate = watch("governorate")
+  const gender = watch("gender")
 
   React.useEffect(() => {
-    setCities([..._cities])
-    setGender([..._gender])
-  }, [isRTL])
+    if (isSuccess) {
+      navigation.navigate("SignIn")
+    }
+  }, [isSuccess])
 
   return (
     <View style={$container}>
@@ -85,48 +76,59 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
         control={control}
         name="name"
         status={errors?.name ? "error" : null}
-        error={errors?.name ? "auth.signIn" : null}
+        error={errors?.name ? "errors.pleaseFill" : null}
         placeholderTx="createPersonalAccount.name"
       />
-      <Datepicker
-        date={dateOfBirth}
+      <TextField
+        control={control}
+        name="birthdateYear"
+        status={errors?.birthdateYear ? "error" : null}
+        error={errors?.birthdateYear ? "errors.pleaseFill" : null}
         placeholderTx="createPersonalAccount.dateOfBirth"
-        onChange={(date) => {
-          setValue("dateOfBirth", date)
-        }}
       />
       <View style={$dropdownGenderList}>
         <Dropdown
-          items={gender}
-          setItems={setGender}
+          items={genders}
+          setItems={setGenders}
           placeholderTx="createPersonalAccount.gender"
           onChange={(value) => {
             setValue("gender", value)
           }}
+          error={!gender && errors?.gender ? "errors.pleaseChoose" : null}
         />
       </View>
 
       <View style={$dropdownList}>
         <Dropdown
-          items={cities}
-          setItems={setCities}
+          items={governorates}
+          setItems={setGovernorates}
           placeholderTx="createPersonalAccount.governorate"
           onChange={(value) => {
-            setValue("city", value)
+            setValue("governorate", value)
           }}
+          error={!governorate && errors?.governorate ? "errors.pleaseChoose" : null}
         />
       </View>
 
       <TextField
         control={control}
-        name="mobileNumber"
-        status={errors?.mobileNumber ? "error" : null}
-        error={errors?.mobileNumber ? "auth.signIn" : null}
+        name="phoneNumber"
+        status={errors?.phoneNumber ? "error" : null}
+        errorText={
+          errors?.phoneNumber
+            ? `${11 - phoneNumber?.length} ${I18n.translate("errors.phone")}`
+            : null
+        }
         placeholderTx="createPersonalAccount.mobileNumber"
         keyboardType="numeric"
       />
 
-      <Button tx="common.continue" style={$continueBtn} onPress={handleSubmit(onSubmit)} />
+      <Button
+        loading={isCreating}
+        tx="common.continue"
+        style={$continueBtn}
+        onPress={handleSubmit(onSubmit)}
+      />
     </View>
   )
 })

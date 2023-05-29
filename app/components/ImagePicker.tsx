@@ -23,13 +23,15 @@ export interface ImagePickerProps {
   iconSize?: number
 
   labelX?: TxKeyPath
+
+  uri?: string
 }
 
 /**
  * Describe your component here
  */
 export const ImagePicker = observer(function ImagePicker(props: ImagePickerProps) {
-  const { style, titleX, onSelectImage, iconSize, labelX } = props
+  const { style, titleX, onSelectImage, iconSize, labelX, uri } = props
   const $styles = [$container, style]
   const [selectedImage, setSelectedImage] = React.useState<null | (Asset & { blob: Blob })>(null)
   const { isRTL } = useRTL()
@@ -49,13 +51,14 @@ export const ImagePicker = observer(function ImagePicker(props: ImagePickerProps
     onSelectImage?.(_image)
   }
   const renderContainer = () => {
-    if (selectedImage) {
+    if (selectedImage || uri) {
       return (
         <Pressable style={$styles} onPress={pickImage}>
-          <Image style={$image} source={{ uri: selectedImage?.uri }} />
+          <Image style={$image} source={{ uri: selectedImage?.uri || uri }} />
         </Pressable>
       )
     }
+
     return (
       <Pressable style={$styles} onPress={pickImage}>
         <EvilIcons name="plus" size={iconSize ?? 30} color={colors.palette.neutral100} />
