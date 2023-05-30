@@ -10,15 +10,12 @@ import Feather from "react-native-vector-icons/Feather"
 import icons from "../../../assets/svgs"
 import { Analytic } from "./Analytic"
 import {
-  $avatar,
   $cityText,
   $container,
   $dateText,
   $fourthContainer,
-  $organizationName,
   $petitionImage,
   $petitionTitle,
-  $secondContainer,
   $thirdContainer,
   $topContainer,
 } from "./styles"
@@ -45,15 +42,7 @@ import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
 import { Petition } from "app/hooks/api/interface"
 import useDeletePetition from "app/hooks/api/useDeletePetition"
 
-const {
-  chevronLeft,
-  circleCheckSolid,
-  eyeSolid,
-  users,
-  arrowUp,
-  penToSquareRegular,
-  trashRegular,
-} = icons
+const { eyeSolid, users, arrowUp, penToSquareRegular, trashRegular } = icons
 
 interface Analytics {
   title: TxKeyPath
@@ -91,16 +80,13 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
     date,
     category,
     city,
-    isOrg,
-    name,
-    photoUrl,
+
     title,
     description,
     viewsCount,
     signsCount,
     status: _status,
-    isPrivileged,
-    isAnonymous,
+
     petitionImageUrl,
     petition,
   } = props
@@ -162,33 +148,7 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
         <Chip text={category} />
         <Text text={city} style={$cityText} />
       </View>
-      {!isAnonymous && (
-        <Pressable
-          style={$secondContainer}
-          onPress={() => {
-            navigation.navigate("UserPage")
-          }}
-        >
-          <SvgXml xml={chevronLeft} height={16} width={16} fill={colors.palette.primary200} />
-          {!!isOrg && !!isPrivileged && (
-            <SvgXml
-              xml={circleCheckSolid}
-              height={16}
-              width={16}
-              fill={colors.palette.primary200}
-            />
-          )}
-          <Text style={$organizationName} text={name} />
-          {!!photoUrl && (
-            <Image
-              source={{
-                uri: photoUrl,
-              }}
-              style={$avatar}
-            />
-          )}
-        </Pressable>
-      )}
+
       {!!petitionImageUrl && (
         <Image
           source={{

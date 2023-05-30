@@ -58,6 +58,7 @@ export const SignedPetitions = observer(function SignedPetitions(props: SignedPe
           isAnonymous={hideName}
           signers={signers?.map(({ id }) => id)}
           petitionImageUrl={image?.url}
+          creatorId={creator?.id}
         />
       </View>
     )

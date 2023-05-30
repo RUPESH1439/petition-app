@@ -64,6 +64,7 @@ export const SearchScreen: FC<SearchScreenProps> = observer(function SearchScree
       isAnonymous,
       signers,
       petitionImageUrl,
+      creatorId,
     } = item ?? {}
     return (
       <View style={$cardContainer} key={id}>
@@ -84,6 +85,7 @@ export const SearchScreen: FC<SearchScreenProps> = observer(function SearchScree
           isAnonymous={isAnonymous}
           signers={signers}
           petitionImageUrl={petitionImageUrl}
+          creatorId={creatorId}
         />
       </View>
     )

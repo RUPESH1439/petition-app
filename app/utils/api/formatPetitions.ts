@@ -41,6 +41,7 @@ export default function formatPetitions(
       signers: signers?.data?.map((signer) => signer?.id),
       petitionImageUrl: image?.data?.attributes?.url,
       petition,
+      creatorId: creator?.data?.id,
     }
   })
 }

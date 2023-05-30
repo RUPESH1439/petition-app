@@ -55,7 +55,9 @@ export type AppStackParamList = {
   CustomerService: undefined
   PrivacyPolicy: undefined
   CreatePetition: undefined
-  UserPage: undefined
+  UserPage: {
+    userId: number
+  }
   Otp: {
     phone: number
     userData: PersonalUser | OrganizationUser
