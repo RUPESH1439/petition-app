@@ -42,6 +42,7 @@ export interface UpdatePersonalUser {
   gender?: number
   phoneNumber?: string
   governorate?: number
+  ip?: string
 }
 
 export type CreatePersonalUser = UpdatePersonalUser
@@ -64,6 +65,7 @@ export interface UpdateOrganization {
   permitImage?: number
   gender?: number
   governorate?: number
+  ip?: string
 }
 
 export type CreateOrganization = UpdateOrganization

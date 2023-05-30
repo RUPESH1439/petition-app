@@ -54,7 +54,11 @@
       }
     },
     "plugins": [
-      "expo-localization"
+      "expo-localization",
+      "expo-location",
+      {
+        "locationAlwaysAndWhenInUsePermission": "Allow to use your location"
+      }
     ]
   }
 }

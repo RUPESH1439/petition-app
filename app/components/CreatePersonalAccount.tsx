@@ -1,5 +1,5 @@
 import * as React from "react"
-import { StyleProp, View, ViewStyle } from "react-native"
+import { Alert, StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { spacing } from "app/theme"
 import { TextField } from "./TextField"
@@ -15,6 +15,7 @@ import useFormattedGenders from "app/hooks/useFormattedGenders"
 import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
 import I18n from "i18n-js"
 import useCreateUser from "app/hooks/api/useCreateUser"
+import NetInfo from "@react-native-community/netinfo"
 
 const schema = z.object({
   name: z.string().min(1),
@@ -37,7 +38,7 @@ export interface CreatePersonalAccountProps {
 export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
   const { genders, setGenders } = useFormattedGenders()
   const { governorates, setGovernorates } = useFormattedGovernorates()
-  const { isCreating, createUser, isSuccess } = useCreateUser("personal")
+  const { isCreating, createUser, isSuccess, createError } = useCreateUser("personal")
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
   const {
@@ -58,7 +59,8 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
   })
   const phoneNumber = watch("phoneNumber")
   const onSubmit = async (data) => {
-    await createUser(data)
+    const netInfo = await NetInfo.fetch()
+    await createUser({ ...data, ip: netInfo?.details?.ipAddress })
   }
 
   const governorate = watch("governorate")
@@ -69,6 +71,12 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
       navigation.navigate("SignIn")
     }
   }, [isSuccess])
+
+  React.useEffect(() => {
+    if (createError) {
+      Alert.alert(createError?.message)
+    }
+  }, [createError])
 
   return (
     <View style={$container}>
