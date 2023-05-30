@@ -7,7 +7,6 @@ import { Button, Screen, ScreenHeader, TextField } from "app/components"
 import { useNavigation } from "@react-navigation/native"
 import { colors, spacing } from "app/theme"
 import useLogin from "app/hooks/api/useLogin"
-import Snackbar from "react-native-snackbar"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -43,13 +42,7 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
     login()
     setCanNavigate(true)
   }
-  if (loginError) {
-    Snackbar.show({
-      text: loginError?.message,
-      backgroundColor: colors.palette.angry500,
-      marginBottom: 20,
-    })
-  }
+
   useEffect(() => {
     if (userData?.id && canNavigate) {
       navigation.navigate("Otp", {
