@@ -62,8 +62,9 @@ const $accountItems = (isRTL: boolean): ViewStyle => ({
 })
 
 const $flashListContainer: ViewStyle = {
-  height: Dimensions.get("window").height * 0.45,
+  height: Dimensions.get("window").height,
   width: "100%",
+  paddingBottom: "12%",
 }
 
 export {

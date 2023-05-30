@@ -29,6 +29,9 @@ export default function useCancelSignPetition() {
       queryClient.invalidateQueries({
         queryKey: [API_KEYS.GET_SIGEND_PETITIONS],
       })
+      queryClient.invalidateQueries({
+        queryKey: [API_KEYS.GET_CREATED_PETITIONS],
+      })
     },
   })
 

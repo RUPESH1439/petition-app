@@ -1,13 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
 import apiClient from "app/services/apiClient"
 import qs from "qs"
-import useUser from "../userUser"
 import { Petition } from "./interface"
 import { API_KEYS } from "app/constants/apiKeys"
 
-export default function useGetCreatedPetitions() {
-  const { user } = useUser()
-  const userId = user?.owner?.id
+export default function useGetCreatedPetitions(userId: number) {
   const {
     isFetching: isPetitionsFetching,
     refetch: fetchPetitions,

@@ -10,4 +10,5 @@ export const API_KEYS = {
   GET_GOVERNORATE: "getGovernorate",
   LOGIN: "login",
   GET_PETITION_CATEGORY: "getPetitionCategory",
+  GET_USER_FROM_ID: "getUserFromId",
 }

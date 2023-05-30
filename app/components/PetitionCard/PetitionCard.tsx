@@ -56,6 +56,7 @@ export interface PetitionCardProps {
   isAnonymous?: boolean
   signers?: number[]
   petitionImageUrl?: string
+  creatorId?: number
 }
 
 /**
@@ -80,6 +81,7 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
     isAnonymous,
     signers,
     petitionImageUrl,
+    creatorId,
   } = props
 
   const { signPetition, signSuccess } = useSignPetition()
@@ -170,7 +172,9 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
         <Pressable
           style={$secondContainer}
           onPress={() => {
-            navigation.navigate("UserPage")
+            navigation.navigate("UserPage", {
+              userId: creatorId,
+            })
           }}
         >
           <SvgXml xml={chevronLeft} height={16} width={16} fill={colors.palette.primary200} />
@@ -231,7 +235,7 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
           textStyle={{ lineHeight: moderateVerticalScale(21), fontSize: moderateVerticalScale(16) }}
           onPress={async () => {
             if (_status === "forGuest") {
-              return
+              navigation.navigate("SignUp")
             }
             if (_status === "unsigned" && !signedPetition) {
               await signPetition({ petitionId: id, signers })

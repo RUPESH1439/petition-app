@@ -89,7 +89,7 @@ const $listCardContainer: ViewStyle = {
   marginTop: spacing.extraSmall,
 }
 
-const $flatListContainer: ViewStyle = { paddingBottom: spacing.extraLarge }
+const $flatListContainer: ViewStyle = { paddingBottom: spacing.extraLarge, height: "80%" }
 
 export {
   $root,
