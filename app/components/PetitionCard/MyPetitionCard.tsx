@@ -41,6 +41,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
 import { Petition } from "app/hooks/api/interface"
 import useDeletePetition from "app/hooks/api/useDeletePetition"
+import useGetPersonalUsersFromUserIds from "app/hooks/api/useGetPersonalUsersFromUserIds"
 
 const { eyeSolid, users, arrowUp, penToSquareRegular, trashRegular } = icons
 
@@ -69,6 +70,7 @@ export interface MyPetitionCardProps {
   isAnonymous?: boolean
   petitionImageUrl?: string
   petition?: Petition
+  signers?: number[]
 }
 
 /**
@@ -80,17 +82,16 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
     date,
     category,
     city,
-
     title,
     description,
     viewsCount,
     signsCount,
     status: _status,
-
     petitionImageUrl,
     petition,
+    signers,
   } = props
-
+  const { personalUsers } = useGetPersonalUsersFromUserIds(signers)
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
   const $styles = [$container, style]
@@ -100,21 +101,67 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
   const { governorates } = useFormattedGovernorates()
   const { deletePetition } = useDeletePetition()
 
-  const analytics: Analytics[] = React.useMemo(
-    () => [
+  const formattedPersonalUsers: {
+    birthYear: number | null
+    gender: string
+    governorate: number
+  }[] = React.useMemo(
+    () =>
+      personalUsers?.data?.map((data) => {
+        const { birthdateYear, gender, governorate } = data?.attributes ?? {}
+        return {
+          birthYear: birthdateYear ? parseInt(birthdateYear) : null,
+          gender: gender?.data?.attributes?.enType,
+          governorate: governorate?.data?.id,
+        }
+      }),
+    [personalUsers],
+  )
+  const analytics: Analytics[] = React.useMemo(() => {
+    const currentYear = new Date().getFullYear()
+    const analytics = {
+      youngerThan18:
+        formattedPersonalUsers?.filter(({ birthYear }) =>
+          birthYear ? currentYear - birthYear < 19 : false,
+        )?.length ?? 0,
+      eighteenToThirty:
+        formattedPersonalUsers?.filter(({ birthYear }) =>
+          birthYear ? currentYear - birthYear > 18 && currentYear - birthYear < 31 : false,
+        )?.length ?? 0,
+      thirtyToSixty:
+        formattedPersonalUsers?.filter(({ birthYear }) =>
+          birthYear ? currentYear - birthYear > 29 && currentYear - birthYear < 61 : false,
+        )?.length ?? 0,
+      olderThanSixty:
+        formattedPersonalUsers?.filter(({ birthYear }) =>
+          birthYear ? currentYear - birthYear > 60 : false,
+        )?.length ?? 0,
+      male: formattedPersonalUsers?.filter(({ gender }) => gender === "male")?.length ?? 0,
+      female: formattedPersonalUsers?.filter(({ gender }) => gender === "female")?.length ?? 0,
+    }
+
+    return [
       {
         title: "petition.analyticsSections.age",
         columns: ["petition.analyticsSections.number", "petition.analyticsSections.ageGroup"],
         data: [
-          { count: 50000, titleX: "petition.analyticsSections.youngerThan18", id: "youngerThan18" },
           {
-            count: 1200,
+            count: analytics?.youngerThan18,
+            titleX: "petition.analyticsSections.youngerThan18",
+            id: "youngerThan18",
+          },
+          {
+            count: analytics?.eighteenToThirty,
             titleX: "petition.analyticsSections.eighteenToThirty",
             id: "eighteenToThirty",
           },
-          { count: 1200, titleX: "petition.analyticsSections.thirtyToSixty", id: "thirtyToSixty" },
           {
-            count: 1200,
+            count: analytics?.thirtyToSixty,
+            titleX: "petition.analyticsSections.thirtyToSixty",
+            id: "thirtyToSixty",
+          },
+          {
+            count: analytics?.olderThanSixty,
             titleX: "petition.analyticsSections.olderThanSixty",
             id: "olderThanSixty",
           },
@@ -124,22 +171,22 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
         title: "petition.analyticsSections.gender",
         columns: ["petition.analyticsSections.number", "petition.analyticsSections.gender"],
         data: [
-          { count: 50000, titleX: "petition.analyticsSections.male", id: "male" },
-          { count: 1200, titleX: "petition.analyticsSections.female", id: "female" },
+          { count: analytics?.male, titleX: "petition.analyticsSections.male", id: "male" },
+          { count: analytics?.female, titleX: "petition.analyticsSections.female", id: "female" },
         ],
       },
       {
         title: "petition.analyticsSections.governorate",
         columns: ["petition.analyticsSections.number", "petition.analyticsSections.gender"],
         data: governorates.map(({ label, value }) => ({
-          count: 5000,
+          count:
+            formattedPersonalUsers?.filter(({ governorate }) => governorate === value)?.length ?? 0,
           title: label,
           id: value,
         })),
       },
-    ],
-    [governorates],
-  )
+    ]
+  }, [governorates, formattedPersonalUsers])
 
   return (
     <View style={$styles}>

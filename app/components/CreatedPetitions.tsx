@@ -24,6 +24,7 @@ export const CreatedPetitions = observer(function CreatedPetitions(props: Create
   const $styles = [$container, style]
   const { isRTL } = useRTL()
   const { user } = useUser()
+
   const { petitionsData } = useGetCreatedPetitions(user?.owner?.id)
   const petitions = React.useMemo(
     () => formatPetitions(petitionsData, isRTL, user?.owner?.id),
@@ -46,6 +47,7 @@ export const CreatedPetitions = observer(function CreatedPetitions(props: Create
       isAnonymous,
       petitionImageUrl,
       petition,
+      signers,
     } = item ?? {}
     return (
       <View style={$cardContainer}>
@@ -65,6 +67,7 @@ export const CreatedPetitions = observer(function CreatedPetitions(props: Create
           isAnonymous={isAnonymous}
           petitionImageUrl={petitionImageUrl}
           petition={petition}
+          signers={signers}
         />
       </View>
     )
