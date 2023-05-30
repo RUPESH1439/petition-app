@@ -235,7 +235,7 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
           textStyle={{ lineHeight: moderateVerticalScale(21), fontSize: moderateVerticalScale(16) }}
           onPress={async () => {
             if (_status === "forGuest") {
-              navigation.navigate("SignUp")
+              navigation.navigate("CreateAccount")
             }
             if (_status === "unsigned" && !signedPetition) {
               await signPetition({ petitionId: id, signers })

@@ -13,6 +13,7 @@ import I18n from "i18n-js"
 import useRTL from "app/hooks/useRTL"
 import { useQueryClient } from "@tanstack/react-query"
 import { API_KEYS } from "app/constants/apiKeys"
+import useUser from "app/hooks/userUser"
 interface MyPetitionsScreenProps
   extends NativeStackScreenProps<AppStackScreenProps<"MyPetitions">> {}
 
@@ -27,6 +28,7 @@ export const MyPetitionsScreen: FC<MyPetitionsScreenProps> = observer(function M
 
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
   const [index, setIndex] = React.useState(0)
+  const { user } = useUser()
   const queryClient = useQueryClient()
   const layout = useWindowDimensions()
   const { isRTL: _ } = useRTL()
@@ -57,7 +59,13 @@ export const MyPetitionsScreen: FC<MyPetitionsScreenProps> = observer(function M
         RightAccessory={
           <Button
             tx="myPetitions.newPetition"
-            onPress={() => navigation.navigate("CreatePetition")}
+            onPress={() => {
+              if (!user) {
+                navigation.navigate("CreateAccount")
+                return
+              }
+              navigation.navigate("CreatePetition")
+            }}
             style={$createPetition}
             textStyle={$createPetitionText}
             LeftAccessory={() => (
