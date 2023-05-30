@@ -1,5 +1,5 @@
 import * as React from "react"
-import { StyleProp, TextStyle, View, ViewStyle } from "react-native"
+import { Alert, StyleProp, TextStyle, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { colors, spacing, typography } from "app/theme"
 import { Text } from "app/components/Text"
@@ -21,6 +21,7 @@ import useCreateUser from "app/hooks/api/useCreateUser"
 import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
 import { TxKeyPath } from "app/i18n"
 import useUploadMedia from "app/hooks/api/useUploadMedia"
+import NetInfo from "@react-native-community/netinfo"
 
 const schema = z.object({
   arName: z
@@ -78,7 +79,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
   props: CreateOrganizationAccountProps,
 ) {
   const { style } = props
-  const { isCreating, createUser, isSuccess } = useCreateUser("organization")
+  const { isCreating, createUser, isSuccess, createError } = useCreateUser("organization")
   const { uploadMedia, isUploadingMedia } = useUploadMedia()
 
   const { governorates, setGovernorates } = useFormattedGovernorates()
@@ -114,6 +115,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
 
   const onSubmit = async (data) => {
     const { logo, permitImage } = data
+    const netInfo = await NetInfo.fetch()
 
     try {
       let logoId = null
@@ -132,7 +134,12 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
       })
       permitImageId = permitImageResp.data?.[0]?.id
 
-      createUser({ ...data, logo: logoId, permitImage: permitImageId })
+      createUser({
+        ...data,
+        logo: logoId,
+        permitImage: permitImageId,
+        ip: netInfo?.details?.ipAddress,
+      })
     } catch (err) {}
   }
 
@@ -176,6 +183,12 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
       navigation.navigate("SignIn")
     }
   }, [isSuccess])
+
+  React.useEffect(() => {
+    if (createError) {
+      Alert.alert(createError?.message)
+    }
+  }, [createError])
 
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
