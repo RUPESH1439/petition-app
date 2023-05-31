@@ -55,10 +55,11 @@
     },
     "plugins": [
       "expo-localization",
+      [
       "expo-location",
       {
         "locationAlwaysAndWhenInUsePermission": "Allow to use your location"
-      }
+      }]
     ]
   }
 }

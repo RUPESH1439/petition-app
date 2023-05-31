@@ -53,6 +53,7 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
         signers,
         petitionImageUrl,
         creatorId,
+        petitionStatId,
       } = item ?? {}
       return (
         <View style={$cardContainer} key={id}>
@@ -74,6 +75,7 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
             signers={signers}
             petitionImageUrl={petitionImageUrl}
             creatorId={creatorId}
+            petitionStatId={petitionStatId}
           />
         </View>
       )

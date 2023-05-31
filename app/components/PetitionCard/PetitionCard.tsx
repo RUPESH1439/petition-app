@@ -33,6 +33,7 @@ import { AppStackParamList } from "app/navigators"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import useSignPetition from "app/hooks/api/useSignPetition"
 import useCancelSignPetition from "app/hooks/api/useCancelSignPetition"
+import useUpdatePetitionStat from "app/hooks/api/useUpdatePetitionStat"
 
 const { chevronLeft, circleCheckSolid, eyeSolid, users, arrowUp } = icons
 export interface PetitionCardProps {
@@ -57,6 +58,7 @@ export interface PetitionCardProps {
   signers?: number[]
   petitionImageUrl?: string
   creatorId?: number
+  petitionStatId?: number
 }
 
 /**
@@ -82,7 +84,10 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
     signers,
     petitionImageUrl,
     creatorId,
+    petitionStatId,
   } = props
+
+  const { updatePetitionStat } = useUpdatePetitionStat()
 
   const { signPetition, signSuccess } = useSignPetition()
   const [signedPetition, setSignedPetition] = React.useState(false)
@@ -160,6 +165,19 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
       clearTimeout(timer)
     }
   }, [signSuccess])
+
+  React.useEffect(() => {
+    let _viewsCount
+    if (typeof viewsCount === "string") {
+      _viewsCount = parseInt(viewsCount)
+    }
+    if (typeof viewsCount === "number") {
+      _viewsCount = viewsCount
+    }
+    if (petitionStatId) {
+      updatePetitionStat({ id: petitionStatId, views: _viewsCount + 1 })
+    }
+  }, [petitionStatId])
 
   return (
     <View style={$styles}>
