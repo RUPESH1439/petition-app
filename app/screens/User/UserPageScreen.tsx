@@ -103,7 +103,13 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
     { key: "instagram", icon: instagram, link: userData?.instagramLink },
     { key: "facebook", icon: facebook, link: userData?.facebookLink },
   ]
+
   const analytics: { key: string; title: TxKeyPath; count: number }[] = useMemo(() => {
+    const _views = petitions?.map((petition) => {
+      const __views = petition.petition?.attributes?.petition_stat?.data?.attributes?.views
+      return __views ? parseInt(__views) : 0
+    })
+
     return [
       {
         key: "petition",
@@ -113,7 +119,7 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
       {
         key: "views",
         title: "userPageScreen.views",
-        count: 1000,
+        count: _views?.reduce((val, current) => current + val, 0),
       },
       {
         key: "signs",
