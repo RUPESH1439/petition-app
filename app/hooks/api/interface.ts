@@ -36,6 +36,12 @@ export interface OrganizationUser {
   owner?: OwnerAttrs & ID
 }
 
+export interface UpdatePetitionStat {
+  views?: number
+  shares?: number
+  id: number
+}
+
 export interface UpdatePersonalUser {
   name?: string
   birthdateYear?: string
