@@ -174,6 +174,9 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
     if (typeof viewsCount === "number") {
       _viewsCount = viewsCount
     }
+    if (!viewsCount) {
+      _viewsCount = 0
+    }
     if (petitionStatId) {
       updatePetitionStat({ id: petitionStatId, views: _viewsCount + 1 })
     }
