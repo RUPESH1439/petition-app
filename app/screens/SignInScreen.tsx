@@ -5,7 +5,7 @@ import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-naviga
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Button, Screen, ScreenHeader, TextField } from "app/components"
 import { useNavigation } from "@react-navigation/native"
-import { colors, spacing } from "app/theme"
+import { spacing } from "app/theme"
 import useLogin from "app/hooks/api/useLogin"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
@@ -35,7 +35,7 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
     },
   })
   const phone = watch("mobileNumber")
-  const { login, userData, loginError, isLogging } = useLogin(phone)
+  const { login, userData, isLogging } = useLogin(phone)
   const [canNavigate, setCanNavigate] = useState(false)
 
   const onSubmit = async (_data) => {

@@ -11,6 +11,8 @@ import I18n from "i18n-js"
 import { save } from "app/utils/storage"
 import { STORAGE } from "app/constants/storage"
 import useUser from "app/hooks/userUser"
+import useVerifyOtp from "app/hooks/api/useVerifyOtp"
+import useResendOtp from "app/hooks/api/useResendOtp"
 
 // import { useStores } from "app/models"
 
@@ -21,9 +23,10 @@ export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
   // const { someStore, anotherStore } = useStores()
   const [values, setValues] = useState([null, null, null, null])
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
-
   const route = useRoute<RouteProp<AppStackParamList, "Otp">>()
-
+  const [code, setCode] = React.useState("")
+  const { verifiedData, verify } = useVerifyOtp(route?.params?.phone, code)
+  const { resend } = useResendOtp(route?.params?.phone)
   const [startTimer, setStartTimer] = useState(true)
   const [count, setCount] = useState(60)
   const timer = useRef<NodeJS.Timer>()
@@ -85,7 +88,6 @@ export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
         break
     }
     setValues(_newValues)
-    // updateValues(null, active)
   }, [active])
 
   const updateValues = async (val, index) => {
@@ -97,18 +99,31 @@ export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
         setError(true)
       } else {
         const enteredCode = _newValues.join("")
-        if (enteredCode === "1234") {
-          await save(STORAGE.USER, userData)
-          setUser(userData)
-          navigation.navigate("HomeTab")
-        } else {
-          setError(true)
-        }
+        setCode(enteredCode)
       }
     }
   }
 
   const { userData } = route?.params ?? {}
+
+  useEffect(() => {
+    ;(async function verify() {
+      if (verifiedData?.status === "approved") {
+        await save(STORAGE.USER, userData)
+        setUser(userData)
+        navigation.navigate("HomeTab")
+      }
+      if (verifiedData?.status === "canceled" || verifiedData?.valid === false) {
+        setError(true)
+      }
+    })()
+  }, [verifiedData])
+
+  useEffect(() => {
+    if (code.length === 4) {
+      verify()
+    }
+  }, [code])
 
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
@@ -192,6 +207,7 @@ export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
           preset={error ? "default" : startTimer ? "reversed" : "default"}
           onPress={() => {
             error ? setError(false) : setStartTimer(true)
+            resend()
           }}
         />
       </View>
