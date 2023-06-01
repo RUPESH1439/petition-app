@@ -62,6 +62,7 @@ export const CreateAccountScreen: FC<CreateAccountScreenProps> = observer(
                 style={$tabBar}
                 labelStyle={$labelStyle}
                 tabStyle={$tabStyle}
+                inactiveColor={colors.palette.gray200}
                 indicatorStyle={$indicator}
               />
             )} // <-- add this line

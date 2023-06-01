@@ -59,7 +59,7 @@ export type AppStackParamList = {
     userId: number
   }
   Otp: {
-    phone: number
+    phone: string
     userData: PersonalUser | OrganizationUser
   }
   EditPetition: {

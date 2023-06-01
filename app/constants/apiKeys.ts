@@ -12,4 +12,5 @@ export const API_KEYS = {
   GET_PETITION_CATEGORY: "getPetitionCategory",
   GET_USER_FROM_ID: "getUserFromId",
   GET_PERSONAL_USERS_FROM_USER: "getPersonalUsersFromUsers",
+  VERIFY_OTP: "verifyOtp",
 }

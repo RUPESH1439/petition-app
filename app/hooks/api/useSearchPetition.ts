@@ -25,6 +25,11 @@ export default function useSearchPetition(searchText: string) {
                 },
               },
               {
+                description: {
+                  $contains: searchText,
+                },
+              },
+              {
                 creator: {
                   arName: {
                     $contains: searchText,
@@ -34,6 +39,34 @@ export default function useSearchPetition(searchText: string) {
               {
                 creator: {
                   enName: {
+                    $contains: searchText,
+                  },
+                },
+              },
+              {
+                governorate: {
+                  enName: {
+                    $contains: searchText,
+                  },
+                },
+              },
+              {
+                governorate: {
+                  arName: {
+                    $contains: searchText,
+                  },
+                },
+              },
+              {
+                category: {
+                  enName: {
+                    $contains: searchText,
+                  },
+                },
+              },
+              {
+                category: {
+                  arName: {
                     $contains: searchText,
                   },
                 },

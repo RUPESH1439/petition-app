@@ -333,3 +333,8 @@ export interface Organization {
   id: number
   attributes?: OrganizationAttr
 }
+
+export interface VerifyOtpResponse {
+  status?: string
+  valid?: boolean
+}
