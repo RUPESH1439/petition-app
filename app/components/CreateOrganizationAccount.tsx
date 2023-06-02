@@ -194,7 +194,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
 
   return (
     <View style={$styles}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{}}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Text tx="createOrganizationAccount.header" style={$header} />
         <ImagePicker
           titleX="createOrganizationAccount.logo"
@@ -234,6 +234,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
               status={errors?.EstablishedYear ? "error" : null}
               error={errors?.EstablishedYear ? "errors.pleaseFill" : null}
               containerStyle={$textInput}
+              keyboardType="phone-pad"
             />
 
             <TextField
@@ -294,6 +295,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
         <TextField
           control={control}
           name="ceoPhone"
+          keyboardType="phone-pad"
           placeholderTx="createOrganizationAccount.phoeNumber"
           status={errors?.ceoPhone ? "error" : null}
           errorText={
@@ -348,7 +350,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
 
 const $container: ViewStyle = {
   paddingHorizontal: spacing.medium,
-  paddingTop: spacing.medium,
+  paddingTop: moderateVerticalScale(30),
   paddingBottom: "30%",
 }
 
@@ -357,7 +359,6 @@ const $header: TextStyle = {
   fontSize: moderateVerticalScale(18),
   color: colors.palette.neutral100,
   marginBottom: spacing.medium,
-  marginTop: spacing.medium,
   fontWeight: "900",
   lineHeight: moderateVerticalScale(31),
 }

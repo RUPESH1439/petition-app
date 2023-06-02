@@ -108,7 +108,7 @@ export const Dropdown = observer(function Dropdown(props: DropdownProps) {
         ArrowDownIconComponent={() => (
           <FontAwesome5
             name="chevron-down"
-            size={20}
+            size={23}
             style={[$arrowDown, iconStyle]}
             color={value ? colors.palette.neutral50 : colors.palette.neutral100}
           />
@@ -124,6 +124,7 @@ const $container: ViewStyle = {
   borderWidth: 1,
   borderColor: colors.palette.neutral100,
   height: moderateVerticalScale(50),
+  paddingHorizontal: spacing.medium,
 }
 
 const $errorContainer: ViewStyle = {
@@ -158,13 +159,10 @@ const $text: TextStyle = {
 
 const $placeholderStyle: TextStyle = {
   color: colors.palette.neutral100,
-  paddingLeft: 8,
   fontSize: moderateVerticalScale(16),
 }
 
-const $arrowDown: ViewStyle = {
-  marginRight: spacing.extraSmall,
-}
+const $arrowDown: ViewStyle = {}
 
 const $labelStyle: TextStyle = {
   textAlign: "center",
