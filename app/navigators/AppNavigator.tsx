@@ -65,6 +65,9 @@ export type AppStackParamList = {
   EditPetition: {
     petitionData: Petition
   }
+  FullScreenPhoto: {
+    imageUri: string
+  }
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
   CreateAccount: undefined
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
@@ -118,6 +121,7 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="UserPage" component={Screens.UserPageScreen} />
       <Stack.Screen name="Otp" component={Screens.OtpScreen} />
       <Stack.Screen name="EditPetition" component={Screens.EditPetitionScreen} />
+      <Stack.Screen name="FullScreenPhoto" component={Screens.FullScreenPhotoScreen} />
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
       <Stack.Screen name="CreateAccount" component={Screens.CreateAccountScreen} />
       <Stack.Screen name="HomeTab" component={HomeNavigator} />
