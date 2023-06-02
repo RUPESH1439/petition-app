@@ -17,14 +17,6 @@ import I18n from "i18n-js"
 import useCreateUser from "app/hooks/api/useCreateUser"
 import NetInfo from "@react-native-community/netinfo"
 
-const schema = z.object({
-  name: z.string().min(1),
-  birthdateYear: z.string().length(4),
-  phoneNumber: z.string().length(11),
-  gender: z.number(),
-  governorate: z.number(),
-})
-
 export interface CreatePersonalAccountProps {
   /**
    * An optional style override useful for padding & margin.
@@ -41,6 +33,27 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
   const { isCreating, createUser, isSuccess, createError } = useCreateUser("personal")
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
+  const schema = z.object({
+    name: z
+      .string()
+      // eslint-disable-next-line no-useless-escape
+      .regex(/^[\u0600-\u06FF\s!"#$%&'()*+,\-.\/:;<=>?@\[\\\]^_`{|}~]+$/)
+      .min(1),
+    birthdateYear: z.string().length(4),
+    phoneNumber: z
+      .string()
+      .refine((value) => /^07\d*$/.test(value), {
+        message: I18n.translate("errors.wrongFormat"),
+      })
+      .refine(
+        (value) => value.length === 11,
+        (val) => ({
+          message: `${11 - val.length} ${I18n.translate("errors.phone")}`,
+        }),
+      ),
+    gender: z.number(),
+    governorate: z.number(),
+  })
   const {
     control,
     handleSubmit,
@@ -122,11 +135,7 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
         control={control}
         name="phoneNumber"
         status={errors?.phoneNumber ? "error" : null}
-        errorText={
-          errors?.phoneNumber
-            ? `${11 - phoneNumber?.length} ${I18n.translate("errors.phone")}`
-            : null
-        }
+        errorText={errors?.phoneNumber?.message as string}
         placeholderTx="createPersonalAccount.mobileNumber"
         keyboardType="numeric"
       />

@@ -21,6 +21,7 @@ const en = {
     facebookOnly: "Facebook Only",
     instagramOnly: "Instagram Only",
     websiteOnly: "Website Only",
+    wrongFormat: "Wrong format",
   },
   homeTab: {
     profile: "profile",
