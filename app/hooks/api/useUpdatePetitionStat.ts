@@ -20,9 +20,9 @@ export default function useUpdatePetitionStat() {
       })
     },
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: [API_KEYS.GET_CREATED_PETITIONS] })
-      // queryClient.invalidateQueries({ queryKey: [API_KEYS.GET_PETITIONS] })
-      // queryClient.invalidateQueries({ queryKey: [API_KEYS.GET_SIGEND_PETITIONS] })
+      queryClient.invalidateQueries({ queryKey: [API_KEYS.GET_CREATED_PETITIONS] })
+      queryClient.invalidateQueries({ queryKey: [API_KEYS.GET_PETITIONS] })
+      queryClient.invalidateQueries({ queryKey: [API_KEYS.GET_SIGEND_PETITIONS] })
     },
   })
 
