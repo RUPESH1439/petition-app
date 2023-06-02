@@ -37,7 +37,7 @@ export interface CreatePersonalAccountProps {
  */
 export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
   const { genders, setGenders } = useFormattedGenders()
-  const { governorates, setGovernorates } = useFormattedGovernorates()
+  const { governorates, setGovernorates } = useFormattedGovernorates(true)
   const { isCreating, createUser, isSuccess, createError } = useCreateUser("personal")
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
