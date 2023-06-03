@@ -28,6 +28,7 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
     handleSubmit,
     formState: { errors },
     watch,
+    setFocus,
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -72,7 +73,13 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
           tx="common.continue"
           style={$next}
           loading={isLogging}
-          onPress={handleSubmit(onSubmit)}
+          onPress={
+            phone?.length > 0
+              ? handleSubmit(onSubmit)
+              : () => {
+                  setFocus("mobileNumber")
+                }
+          }
         />
       </View>
     </Screen>

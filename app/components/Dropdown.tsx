@@ -132,7 +132,7 @@ const $errorContainer: ViewStyle = {
 }
 
 const $containerSelected: ViewStyle = {
-  backgroundColor: colors.palette.primary300,
+  backgroundColor: colors.palette.primary100,
 }
 
 const $containerUnselected: ViewStyle = {
@@ -140,10 +140,10 @@ const $containerUnselected: ViewStyle = {
 }
 
 const $dropDownContainer: ViewStyle = {
-  backgroundColor: colors.palette.primary300,
-  borderColor: colors.palette.primary300,
-  paddingVertical: moderateVerticalScale(20),
-  borderRadius: moderateVerticalScale(28),
+  backgroundColor: colors.palette.primary100,
+  borderColor: colors.palette.primary100,
+  paddingVertical: moderateVerticalScale(16),
+  borderRadius: moderateVerticalScale(25),
   top: 0,
   flexDirection: "row",
   flex: 1,
