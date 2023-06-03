@@ -10,13 +10,17 @@ const $container: ViewStyle = {
 const $topContainer: ViewStyle = {
   flexDirection: "row",
   paddingHorizontal: spacing.extraMedium,
-  justifyContent: "space-between",
+  justifyContent: "center",
   alignItems: "center",
-  paddingVertical: moderateVerticalScale(8),
+  paddingVertical: moderateVerticalScale(14),
   borderTopWidth: 0.4,
   borderBottomWidth: 0.4,
   borderColor: colors.palette.neutral100,
 }
+
+const $date: ViewStyle = { position: "absolute", left: spacing.medium }
+
+const $city: ViewStyle = { position: "absolute", right: spacing.medium }
 
 const $cityText: TextStyle = {
   fontFamily: typography.primary.bold,
@@ -128,4 +132,6 @@ export {
   $fifthContainer,
   $responseButton,
   $petitionImage,
+  $date,
+  $city,
 }

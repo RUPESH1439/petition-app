@@ -10,8 +10,10 @@ import Feather from "react-native-vector-icons/Feather"
 import icons from "../../../assets/svgs"
 import { Analytic } from "./Analytic"
 import {
+  $city,
   $cityText,
   $container,
+  $date,
   $dateText,
   $fourthContainer,
   $petitionImage,
@@ -191,9 +193,14 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
   return (
     <View style={$styles}>
       <View style={$topContainer}>
-        <Text text={formatDate(date.toISOString(), "dd/MM/yyyy")} style={$dateText} />
+        <View style={$date}>
+          <Text text={formatDate(date.toISOString(), "dd/MM/yyyy")} style={$dateText} />
+        </View>
+
         <Chip text={category} />
-        <Text text={city} style={$cityText} />
+        <View style={$city}>
+          <Text text={city} style={$cityText} />
+        </View>
       </View>
 
       {!!petitionImageUrl && (
