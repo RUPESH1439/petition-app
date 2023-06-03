@@ -6,7 +6,7 @@ import { API_KEYS } from "app/constants/apiKeys"
 
 export default function useSearchPetition(searchText: string) {
   const {
-    isFetching: isPetitionsFetching,
+    isInitialLoading: isPetitionsFetching,
     refetch: fetchPetitions,
     data: petitionsData,
     error: petitionFetchError,

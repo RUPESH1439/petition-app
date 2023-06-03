@@ -22,6 +22,7 @@ import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
 import { TxKeyPath } from "app/i18n"
 import useUploadMedia from "app/hooks/api/useUploadMedia"
 import NetInfo from "@react-native-community/netinfo"
+import phoneValidation from "app/schemas/phoneValidation"
 
 const schema = z.object({
   arName: z
@@ -36,8 +37,8 @@ const schema = z.object({
     .min(1),
   nearestLandmark: z.string().min(1),
   CEOName: z.string().min(1),
-  ceoPhone: z.string().length(11),
-  organizationPhone: z.string().length(11),
+  ceoPhone: phoneValidation,
+  organizationPhone: phoneValidation,
   organizationSocialMediaLinks: z.array(z.string()),
   EstablishedYear: z.string().length(4),
   governorate: z.number(),
@@ -296,13 +297,10 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
           control={control}
           name="ceoPhone"
           keyboardType="phone-pad"
+          maxLength={11}
           placeholderTx="createOrganizationAccount.phoeNumber"
           status={errors?.ceoPhone ? "error" : null}
-          errorText={
-            errors?.ceoPhone
-              ? `${11 - watch("ceoPhone")?.length} ${I18n.translate("errors.phone")}`
-              : null
-          }
+          errorText={errors?.ceoPhone?.message as string}
           containerStyle={$textInput}
         />
 
@@ -310,13 +308,10 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
         <TextField
           control={control}
           name="organizationPhone"
+          maxLength={11}
           placeholderTx="createOrganizationAccount.organizationPhoneNumber"
           status={errors?.organizationPhone ? "error" : null}
-          errorText={
-            errors?.organizationPhone
-              ? `${11 - watch("organizationPhone")?.length} ${I18n.translate("errors.phone")}`
-              : null
-          }
+          errorText={errors?.organizationPhone?.message as string}
           containerStyle={$textInput}
           keyboardType="phone-pad"
         />

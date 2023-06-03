@@ -1,6 +1,6 @@
 import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
-import { Dimensions, TextStyle, View, ViewStyle } from "react-native"
+import { ActivityIndicator, Dimensions, TextStyle, View, ViewStyle } from "react-native"
 import { AppStackScreenProps } from "app/navigators"
 import { PetitionCard, Screen, Text, TextField } from "app/components"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -28,7 +28,7 @@ export const SearchScreen: FC<SearchScreenProps> = observer(function SearchScree
   const { isRTL } = useRTL()
   const { user } = useUser()
 
-  const { petitionsData } = useSearchPetition(debouncedSearch)
+  const { petitionsData, isPetitionsFetching } = useSearchPetition(debouncedSearch)
   const mappedPetitionsData = React.useMemo(
     () => formatPetitions(petitionsData, isRTL, user?.owner?.id),
     [petitionsData, isRTL],
@@ -111,17 +111,23 @@ export const SearchScreen: FC<SearchScreenProps> = observer(function SearchScree
         />
       </View>
       <View style={$container}>
-        <FlashList
-          showsVerticalScrollIndicator={false}
-          renderItem={renderItem}
-          estimatedItemSize={200}
-          data={mappedPetitionsData ?? []}
-          ListEmptyComponent={() => (
-            <View style={$textContainer}>
-              <Text tx="search.bodyText" style={$textStyle} />
-            </View>
-          )}
-        />
+        {isPetitionsFetching ? (
+          <ActivityIndicator size="large" color={colors.palette.primary100} />
+        ) : (
+          <FlashList
+            showsVerticalScrollIndicator={false}
+            renderItem={renderItem}
+            estimatedItemSize={200}
+            data={mappedPetitionsData ?? []}
+            ListEmptyComponent={() =>
+              debouncedSearch?.length < 1 ? (
+                <View style={$textContainer}>
+                  <Text tx="search.bodyText" style={$textStyle} />
+                </View>
+              ) : null
+            }
+          />
+        )}
       </View>
     </Screen>
   )
@@ -178,6 +184,7 @@ const $container: ViewStyle = {
   height: Dimensions.get("screen").height * 0.73,
   width: Dimensions.get("screen").width,
   zIndex: 499,
+  justifyContent: "center",
 }
 
 const $cardContainer: ViewStyle = {

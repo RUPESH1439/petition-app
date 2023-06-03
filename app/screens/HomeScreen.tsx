@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from "react"
 import { observer } from "mobx-react-lite"
-import { Dimensions, TextStyle, View, ViewStyle } from "react-native"
+import { ActivityIndicator, Dimensions, TextStyle, View, ViewStyle } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Dropdown, PetitionCard, Screen, ScreenHeader } from "app/components"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -28,7 +28,8 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   const queryClient = useQueryClient()
   const { governorates, setGovernorates } = useFormattedGovernorates()
   const [governorateFilter, setGovernorateFilter] = React.useState([])
-  const { petitionsData, fetchPetitions } = useGetPetitions(governorateFilter)
+  const { petitionsData, fetchPetitions, petitionInitalLoading } =
+    useGetPetitions(governorateFilter)
   const mappedPetitionsData = React.useMemo(
     () => formatPetitions(petitionsData, isRTL, user?.owner?.id),
     [petitionsData, isRTL],
@@ -93,11 +94,11 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
     setGovernorateFilter([...governorates.map(({ value }) => value)])
   }, [governorates])
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     queryClient.invalidateQueries({ queryKey: [API_KEYS.GET_PETITIONS] })
-  //   }, []),
-  // )
+  useFocusEffect(
+    useCallback(() => {
+      queryClient.invalidateQueries({ queryKey: [API_KEYS.GET_PETITIONS] })
+    }, []),
+  )
 
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top"]}>
@@ -126,12 +127,16 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
         }
       />
       <View style={$container}>
-        <FlashList
-          showsVerticalScrollIndicator={false}
-          renderItem={renderItem}
-          estimatedItemSize={200}
-          data={mappedPetitionsData ?? []}
-        />
+        {petitionInitalLoading ? (
+          <ActivityIndicator size="large" color={colors.palette.primary100} />
+        ) : (
+          <FlashList
+            showsVerticalScrollIndicator={false}
+            renderItem={renderItem}
+            estimatedItemSize={200}
+            data={mappedPetitionsData ?? []}
+          />
+        )}
       </View>
     </Screen>
   )
@@ -146,6 +151,7 @@ const $container: ViewStyle = {
   height: Dimensions.get("screen").height * 0.73,
   width: Dimensions.get("screen").width,
   zIndex: 499,
+  justifyContent: "center",
 }
 
 const $cardContainer: ViewStyle = {

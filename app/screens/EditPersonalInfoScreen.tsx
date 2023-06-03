@@ -17,16 +17,20 @@ import { save } from "app/utils/storage"
 import { STORAGE } from "app/constants/storage"
 import useUpdateUser from "app/hooks/api/useUpdateUser"
 import formatUserData from "app/utils/api/formatUserData"
-import I18n from "i18n-js"
 import useUpdateOwner from "app/hooks/api/useUpdateOwner"
 import { PersonalUser } from "app/hooks/api/interface"
+import phoneValidation from "app/schemas/phoneValidation"
 
 // import { useStores } from "app/models"
 
 const schema = z.object({
-  name: z.string().min(1),
+  name: z
+    .string()
+    // eslint-disable-next-line no-useless-escape
+    .regex(/^[\u0600-\u06FF\s!"#$%&'()*+,\-.\/:;<=>?@\[\\\]^_`{|}~]+$/)
+    .min(1),
   birthdateYear: z.string().length(4),
-  mobileNumber: z.string().length(11),
+  mobileNumber: phoneValidation,
   gender: z.number(),
   governorate: z.number(),
 })
@@ -174,11 +178,7 @@ export const EditPersonalInfoScreen: FC<EditPersonalInfoScreenProps> = observer(
             control={control}
             name="mobileNumber"
             status={errors?.mobileNumber ? "error" : null}
-            errorText={
-              errors?.mobileNumber
-                ? `${11 - mobileNumber?.length} ${I18n.translate("errors.phone")}`
-                : null
-            }
+            error={errors?.mobileNumber ? "errors.pleaseFill" : null}
             placeholderTx="createPersonalAccount.mobileNumber"
             keyboardType="numeric"
           />
