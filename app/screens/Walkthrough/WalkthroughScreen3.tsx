@@ -25,6 +25,7 @@ export const WalkthroughScreen3: FC<WalkthroughScreen3Props> = observer(
 
         <Button
           tx="common.next"
+          style={$next}
           onPress={() => {
             navigation.navigate("Walkthrough4")
           }}
@@ -51,4 +52,8 @@ const $textStyle: TextStyle = {
   fontSize: moderateVerticalScale(14),
   lineHeight: 40,
   marginBottom: "10%",
+}
+
+const $next: ViewStyle = {
+  bottom: moderateVerticalScale(0),
 }
