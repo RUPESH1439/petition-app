@@ -11,11 +11,11 @@
     "splash": {
       "image": "./assets/images/splash-logo-all.png",
       "resizeMode": "contain",
-      "backgroundColor": "#191015"
+      "backgroundColor": "#FFFFFF"
     },
-    "updates": { 
+    "updates": {
       "fallbackToCacheTimeout": 0,
-      "url": "http://localhost:3000/api/manifest" 
+      "url": "http://localhost:3000/api/manifest"
     },
     "jsEngine": "hermes",
     "assetBundlePatterns": [
@@ -31,7 +31,7 @@
       "splash": {
         "image": "./assets/images/splash-logo-android-universal.png",
         "resizeMode": "contain",
-        "backgroundColor": "#191015"
+        "backgroundColor": "#FFFFFF"
       }
     },
     "ios": {
@@ -42,7 +42,7 @@
         "image": "./assets/images/splash-logo-ios-mobile.png",
         "tabletImage": "./assets/images/splash-logo-ios-tablet.png",
         "resizeMode": "contain",
-        "backgroundColor": "#191015"
+        "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
@@ -50,16 +50,17 @@
       "splash": {
         "image": "./assets/images/splash-logo-web.png",
         "resizeMode": "contain",
-        "backgroundColor": "#191015"
+        "backgroundColor": "#FFFFFF"
       }
     },
     "plugins": [
       "expo-localization",
       [
-      "expo-location",
-      {
-        "locationAlwaysAndWhenInUsePermission": "Allow to use your location"
-      }]
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow to use your location"
+        }
+      ]
     ]
   }
 }
