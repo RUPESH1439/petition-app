@@ -13,11 +13,11 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { AppStackParamList } from "app/navigators"
 import useFormattedGenders from "app/hooks/useFormattedGenders"
 import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
-import I18n from "i18n-js"
 import useCreateUser from "app/hooks/api/useCreateUser"
 import NetInfo from "@react-native-community/netinfo"
 import { ScrollView } from "react-native-gesture-handler"
 import { moderateVerticalScale } from "app/utils/scaling"
+import phoneValidation from "app/schemas/phoneValidation"
 
 export interface CreatePersonalAccountProps {
   /**
@@ -42,17 +42,7 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
       .regex(/^[\u0600-\u06FF\s!"#$%&'()*+,\-.\/:;<=>?@\[\\\]^_`{|}~]+$/)
       .min(1),
     birthdateYear: z.string().length(4),
-    phoneNumber: z
-      .string()
-      .refine((value) => /^07\d*$/.test(value), {
-        message: I18n.translate("errors.wrongFormat"),
-      })
-      .refine(
-        (value) => value.length === 11,
-        (val) => ({
-          message: `${11 - val.length} ${I18n.translate("errors.phone")}`,
-        }),
-      ),
+    phoneNumber: phoneValidation,
     gender: z.number(),
     governorate: z.number(),
   })
@@ -139,6 +129,7 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
         <TextField
           control={control}
           name="phoneNumber"
+          maxLength={11}
           status={errors?.phoneNumber ? "error" : null}
           errorText={errors?.phoneNumber?.message as string}
           placeholderTx="createPersonalAccount.mobileNumber"

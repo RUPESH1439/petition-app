@@ -31,6 +31,7 @@ import { save } from "app/utils/storage"
 import { STORAGE } from "app/constants/storage"
 import { TxKeyPath } from "app/i18n"
 import useUploadMedia from "app/hooks/api/useUploadMedia"
+import phoneValidation from "app/schemas/phoneValidation"
 
 interface EditOrganizationalInfoScreenProps
   extends NativeStackScreenProps<AppStackScreenProps<"EditOrganizationalInfo">> {}
@@ -48,8 +49,8 @@ const schema = z.object({
     .min(1),
   nearestLandmark: z.string().min(1),
   CEOName: z.string().min(1),
-  ceoPhone: z.string().length(11),
-  organizationPhone: z.string().length(11),
+  ceoPhone: phoneValidation,
+  organizationPhone: phoneValidation,
   organizationSocialMediaLinks: z.array(z.string()),
   EstablishedYear: z.string().length(4),
   governorate: z.number(),

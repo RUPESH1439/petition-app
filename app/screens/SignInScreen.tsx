@@ -10,12 +10,12 @@ import useLogin from "app/hooks/api/useLogin"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import I18n from "i18n-js"
+import phoneValidation from "app/schemas/phoneValidation"
 
 interface SignInScreenProps extends NativeStackScreenProps<AppStackScreenProps<"SignIn">> {}
 
 const schema = z.object({
-  mobileNumber: z.string().length(11),
+  mobileNumber: phoneValidation,
 })
 
 export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScreen() {
@@ -63,11 +63,10 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
           control={control}
           name="mobileNumber"
           status={errors?.mobileNumber ? "error" : null}
-          errorText={
-            errors?.mobileNumber ? `${11 - phone?.length} ${I18n.translate("errors.phone")}` : null
-          }
+          errorText={errors?.mobileNumber?.message as string}
           placeholderTx="createPersonalAccount.mobileNumber"
           keyboardType="numeric"
+          maxLength={11}
         />
         <Button
           tx="common.continue"
