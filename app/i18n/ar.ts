@@ -3,7 +3,7 @@ import { Translations } from "./en"
 const ar: Translations = {
   common: {
     ok: "نعم",
-    cancel: "حذف",
+    cancel: "إلغاء",
     back: "خلف",
     next: "التالي",
     continue: "التالي",
@@ -23,6 +23,7 @@ const ar: Translations = {
     facebookOnly: "رابط فيسبوك فقط",
     instagramOnly: "رابط انستغرام فقط",
     websiteOnly: "رابط موقع فقط",
+    wrongFormat: "رقم خاطئ",
   },
   homeTab: {
     profile: "الحساب",
@@ -150,7 +151,7 @@ const ar: Translations = {
   },
   createPersonalAccount: {
     name: "الإسم",
-    dateOfBirth: "الجنس",
+    dateOfBirth: "المواليد",
     gender: "الجنس",
     governorate: "المحافظة",
     mobileNumber: "رقم الموبايل",

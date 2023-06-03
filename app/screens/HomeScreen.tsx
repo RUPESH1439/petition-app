@@ -93,11 +93,11 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
     setGovernorateFilter([...governorates.map(({ value }) => value)])
   }, [governorates])
 
-  useFocusEffect(
-    useCallback(() => {
-      queryClient.invalidateQueries({ queryKey: [API_KEYS.GET_PETITIONS] })
-    }, []),
-  )
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     queryClient.invalidateQueries({ queryKey: [API_KEYS.GET_PETITIONS] })
+  //   }, []),
+  // )
 
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top"]}>

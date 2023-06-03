@@ -21,7 +21,7 @@ export default function useFormattedGenders() {
   }, [isRTL])
 
   React.useEffect(() => {
-    setGenders([...genders])
+    setGenders([..._genders])
   }, [_genders])
   return { genders, setGenders }
 }

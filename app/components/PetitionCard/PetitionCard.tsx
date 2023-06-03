@@ -219,12 +219,20 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
         </Pressable>
       )}
       {!!petitionImageUrl && (
-        <Image
-          source={{
-            uri: petitionImageUrl,
+        <Pressable
+          onPress={() => {
+            navigation.navigate("FullScreenPhoto", {
+              imageUri: petitionImageUrl,
+            })
           }}
-          style={$petitionImage}
-        />
+        >
+          <Image
+            source={{
+              uri: petitionImageUrl,
+            }}
+            style={$petitionImage}
+          />
+        </Pressable>
       )}
       <View style={$thirdContainer}>
         <Text style={$petitionTitle} text={title} />

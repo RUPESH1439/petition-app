@@ -16,14 +16,8 @@ import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
 import I18n from "i18n-js"
 import useCreateUser from "app/hooks/api/useCreateUser"
 import NetInfo from "@react-native-community/netinfo"
-
-const schema = z.object({
-  name: z.string().min(1),
-  birthdateYear: z.string().length(4),
-  phoneNumber: z.string().length(11),
-  gender: z.number(),
-  governorate: z.number(),
-})
+import { ScrollView } from "react-native-gesture-handler"
+import { moderateVerticalScale } from "app/utils/scaling"
 
 export interface CreatePersonalAccountProps {
   /**
@@ -37,10 +31,31 @@ export interface CreatePersonalAccountProps {
  */
 export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
   const { genders, setGenders } = useFormattedGenders()
-  const { governorates, setGovernorates } = useFormattedGovernorates()
+  const { governorates, setGovernorates } = useFormattedGovernorates(true)
   const { isCreating, createUser, isSuccess, createError } = useCreateUser("personal")
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
+  const schema = z.object({
+    name: z
+      .string()
+      // eslint-disable-next-line no-useless-escape
+      .regex(/^[\u0600-\u06FF\s!"#$%&'()*+,\-.\/:;<=>?@\[\\\]^_`{|}~]+$/)
+      .min(1),
+    birthdateYear: z.string().length(4),
+    phoneNumber: z
+      .string()
+      .refine((value) => /^07\d*$/.test(value), {
+        message: I18n.translate("errors.wrongFormat"),
+      })
+      .refine(
+        (value) => value.length === 11,
+        (val) => ({
+          message: `${11 - val.length} ${I18n.translate("errors.phone")}`,
+        }),
+      ),
+    gender: z.number(),
+    governorate: z.number(),
+  })
   const {
     control,
     handleSubmit,
@@ -57,7 +72,6 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
       governorate: null,
     },
   })
-  const phoneNumber = watch("phoneNumber")
   const onSubmit = async (data) => {
     const netInfo = await NetInfo.fetch()
     await createUser({ ...data, ip: netInfo?.details?.ipAddress })
@@ -80,75 +94,76 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
 
   return (
     <View style={$container}>
-      <TextField
-        control={control}
-        name="name"
-        status={errors?.name ? "error" : null}
-        error={errors?.name ? "errors.pleaseFill" : null}
-        placeholderTx="createPersonalAccount.name"
-      />
-      <TextField
-        control={control}
-        name="birthdateYear"
-        status={errors?.birthdateYear ? "error" : null}
-        error={errors?.birthdateYear ? "errors.pleaseFill" : null}
-        placeholderTx="createPersonalAccount.dateOfBirth"
-      />
-      <View style={$dropdownGenderList}>
-        <Dropdown
-          items={genders}
-          setItems={setGenders}
-          placeholderTx="createPersonalAccount.gender"
-          onChange={(value) => {
-            setValue("gender", value)
-          }}
-          error={!gender && errors?.gender ? "errors.pleaseChoose" : null}
+      <ScrollView>
+        <TextField
+          control={control}
+          name="name"
+          status={errors?.name ? "error" : null}
+          error={errors?.name ? "errors.pleaseFill" : null}
+          placeholderTx="createPersonalAccount.name"
+          containerStyle={$textInput}
         />
-      </View>
-
-      <View style={$dropdownList}>
-        <Dropdown
-          items={governorates}
-          setItems={setGovernorates}
-          placeholderTx="createPersonalAccount.governorate"
-          onChange={(value) => {
-            setValue("governorate", value)
-          }}
-          error={!governorate && errors?.governorate ? "errors.pleaseChoose" : null}
+        <TextField
+          control={control}
+          name="birthdateYear"
+          keyboardType="number-pad"
+          status={errors?.birthdateYear ? "error" : null}
+          error={errors?.birthdateYear ? "errors.pleaseFill" : null}
+          placeholderTx="createPersonalAccount.dateOfBirth"
+          containerStyle={$textInput}
         />
-      </View>
+        <View style={[$dropdownGenderList, $textInput]}>
+          <Dropdown
+            items={genders}
+            setItems={setGenders}
+            placeholderTx="createPersonalAccount.gender"
+            onChange={(value) => {
+              setValue("gender", value)
+            }}
+            error={!gender && errors?.gender ? "errors.pleaseChoose" : null}
+          />
+        </View>
 
-      <TextField
-        control={control}
-        name="phoneNumber"
-        status={errors?.phoneNumber ? "error" : null}
-        errorText={
-          errors?.phoneNumber
-            ? `${11 - phoneNumber?.length} ${I18n.translate("errors.phone")}`
-            : null
-        }
-        placeholderTx="createPersonalAccount.mobileNumber"
-        keyboardType="numeric"
-      />
+        <View style={[$dropdownList, $textInput]}>
+          <Dropdown
+            items={governorates}
+            setItems={setGovernorates}
+            placeholderTx="createPersonalAccount.governorate"
+            onChange={(value) => {
+              setValue("governorate", value)
+            }}
+            error={!governorate && errors?.governorate ? "errors.pleaseChoose" : null}
+          />
+        </View>
 
-      <Button
-        loading={isCreating}
-        tx="common.continue"
-        style={$continueBtn}
-        onPress={handleSubmit(onSubmit)}
-      />
+        <TextField
+          control={control}
+          name="phoneNumber"
+          status={errors?.phoneNumber ? "error" : null}
+          errorText={errors?.phoneNumber?.message as string}
+          placeholderTx="createPersonalAccount.mobileNumber"
+          keyboardType="numeric"
+        />
+
+        <Button
+          loading={isCreating}
+          tx="common.continue"
+          style={$continueBtn}
+          onPress={handleSubmit(onSubmit)}
+        />
+      </ScrollView>
     </View>
   )
 })
 
 const $container: ViewStyle = {
   paddingHorizontal: spacing.medium,
-  paddingVertical: spacing.extraLarge,
-  gap: 20,
+  paddingVertical: moderateVerticalScale(38),
+  flex: 1,
 }
 
 const $continueBtn: ViewStyle = {
-  marginTop: spacing.large,
+  marginTop: moderateVerticalScale(38),
 }
 
 const $dropdownGenderList: ViewStyle = {
@@ -157,4 +172,8 @@ const $dropdownGenderList: ViewStyle = {
 
 const $dropdownList: ViewStyle = {
   zIndex: 899,
+}
+
+const $textInput: ViewStyle = {
+  marginBottom: spacing.extraMedium,
 }
