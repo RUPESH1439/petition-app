@@ -1,6 +1,13 @@
 import React, { FC, useCallback } from "react"
 import { observer } from "mobx-react-lite"
-import { ActivityIndicator, Dimensions, TextStyle, View, ViewStyle } from "react-native"
+import {
+  ActivityIndicator,
+  Dimensions,
+  RefreshControl,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Dropdown, PetitionCard, Screen, ScreenHeader } from "app/components"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -28,7 +35,7 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   const queryClient = useQueryClient()
   const { governorates, setGovernorates } = useFormattedGovernorates()
   const [governorateFilter, setGovernorateFilter] = React.useState([])
-  const { petitionsData, fetchPetitions, petitionInitalLoading } =
+  const { petitionsData, fetchPetitions, petitionInitalLoading, isPetitionsFetching } =
     useGetPetitions(governorateFilter)
   const mappedPetitionsData = React.useMemo(
     () => formatPetitions(petitionsData, isRTL, user?.owner?.id),
@@ -135,6 +142,13 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
             renderItem={renderItem}
             estimatedItemSize={200}
             data={mappedPetitionsData ?? []}
+            refreshControl={
+              <RefreshControl
+                refreshing={false}
+                onRefresh={() => fetchPetitions()}
+                tintColor={colors.palette.primary100}
+              />
+            }
           />
         )}
       </View>
