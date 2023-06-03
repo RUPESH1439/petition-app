@@ -151,7 +151,7 @@ const ar: Translations = {
   },
   createPersonalAccount: {
     name: "الإسم",
-    dateOfBirth: "الجنس",
+    dateOfBirth: "المواليد",
     gender: "الجنس",
     governorate: "المحافظة",
     mobileNumber: "رقم الموبايل",
