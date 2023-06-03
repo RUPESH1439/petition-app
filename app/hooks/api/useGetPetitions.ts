@@ -10,6 +10,7 @@ export default function useGetPetitions(governorates: number[]) {
     refetch: fetchPetitions,
     data: petitionsData,
     error: petitionFetchError,
+    isInitialLoading: petitionInitalLoading,
   } = useQuery({
     queryKey: [API_KEYS.GET_PETITIONS, governorates],
     queryFn: async () => {
@@ -59,5 +60,11 @@ export default function useGetPetitions(governorates: number[]) {
     },
     enabled: !!governorates,
   })
-  return { isPetitionsFetching, fetchPetitions, petitionsData, petitionFetchError }
+  return {
+    isPetitionsFetching,
+    fetchPetitions,
+    petitionsData,
+    petitionFetchError,
+    petitionInitalLoading,
+  }
 }
