@@ -218,7 +218,7 @@ const ar: Translations = {
     headerBottomPart: "نصية على الرقم",
     changeNum: "تغيير الرقم",
     notificationText: "لم استلم الرمز",
-    sendCodeAgain: "اعادة ادخال الرمز",
+    sendCodeAgain: "ارسال الرمز مرة اخرى",
     wrongCode: "الرمز خاطئ",
     reEnter: "اعادة ادخال الرمز",
   },

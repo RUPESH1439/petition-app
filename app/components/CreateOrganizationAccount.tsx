@@ -83,7 +83,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
   const { isCreating, createUser, isSuccess, createError } = useCreateUser("organization")
   const { uploadMedia, isUploadingMedia } = useUploadMedia()
 
-  const { governorates, setGovernorates } = useFormattedGovernorates()
+  const { governorates, setGovernorates } = useFormattedGovernorates(true)
   const $styles = [$container, style]
 
   const {

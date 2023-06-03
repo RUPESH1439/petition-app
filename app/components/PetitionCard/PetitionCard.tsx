@@ -22,6 +22,8 @@ import {
   $fifthContainer,
   $responseButton,
   $petitionImage,
+  $date,
+  $city,
 } from "./styles"
 import { Button } from "../Button"
 import { moderateVerticalScale } from "app/utils/scaling"
@@ -185,10 +187,16 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
   return (
     <View style={$styles}>
       <View style={$topContainer}>
-        <Text text={formatDate(date.toISOString(), "dd/MM/yyyy")} style={$dateText} />
+        <View style={$date}>
+          <Text text={formatDate(date.toISOString(), "dd/MM/yyyy")} style={$dateText} />
+        </View>
+
         <Chip text={category} />
-        <Text text={city} style={$cityText} />
+        <View style={$city}>
+          <Text text={city} style={$cityText} />
+        </View>
       </View>
+
       {!isAnonymous && (
         <Pressable
           style={$secondContainer}

@@ -7,6 +7,7 @@ import { AppStackParamList, AppStackScreenProps } from "app/navigators"
 import { Button, Screen } from "app/components"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { moderateVerticalScale } from "app/utils/scaling"
 
 interface AuthScreenProps extends AppStackScreenProps<"ChooseLanguage"> {}
 
@@ -16,22 +17,23 @@ export const AuthScreen: FC<AuthScreenProps> = observer(function AuthScreen() {
   return (
     <Screen preset="fixed" safeAreaEdges={["top", "bottom"]} contentContainerStyle={$container}>
       <View style={$topContainer}></View>
-      <Button
-        tx="auth.signIn"
-        style={$englishButton}
-        onPress={() => navigation.navigate("SignIn")}
-      />
-      <Button
-        tx="auth.signUp"
-        style={$englishButton}
-        onPress={() => navigation.navigate("CreateAccount")}
-      />
-      <Button
-        tx="auth.continueAsGuest"
-        style={$englishButton}
-        preset="secondary"
-        onPress={() => navigation.navigate("HomeTab")}
-      />
+      <View style={$next}>
+        <Button
+          tx="auth.signIn"
+          style={$englishButton}
+          onPress={() => navigation.navigate("SignIn")}
+        />
+        <Button
+          tx="auth.signUp"
+          style={$englishButton}
+          onPress={() => navigation.navigate("CreateAccount")}
+        />
+        <Button
+          tx="auth.continueAsGuest"
+          preset="secondary"
+          onPress={() => navigation.navigate("HomeTab")}
+        />
+      </View>
     </Screen>
   )
 })
@@ -51,4 +53,8 @@ const $topContainer: ViewStyle = {
 
 const $englishButton: ViewStyle = {
   marginBottom: spacing.medium,
+}
+
+const $next: ViewStyle = {
+  bottom: moderateVerticalScale(0),
 }
