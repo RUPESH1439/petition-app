@@ -138,7 +138,7 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
 
   const onShare = async () => {
     try {
-      const link = `petitionApp://petition/${id}`
+      const link = `petitionapp://petition/${id}`
       const result = await Share.share({
         title: `${I18n.translate("petition.share.message")}`,
         message: `${I18n.translate("petition.share.message")}`,
