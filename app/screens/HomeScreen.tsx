@@ -35,7 +35,8 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   const queryClient = useQueryClient()
   const { governorates, setGovernorates } = useFormattedGovernorates()
   const [governorateFilter, setGovernorateFilter] = React.useState([])
-  const { petitionsData, fetchPetitions, petitionInitalLoading, isPetitionsFetching } =
+  const [governorateSelected, setGovernorateSelected] = React.useState<null | number>(null)
+  const { petitionsData, fetchPetitions, petitionInitalLoading } =
     useGetPetitions(governorateFilter)
   const mappedPetitionsData = React.useMemo(
     () => formatPetitions(petitionsData, isRTL, user?.owner?.id),
@@ -98,7 +99,10 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   }, [governorateFilter])
 
   React.useEffect(() => {
-    setGovernorateFilter([...governorates.map(({ value }) => value)])
+    const _governorates = [...governorates.map(({ value }) => value)]
+    setGovernorateFilter(_governorates)
+    const iraq = governorates?.find((gov) => gov?.label?.toLowerCase() === "iraq")
+    setGovernorateSelected(iraq?.value)
   }, [governorates])
 
   useFocusEffect(
@@ -121,7 +125,9 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
             setItems={setGovernorates}
             onChange={(value) => {
               setGovernorateFilter([value])
+              setGovernorateSelected(parseInt(value))
             }}
+            value={governorateSelected}
             dropdownTextStyle={{ color: colors.palette.neutral50 }}
             style={{
               width: moderateVerticalScale(130),
