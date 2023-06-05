@@ -33,6 +33,7 @@ import useRTL from "app/hooks/useRTL"
 import useGetCreatedPetitions from "app/hooks/api/useGetCreatedPetitions"
 import formatPetitions from "app/utils/api/formatPetitions"
 import useUser from "app/hooks/userUser"
+import { $ltr, $rowReverse, $rtl } from "app/common/styles"
 
 const { phone, instagram, facebook } = svgs
 
@@ -145,7 +146,7 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
       <View style={$flashListContainer}>
         <FlashList
           ListHeaderComponent={() => (
-            <View style={$detailContainer}>
+            <View style={[$detailContainer, isRTL ? $rtl : $ltr]}>
               <Pressable
                 onPress={() => {
                   navigation.goBack()
@@ -193,7 +194,14 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
                 ))}
               </View>
 
-              <View style={[$itemsContainer, $iconsContainer]}>
+              <View
+                style={[
+                  $itemsContainer,
+                  $iconsContainer,
+                  isRTL ? $rtl : $ltr,
+                  !!isRTL && $rowReverse,
+                ]}
+              >
                 {icons.map(({ key, icon, link }) => (
                   <Pressable key={key} onPress={() => openLink(link)}>
                     <SvgXml xml={icon} height={39} width={39} />

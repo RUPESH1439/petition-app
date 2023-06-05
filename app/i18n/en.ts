@@ -23,6 +23,9 @@ const en = {
     websiteOnly: "Website Only",
     wrongFormat: "Wrong format",
   },
+  petitionDetail: {
+    title: "Petition",
+  },
   homeTab: {
     profile: "profile",
     myPetitions: "my petitions",

@@ -8,4 +8,12 @@ const $ltr: ViewStyle = {
   direction: "ltr",
 }
 
-export { $rtl, $ltr }
+const $rowReverse: ViewStyle = {
+  flexDirection: "row-reverse",
+}
+
+const $row: ViewStyle = {
+  flexDirection: "row",
+}
+
+export { $rtl, $ltr, $rowReverse, $row }

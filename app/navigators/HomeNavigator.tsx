@@ -26,7 +26,11 @@ const BottomTab = createMaterialTopTabNavigator<HomeNavigatorParamList>()
 export const HomeNavigator = () => {
   const { isRTL } = useRTL()
   return (
-    <BottomTab.Navigator tabBarPosition="bottom" screenOptions={screenOptions(isRTL)}>
+    <BottomTab.Navigator
+      tabBarPosition="bottom"
+      screenOptions={screenOptions(isRTL)}
+      initialRouteName="Home"
+    >
       <BottomTab.Screen
         name="Home"
         component={HomeScreen}

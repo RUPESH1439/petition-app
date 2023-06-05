@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { BackHandler, Platform } from "react-native"
+import { BackHandler, Linking, Platform } from "react-native"
 import { NavigationState, createNavigationContainerRef } from "@react-navigation/native"
 import Config from "../config"
 import type { PersistNavigationConfig } from "../config/config.base"
@@ -116,7 +116,6 @@ export function useNavigationPersistence(storage: Storage, persistenceKey: strin
   const onNavigationStateChange: NavigationProps["onStateChange"] = (state) => {
     const previousRouteName = routeNameRef.current
     const currentRouteName = getActiveRouteName(state)
-
     if (previousRouteName !== currentRouteName) {
       // track screens.
       if (__DEV__) {
@@ -133,8 +132,11 @@ export function useNavigationPersistence(storage: Storage, persistenceKey: strin
 
   const restoreState = async () => {
     try {
+      const initialUrl = await Linking.getInitialURL()
       const state = (await storage.load(persistenceKey)) as NavigationProps["initialState"] | null
-      if (state) setInitialNavigationState(state)
+      if (state && !initialUrl) {
+        setInitialNavigationState(state)
+      }
     } finally {
       if (isMounted()) setIsRestored(true)
     }

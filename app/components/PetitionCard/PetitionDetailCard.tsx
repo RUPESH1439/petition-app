@@ -27,7 +27,6 @@ import {
 } from "./styles"
 import { Button } from "../Button"
 import { moderateVerticalScale } from "app/utils/scaling"
-import { TxKeyPath } from "app/i18n"
 import I18n from "i18n-js"
 import { ViewMoreText } from "../ViewMoreText"
 import { useNavigation } from "@react-navigation/native"
@@ -61,13 +60,12 @@ export interface PetitionCardProps {
   petitionImageUrl?: string
   creatorId?: number
   petitionStatId?: number
-  disableTouch?: boolean
 }
 
 /**
  * Describe your component here
  */
-export const PetitionCard = observer(function PetitionCard(props: PetitionCardProps) {
+export const PetitionDetailCard = observer(function PetitionCard(props: PetitionCardProps) {
   const {
     id,
     style,
@@ -88,7 +86,6 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
     petitionImageUrl,
     creatorId,
     petitionStatId,
-    disableTouch,
   } = props
 
   const { updatePetitionStat } = useUpdatePetitionStat()
@@ -104,31 +101,31 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
   let timer
 
   const getButtonProps = (): {
-    tx: TxKeyPath
+    text: string
     preset: "default" | "filled" | "secondary" | "interest" | "reversed" | "outlined"
   } => {
     switch (_status) {
       case "signed":
         setPetitionSigned(true)
         return {
-          tx: "petition.cancel",
+          text: "Cancel Sign",
           preset: "secondary",
         }
       case "unsigned":
         setPetitionSigned(false)
         return {
-          tx: "petition.signPetition",
+          text: "Sign Petition",
           preset: "default",
         }
       case "forGuest":
         return {
-          tx: "petition.signupToParticipate",
+          text: "Sign Up To Participate",
           preset: "interest",
         }
       default:
         setPetitionSigned(false)
         return {
-          tx: "petition.signPetition",
+          text: "Sign Petition",
           preset: "default",
         }
     }
@@ -138,11 +135,8 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
 
   const onShare = async () => {
     try {
-      const link = `petitionApp://petition/${id}`
       const result = await Share.share({
-        title: `${I18n.translate("petition.share.message")}`,
-        message: `${I18n.translate("petition.share.message")}`,
-        url: link,
+        message: I18n.translate("petition.share.message"),
       })
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -190,17 +184,7 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
   }, [petitionStatId])
 
   return (
-    <Pressable
-      style={$styles}
-      onPress={() => {
-        if (disableTouch) {
-          return
-        }
-        navigation.navigate("PetitionDetail", {
-          petitionId: id,
-        })
-      }}
-    >
+    <View style={$styles}>
       <View style={$topContainer}>
         <View style={$date}>
           <Text text={formatDate(date.toISOString(), "dd/MM/yyyy")} style={$dateText} />
@@ -263,8 +247,8 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
       </View>
 
       <View style={$fourthContainer}>
-        <Analytic tx="petition.views" value={viewsCount} svgString={eyeSolid} />
-        <Analytic tx="petition.signs" value={signsCount} svgString={users} />
+        <Analytic text="Views" value={viewsCount} svgString={eyeSolid} />
+        <Analytic text="Signs" value={signsCount} svgString={users} />
       </View>
 
       <View style={$fifthContainer}>
@@ -272,13 +256,7 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
           <SvgXml xml={arrowUp} height={26} width={23} fill={colors.palette.primary200} />
         </Pressable>
         <Button
-          tx={
-            signedPetition
-              ? "petition.thankyou"
-              : petitionSigned
-              ? "petition.cancel"
-              : buttonProps.tx
-          }
+          text={signedPetition ? "Thank You" : petitionSigned ? "Cancel Sign" : buttonProps.text}
           preset={signedPetition ? "default" : petitionSigned ? "secondary" : buttonProps.preset}
           style={[
             $responseButton,
@@ -297,6 +275,6 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
           }}
         />
       </View>
-    </Pressable>
+    </View>
   )
 })

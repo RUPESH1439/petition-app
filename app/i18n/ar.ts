@@ -25,6 +25,9 @@ const ar: Translations = {
     websiteOnly: "رابط موقع فقط",
     wrongFormat: "رقم خاطئ",
   },
+  petitionDetail: {
+    title: "حملة",
+  },
   homeTab: {
     profile: "الحساب",
     myPetitions: "حملاتي",

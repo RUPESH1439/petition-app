@@ -1,5 +1,6 @@
 export const API_KEYS = {
   GET_PETITIONS: "getPetitions",
+  GET_PETITION: "getPetition",
   GET_SEARCH_PETITION: "searchPetitions",
   GET_SIGEND_PETITIONS: "getSignedPetitions",
   GET_CREATED_PETITIONS: "getCreatedPetitions",

@@ -39,8 +39,12 @@ export default function formatPetitions(
           photoUrl: creator?.data?.attributes?.image?.data?.attributes?.url,
           name: isRTL ? creator?.data?.attributes?.arName : creator?.data?.attributes?.enName,
           category: isRTL ? category?.data?.attributes?.arName : category?.data?.attributes?.enName,
-          status: !currentUserId ? "forGuest" : isSigned ? "signed" : "unsigned",
-          isAnonymous: hideName,
+          status: !currentUserId
+            ? "forGuest"
+            : isSigned
+            ? "signed"
+            : ("unsigned" as "forGuest" | "signed" | "unsigned"),
+          isAnonymous: !!hideName,
           signers: signers?.data?.map((signer) => signer?.id),
           petitionImageUrl: image?.data?.attributes?.url,
           petition,
