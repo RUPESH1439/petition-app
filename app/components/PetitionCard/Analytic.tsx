@@ -12,21 +12,22 @@ export interface AnalyticProps {
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
-  tx: TxKeyPath
+  tx?: TxKeyPath
   value: number | string
   svgString: string
+  text?: string
 }
 
 /**
  * Describe your component here
  */
 export const Analytic = observer(function Analytic(props: AnalyticProps) {
-  const { style, tx, value, svgString } = props
+  const { style, tx, value, svgString, text } = props
   const $styles = [$container, style]
 
   return (
     <View style={$styles}>
-      <Text style={$text} tx={tx} />
+      <Text style={$text} tx={tx} text={text} />
       <Text style={$analytic}>{value}</Text>
       <SvgXml xml={svgString} height={24} width={31} fill={colors.palette.secondary600} />
     </View>
