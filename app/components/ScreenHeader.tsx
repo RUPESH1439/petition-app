@@ -33,6 +33,8 @@ export interface ScreenHeaderProps {
   BottomAccessory?: React.ReactNode
 
   bottomStyle?: StyleProp<ViewStyle>
+
+  isHome?: boolean
 }
 
 /**
@@ -49,6 +51,7 @@ export const ScreenHeader = observer(function ScreenHeader(props: ScreenHeaderPr
     RightAccessory,
     BottomAccessory,
     bottomStyle,
+    isHome,
   } = props
   const $styles = [$container, style]
   const $bottomStyles = [$bottomContainer, bottomStyle]
@@ -68,7 +71,7 @@ export const ScreenHeader = observer(function ScreenHeader(props: ScreenHeaderPr
           <Text tx={tx} preset="primaryBold" style={$title} />
         </View>
 
-        {!!RightAccessory && <View>{RightAccessory}</View>}
+        {!!RightAccessory && !isHome && <View>{RightAccessory}</View>}
       </View>
     )
   }
@@ -87,7 +90,7 @@ export const ScreenHeader = observer(function ScreenHeader(props: ScreenHeaderPr
           />
         )}
 
-        {!!RightAccessory && <View>{RightAccessory}</View>}
+        {!!RightAccessory && !isHome && <View>{RightAccessory}</View>}
       </View>
     )
   }
@@ -103,6 +106,22 @@ export const ScreenHeader = observer(function ScreenHeader(props: ScreenHeaderPr
 
   return (
     <View style={$styles}>
+      {!!RightAccessory && isHome && (
+        <View
+          style={[
+            // eslint-disable-next-line react-native/no-inline-styles
+            {
+              position: "absolute",
+              zIndex: 9999,
+            },
+            // eslint-disable-next-line react-native/no-inline-styles
+            !isRTL ? { right: spacing.medium } : { left: spacing.medium },
+          ]}
+        >
+          {RightAccessory}
+        </View>
+      )}
+
       {renderContent()}
       {!!BottomAccessory && <View style={$bottomStyles}>{BottomAccessory}</View>}
     </View>

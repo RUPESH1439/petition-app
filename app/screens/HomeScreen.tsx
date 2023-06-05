@@ -115,6 +115,7 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
     <Screen style={$root} preset="fixed" safeAreaEdges={["top"]}>
       <ScreenHeader
         tx="home.header"
+        isHome={true}
         style={$screenHeader}
         onButtonPress={() => navigation.goBack()}
         RightAccessory={
