@@ -162,7 +162,8 @@ const en = {
   },
   thankyouScreen: {
     title: "New Petition",
-    headingTop: "Thank you \npetition is uploaded",
+    headingTop: "Thank you",
+    headingMid: "petition is uploaded",
     headingBottom: "petition will be published after being reviewed",
   },
   search: {

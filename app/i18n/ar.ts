@@ -170,8 +170,9 @@ const ar: Translations = {
   },
   thankyouScreen: {
     title: "حملة جديدة",
-    headingTop: "يتم تحميل عريضة شكرا لك",
-    headingBottom: "سيتم نشر الالتماس بعد مراجعته",
+    headingTop: "شكرا لك",
+    headingMid: "تم رفع الحملة بنجاح",
+    headingBottom: "سوف يتم نشر الحملة بعد مراجعتها",
   },
   search: {
     searchPlaceholder: "ابحث عن عريضة او شخص",
