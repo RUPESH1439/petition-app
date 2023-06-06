@@ -93,7 +93,6 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
   const { user } = useUser()
-  console.log("user", user)
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false, animation: "none" }}

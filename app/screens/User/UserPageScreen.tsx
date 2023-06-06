@@ -142,7 +142,7 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
   }
 
   return (
-    <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
+    <Screen style={$root} preset="fixed" safeAreaEdges={["top"]}>
       <View style={$flashListContainer}>
         <FlashList
           ListHeaderComponent={() => (

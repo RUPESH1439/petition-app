@@ -5,7 +5,7 @@ import {
 } from "@react-navigation/material-top-tabs"
 
 import { SvgXml } from "react-native-svg"
-import { MyPetitionsScreen, SearchScreen, HomeScreen, AccountScreen } from "app/screens"
+import { AccountScreen } from "app/screens"
 import icons from "../../assets/svgs"
 import { colors, typography } from "app/theme"
 import { moderateVerticalScale } from "app/utils/scaling"
@@ -13,6 +13,9 @@ import I18n from "i18n-js"
 import { View } from "react-native"
 import useRTL from "app/hooks/useRTL"
 import NotesFilled from "app/components/Icons/NotesFilled"
+import { HomeStackNavigator } from "./HomeStackNavigator"
+import { SearchStackNavigator } from "./SearchStackNavigator"
+import { MyPetitionStackNavigator } from "./MyPetitionStackNavigator"
 
 const { home, user, search, notes, homeFilled, userFilled, searchFilled } = icons
 export type HomeNavigatorParamList = {
@@ -33,7 +36,7 @@ export const HomeNavigator = () => {
     >
       <BottomTab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeStackNavigator}
         options={{
           tabBarLabel: I18n.t("homeTab.home"),
           tabBarIcon: ({ focused }) =>
@@ -56,7 +59,7 @@ export const HomeNavigator = () => {
       />
       <BottomTab.Screen
         name="Search"
-        component={SearchScreen}
+        component={SearchStackNavigator}
         options={{
           tabBarLabel: I18n.t("homeTab.search"),
           tabBarIconStyle: {
@@ -82,7 +85,7 @@ export const HomeNavigator = () => {
       />
       <BottomTab.Screen
         name="MyPetitions"
-        component={MyPetitionsScreen}
+        component={MyPetitionStackNavigator}
         options={{
           tabBarLabel: I18n.t("homeTab.myPetitions"),
 
