@@ -2,6 +2,7 @@ import React, { FC, useCallback } from "react"
 import { observer } from "mobx-react-lite"
 import {
   ActivityIndicator,
+  BackHandler,
   Dimensions,
   RefreshControl,
   TextStyle,
@@ -107,6 +108,14 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   useFocusEffect(
     useCallback(() => {
       queryClient.invalidateQueries({ queryKey: [API_KEYS.GET_PETITIONS] })
+      const onBackPress = () => {
+        BackHandler.exitApp()
+        return true
+      }
+
+      const subscription = BackHandler.addEventListener("hardwareBackPress", onBackPress)
+
+      return () => subscription.remove()
     }, []),
   )
 
@@ -116,7 +125,6 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
         tx="home.header"
         isHome={true}
         style={$screenHeader}
-        onButtonPress={() => navigation.goBack()}
         RightAccessory={
           <Dropdown
             items={governorates}
