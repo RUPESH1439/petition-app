@@ -2,7 +2,7 @@ import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 import { ActivityIndicator, TextStyle, View, ViewStyle } from "react-native"
 import { AppStackParamList, AppStackScreenProps } from "app/navigators"
-import { Screen, ScreenHeader, Text } from "app/components"
+import { PetitionCard, Screen, ScreenHeader, Text } from "app/components"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import useGetPetition from "app/hooks/api/useGetPetition"
@@ -12,7 +12,6 @@ import { colors } from "app/theme"
 import { moderateVerticalScale } from "app/utils/scaling"
 import AntDesign from "react-native-vector-icons/AntDesign"
 import truncateString from "app/utils/truncateString"
-import { PetitionDetailCard } from "app/components/PetitionCard/PetitionDetailCard"
 
 interface PetitionDetailScreenProps
   extends NativeStackScreenProps<AppStackScreenProps<"PetitionDetail">> {}
@@ -80,7 +79,7 @@ export const PetitionDetailScreen: FC<PetitionDetailScreenProps> = observer(
             <ActivityIndicator size="large" color={colors.palette.primary100} />
           </View>
         ) : (
-          <PetitionDetailCard
+          <PetitionCard
             disableTouch={true}
             id={id}
             city={city}

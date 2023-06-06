@@ -11,6 +11,7 @@ const ar: Translations = {
     viewMore: "مشاهدة المزيد",
     viewLess: "رؤية أقل",
     confirmation: "التأكيد",
+    all: "الكل",
   },
   errors: {
     pleaseTry: "الرجاء الاختيار",

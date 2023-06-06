@@ -1,5 +1,5 @@
 import * as React from "react"
-import { StyleProp, TextStyle, View, ViewStyle } from "react-native"
+import { Pressable, StyleProp, TextStyle, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { colors, typography } from "app/theme"
 import { Text } from "app/components/Text"
@@ -26,11 +26,11 @@ export const Analytic = observer(function Analytic(props: AnalyticProps) {
   const $styles = [$container, style]
 
   return (
-    <View style={$styles}>
+    <Pressable style={$styles}>
       <Text style={$text} tx={tx} text={text} />
       <Text style={$analytic}>{value}</Text>
       <SvgXml xml={svgString} height={24} width={31} fill={colors.palette.secondary600} />
-    </View>
+    </Pressable>
   )
 })
 

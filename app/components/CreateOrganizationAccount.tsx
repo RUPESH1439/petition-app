@@ -23,6 +23,7 @@ import { TxKeyPath } from "app/i18n"
 import useUploadMedia from "app/hooks/api/useUploadMedia"
 import NetInfo from "@react-native-community/netinfo"
 import phoneValidation from "app/schemas/phoneValidation"
+import useLogin from "app/hooks/api/useLogin"
 
 const schema = z.object({
   arName: z
@@ -82,6 +83,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
   const { style } = props
   const { isCreating, createUser, isSuccess, createError } = useCreateUser("organization")
   const { uploadMedia, isUploadingMedia } = useUploadMedia()
+  const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
   const { governorates, setGovernorates } = useFormattedGovernorates(true)
   const $styles = [$container, style]
@@ -145,6 +147,9 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
   }
 
   const { isRTL } = useRTL()
+  const ceoPhone = watch("ceoPhone")
+
+  const { login, userData, isLogging } = useLogin(ceoPhone)
 
   const socialMediaLinks: {
     id: string
@@ -180,8 +185,17 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
   )
 
   React.useEffect(() => {
+    if (userData?.id) {
+      navigation.navigate("Otp", {
+        phone: ceoPhone,
+        userData,
+      })
+    }
+  }, [userData?.id, isLogging])
+
+  React.useEffect(() => {
     if (isSuccess) {
-      navigation.navigate("SignIn")
+      login()
     }
   }, [isSuccess])
 
@@ -190,8 +204,6 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
       Alert.alert(createError?.message)
     }
   }, [createError])
-
-  const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
   return (
     <View style={$styles}>

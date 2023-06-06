@@ -1,6 +1,6 @@
 import { colors, spacing, typography } from "app/theme"
 import { moderateScale, moderateVerticalScale } from "app/utils/scaling"
-import { ImageStyle } from "react-native"
+import { Dimensions, ImageStyle } from "react-native"
 import { TextStyle, ViewStyle } from "react-native/types"
 
 const $root: ViewStyle = {
@@ -89,7 +89,10 @@ const $listCardContainer: ViewStyle = {
   marginTop: spacing.extraSmall,
 }
 
-const $flatListContainer: ViewStyle = { paddingBottom: spacing.extraLarge, height: "80%" }
+const $flatListContainer: ViewStyle = {
+  paddingBottom: Dimensions.get("window").height * 0.12,
+  height: "80%",
+}
 
 export {
   $root,

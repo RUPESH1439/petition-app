@@ -18,6 +18,7 @@ import NetInfo from "@react-native-community/netinfo"
 import { ScrollView } from "react-native-gesture-handler"
 import { moderateVerticalScale } from "app/utils/scaling"
 import phoneValidation from "app/schemas/phoneValidation"
+import useLogin from "app/hooks/api/useLogin"
 
 export interface CreatePersonalAccountProps {
   /**
@@ -33,6 +34,7 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
   const { genders, setGenders } = useFormattedGenders()
   const { governorates, setGovernorates } = useFormattedGovernorates(true)
   const { isCreating, createUser, isSuccess, createError } = useCreateUser("personal")
+
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
   const schema = z.object({
@@ -69,12 +71,24 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
 
   const governorate = watch("governorate")
   const gender = watch("gender")
+  const phone = watch("phoneNumber")
+
+  const { login, userData, isLogging } = useLogin(phone)
 
   React.useEffect(() => {
     if (isSuccess) {
-      navigation.navigate("SignIn")
+      login()
     }
   }, [isSuccess])
+
+  React.useEffect(() => {
+    if (userData?.id) {
+      navigation.navigate("Otp", {
+        phone,
+        userData,
+      })
+    }
+  }, [userData?.id, isLogging])
 
   React.useEffect(() => {
     if (createError) {
