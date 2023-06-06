@@ -68,6 +68,7 @@
     "react-hook-form": "^7.43.9",
     "react-native": "0.71.7",
     "react-native-bootsplash": "4.5.0",
+    "react-native-device-info": "^10.6.0",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-image-picker": "^5.3.1",
