@@ -9,10 +9,10 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { AppStackParamList, AppStackScreenProps } from "app/navigators"
+import { AppStackScreenProps } from "app/navigators"
 import { Dropdown, PetitionCard, Screen, ScreenHeader } from "app/components"
-import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useFocusEffect, useNavigation } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { useFocusEffect } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
 import { colors, spacing } from "app/theme"
 import useRTL from "app/hooks/useRTL"
@@ -30,7 +30,6 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
 
-  const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
   const { isRTL } = useRTL()
   const { user } = useUser()
   const queryClient = useQueryClient()
