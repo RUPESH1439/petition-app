@@ -71,6 +71,8 @@ const en = {
       female: "Female",
       governorate: "Governorate",
     },
+    clickToDelete: "Click To Delete",
+    clickToEdit: "Click To Edit",
   },
   home: {
     header: "Home",

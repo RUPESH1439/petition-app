@@ -1,6 +1,6 @@
 import { colors, spacing, typography } from "app/theme"
 import { moderateVerticalScale } from "app/utils/scaling"
-import { TextStyle, ViewStyle } from "react-native"
+import { Dimensions, TextStyle, ViewStyle } from "react-native"
 
 const $analyticsText: TextStyle = {
   fontFamily: typography.primary.bold,
@@ -82,6 +82,14 @@ const $metricTitle: TextStyle = {
   color: colors.palette.neutral100,
 }
 
+const $deleteOnEdit: ViewStyle = {
+  right: Dimensions.get("screen").width * -0.16,
+}
+
+const $delete: ViewStyle = {
+  right: 0,
+}
+
 export {
   $analyticsContainer,
   $analyticsMetricContainer,
@@ -94,4 +102,6 @@ export {
   $sixthContainer,
   $metricColumn,
   $metricTitle,
+  $delete,
+  $deleteOnEdit,
 }

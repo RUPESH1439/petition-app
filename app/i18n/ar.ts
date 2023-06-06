@@ -77,6 +77,8 @@ const ar: Translations = {
       female: "انثى",
       governorate: "احصائيات المحافظة",
     },
+    clickToDelete: "اضغط للحذف",
+    clickToEdit: "اضغط للتعديل",
   },
   walkthrough: {
     screen1: {
