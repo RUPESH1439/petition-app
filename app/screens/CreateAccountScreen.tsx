@@ -15,6 +15,7 @@ import { colors, typography } from "app/theme"
 import { TabView, SceneMap, TabBar } from "react-native-tab-view"
 import I18n from "i18n-js"
 import { moderateVerticalScale } from "app/utils/scaling"
+import useRTL from "app/hooks/useRTL"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "app/models"
@@ -32,11 +33,12 @@ export const CreateAccountScreen: FC<CreateAccountScreenProps> = observer(
     const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
     const layout = useWindowDimensions()
     const [index, setIndex] = React.useState(0)
-
-    const routes = [
+    const { isRTL } = useRTL()
+    const _routes = [
       { key: "personal", title: I18n.t("createAccount.personal") },
       { key: "organization", title: I18n.t("createAccount.organization") },
     ]
+    const routes = isRTL ? _routes.reverse() : _routes
 
     return (
       <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
