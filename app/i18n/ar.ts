@@ -182,7 +182,7 @@ const ar: Translations = {
     name: "جمعية التعاون الخيرية",
     phoneNumber: "07814135918",
     myInfo: "معلوماتي",
-    customerService: "معلوماتي",
+    customerService: "خدمة الزبائن",
     privatePolicy: "سياسة \n الخصوصية",
     settings: "الاعدادات",
     logout: "تسجيل خروج",
