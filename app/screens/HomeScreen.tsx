@@ -101,8 +101,7 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   React.useEffect(() => {
     const _governorates = [...governorates.map(({ value }) => value)]
     setGovernorateFilter(_governorates)
-    const iraq = governorates?.find((gov) => gov?.label?.toLowerCase() === "iraq")
-    setGovernorateSelected(iraq?.value)
+    setGovernorateSelected(user?.governorate?.id)
   }, [governorates])
 
   useFocusEffect(
