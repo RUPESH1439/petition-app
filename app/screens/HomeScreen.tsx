@@ -2,16 +2,17 @@ import React, { FC, useCallback } from "react"
 import { observer } from "mobx-react-lite"
 import {
   ActivityIndicator,
+  BackHandler,
   Dimensions,
   RefreshControl,
   TextStyle,
   View,
   ViewStyle,
 } from "react-native"
-import { AppStackParamList, AppStackScreenProps } from "app/navigators"
+import { AppStackScreenProps } from "app/navigators"
 import { Dropdown, PetitionCard, Screen, ScreenHeader } from "app/components"
-import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useFocusEffect, useNavigation } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { useFocusEffect } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
 import { colors, spacing } from "app/theme"
 import useRTL from "app/hooks/useRTL"
@@ -29,7 +30,6 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
 
-  const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
   const { isRTL } = useRTL()
   const { user } = useUser()
   const queryClient = useQueryClient()
@@ -107,6 +107,14 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   useFocusEffect(
     useCallback(() => {
       queryClient.invalidateQueries({ queryKey: [API_KEYS.GET_PETITIONS] })
+      const onBackPress = () => {
+        BackHandler.exitApp()
+        return true
+      }
+
+      const subscription = BackHandler.addEventListener("hardwareBackPress", onBackPress)
+
+      return () => subscription.remove()
     }, []),
   )
 
@@ -116,7 +124,6 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
         tx="home.header"
         isHome={true}
         style={$screenHeader}
-        onButtonPress={() => navigation.goBack()}
         RightAccessory={
           <Dropdown
             items={governorates}
