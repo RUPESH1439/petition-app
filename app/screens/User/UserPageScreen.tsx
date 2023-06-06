@@ -47,7 +47,6 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
   const { userId } = route?.params ?? {}
 
   const { userData } = useGetUserFromId(userId)
-  console.log("user", userData)
   const { enName, arName, isPrivileged } = userData ?? {}
   const { petitionsData } = useGetCreatedPetitions(userId)
   const petitions = React.useMemo(
