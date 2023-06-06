@@ -11,6 +11,9 @@ import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import phoneValidation from "app/schemas/phoneValidation"
+import { save } from "app/utils/storage"
+import { STORAGE } from "app/constants/storage"
+import useUser from "app/hooks/userUser"
 
 interface SignInScreenProps extends NativeStackScreenProps<AppStackScreenProps<"SignIn">> {}
 
@@ -23,6 +26,8 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
   // const { someStore, anotherStore } = useStores()
   // Pull in navigation via hook
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
+  const { setUser } = useUser()
+
   const {
     control,
     handleSubmit,
@@ -44,12 +49,22 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
     setCanNavigate(true)
   }
 
+  const saveUserData = async () => {
+    await save(STORAGE.USER, userData)
+    setUser(userData)
+    navigation.navigate("HomeTab")
+  }
+
   useEffect(() => {
     if (userData?.id && canNavigate) {
-      navigation.navigate("Otp", {
-        phone,
-        userData,
-      })
+      if (userData?.verifiedUser) {
+        saveUserData()
+      } else {
+        navigation.navigate("Otp", {
+          phone,
+          userData,
+        })
+      }
     }
   }, [userData?.id, isLogging])
   return (

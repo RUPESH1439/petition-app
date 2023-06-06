@@ -15,6 +15,7 @@ export interface PersonalUser {
   gender?: GenderAttrs & ID
   governorate?: GovernorateAttrs & ID
   owner: OwnerAttrs & ID
+  verifiedUser?: boolean
 }
 
 export interface OrganizationUser {
@@ -34,6 +35,7 @@ export interface OrganizationUser {
   gender?: GenderAttrs & ID
   governorate?: GovernorateAttrs & ID
   owner?: OwnerAttrs & ID
+  verifiedUser?: boolean
 }
 
 export interface UpdatePetitionStat {

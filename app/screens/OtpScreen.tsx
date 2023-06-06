@@ -107,7 +107,7 @@ export const OtpScreen: FC<OtpScreenProps> = observer(function OtpScreen() {
   const { userData } = route?.params ?? {}
 
   useEffect(() => {
-    ;(async function verify() {
+    ;(async function _verify() {
       if (verifiedData?.status === "approved") {
         await save(STORAGE.USER, userData)
         setUser(userData)
