@@ -12,6 +12,7 @@ import { Analytic } from "./Analytic"
 import {
   $city,
   $cityText,
+  $clickToDelete,
   $container,
   $date,
   $dateText,
@@ -33,6 +34,8 @@ import {
   $metricTitle,
   $metricColumn,
   $sixthContainer,
+  $deleteOnEdit,
+  $delete,
 } from "./myPetitionStyles"
 import { ViewMoreText } from "../ViewMoreText"
 import { moderateVerticalScale } from "app/utils/scaling"
@@ -44,6 +47,7 @@ import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
 import { Petition } from "app/hooks/api/interface"
 import useDeletePetition from "app/hooks/api/useDeletePetition"
 import useGetPersonalUsersFromUserIds from "app/hooks/api/useGetPersonalUsersFromUserIds"
+import { Button } from "../Button"
 
 const { eyeSolid, users, arrowUp, penToSquareRegular, trashRegular } = icons
 
@@ -93,6 +97,9 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
     petition,
     signers,
   } = props
+  const [deletePressed, setDeletePressed] = React.useState(false)
+  const [editPressed, setEditPressed] = React.useState(false)
+
   const { personalUsers } = useGetPersonalUsersFromUserIds(signers)
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
@@ -263,22 +270,72 @@ export const MyPetitionCard = observer(function MyPetitionCard(props: MyPetition
             style={{ left: moderateVerticalScale(4) }}
           />
         </Pressable>
-        <Pressable onPress={async () => await deletePetition({ id: petition?.id })}>
-          <SvgXml
-            xml={trashRegular}
-            height={moderateVerticalScale(24)}
-            width={moderateVerticalScale(20.75)}
-            fill={colors.palette.primary200}
+        {deletePressed ? (
+          <Button
+            tx="petition.clickToDelete"
+            onPress={async () => {
+              await deletePetition({ id: petition?.id })
+              setDeletePressed(false)
+            }}
+            style={$clickToDelete}
+            LeftAccessory={() => (
+              <SvgXml
+                xml={trashRegular}
+                height={moderateVerticalScale(24)}
+                width={moderateVerticalScale(20.75)}
+                fill={colors.palette.neutral50}
+              />
+            )}
           />
-        </Pressable>
-        <Pressable onPress={() => navigation.navigate("EditPetition", { petitionData: petition })}>
-          <SvgXml
-            xml={penToSquareRegular}
-            height={moderateVerticalScale(24)}
-            width={moderateVerticalScale(20.75)}
-            fill={colors.palette.primary200}
+        ) : (
+          <Pressable
+            onPress={() => {
+              setDeletePressed(true)
+              setEditPressed(false)
+            }}
+            style={editPressed ? $deleteOnEdit : $delete}
+          >
+            <SvgXml
+              xml={trashRegular}
+              height={moderateVerticalScale(24)}
+              width={moderateVerticalScale(20.75)}
+              fill={colors.palette.primary200}
+            />
+          </Pressable>
+        )}
+
+        {editPressed ? (
+          <Button
+            tx="petition.clickToEdit"
+            onPress={() => {
+              navigation.navigate("EditPetition", { petitionData: petition })
+              setEditPressed(false)
+            }}
+            style={$clickToDelete}
+            LeftAccessory={() => (
+              <SvgXml
+                xml={penToSquareRegular}
+                height={moderateVerticalScale(24)}
+                width={moderateVerticalScale(20.75)}
+                fill={colors.palette.neutral50}
+              />
+            )}
           />
-        </Pressable>
+        ) : (
+          <Pressable
+            onPress={() => {
+              setEditPressed(true)
+              setDeletePressed(false)
+            }}
+          >
+            <SvgXml
+              xml={penToSquareRegular}
+              height={moderateVerticalScale(24)}
+              width={moderateVerticalScale(20.75)}
+              fill={colors.palette.primary200}
+            />
+          </Pressable>
+        )}
       </View>
     </View>
   )

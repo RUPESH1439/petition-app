@@ -1,5 +1,5 @@
 import { colors, spacing, typography } from "app/theme"
-import { moderateVerticalScale } from "app/utils/scaling"
+import { moderateScale, moderateVerticalScale } from "app/utils/scaling"
 import { ImageStyle, TextStyle, ViewStyle } from "react-native"
 
 const $container: ViewStyle = {
@@ -117,6 +117,13 @@ const $responseButton: ViewStyle = {
   height: moderateVerticalScale(38),
 }
 
+const $clickToDelete: ViewStyle = {
+  paddingVertical: moderateVerticalScale(8),
+  minHeight: moderateVerticalScale(38),
+  gap: moderateScale(10),
+  paddingHorizontal: moderateScale(16),
+}
+
 export {
   $fourthContainer,
   $avatar,
@@ -134,4 +141,5 @@ export {
   $petitionImage,
   $date,
   $city,
+  $clickToDelete,
 }
