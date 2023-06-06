@@ -34,6 +34,7 @@ import useGetCreatedPetitions from "app/hooks/api/useGetCreatedPetitions"
 import formatPetitions from "app/utils/api/formatPetitions"
 import useUser from "app/hooks/userUser"
 import { $ltr, $rowReverse, $rtl } from "app/common/styles"
+import { moderateVerticalScale } from "app/utils/scaling"
 
 const { phone, instagram, facebook } = svgs
 
@@ -46,7 +47,7 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
   const { userId } = route?.params ?? {}
 
   const { userData } = useGetUserFromId(userId)
-  const { enName, arName } = userData ?? {}
+  const { enName, arName, isPrivileged } = userData ?? {}
   const { petitionsData } = useGetCreatedPetitions(userId)
   const petitions = React.useMemo(
     () => formatPetitions(petitionsData, isRTL, user?.owner?.id),
@@ -185,7 +186,7 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
                 </View>
               </View>
 
-              <View style={$itemsContainer}>
+              <View style={[$itemsContainer, { marginBottom: moderateVerticalScale(8) }]}>
                 {analytics.map(({ key, title, count }) => (
                   <View key={key}>
                     <Text style={$analyticsNumbers}>{count}</Text>
@@ -194,20 +195,22 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
                 ))}
               </View>
 
-              <View
-                style={[
-                  $itemsContainer,
-                  $iconsContainer,
-                  isRTL ? $rtl : $ltr,
-                  !!isRTL && $rowReverse,
-                ]}
-              >
-                {icons.map(({ key, icon, link }) => (
-                  <Pressable key={key} onPress={() => openLink(link)}>
-                    <SvgXml xml={icon} height={39} width={39} />
-                  </Pressable>
-                ))}
-              </View>
+              {isPrivileged ? (
+                <View
+                  style={[
+                    $itemsContainer,
+                    $iconsContainer,
+                    isRTL ? $rtl : $ltr,
+                    !!isRTL && $rowReverse,
+                  ]}
+                >
+                  {icons.map(({ key, icon, link }) => (
+                    <Pressable key={key} onPress={() => openLink(link)}>
+                      <SvgXml xml={icon} height={39} width={39} />
+                    </Pressable>
+                  ))}
+                </View>
+              ) : null}
             </View>
           )}
           contentContainerStyle={$flatListContainer}
