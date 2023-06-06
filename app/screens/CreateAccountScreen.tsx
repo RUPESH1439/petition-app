@@ -32,13 +32,19 @@ export const CreateAccountScreen: FC<CreateAccountScreenProps> = observer(
   function CreateAccountScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
     const layout = useWindowDimensions()
-    const [index, setIndex] = React.useState(0)
     const { isRTL } = useRTL()
+    const [index, setIndex] = React.useState(isRTL ? 1 : 0)
     const _routes = [
       { key: "personal", title: I18n.t("createAccount.personal") },
       { key: "organization", title: I18n.t("createAccount.organization") },
     ]
     const routes = isRTL ? _routes.reverse() : _routes
+
+    React.useEffect(() => {
+      if (isRTL) {
+        setIndex(1)
+      }
+    }, [isRTL])
 
     return (
       <Screen style={$root} preset="fixed" safeAreaEdges={["top", "bottom"]}>
