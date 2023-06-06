@@ -21,7 +21,7 @@ import useUser from "app/hooks/userUser"
 import formatPetitions from "app/utils/api/formatPetitions"
 import { useQueryClient } from "@tanstack/react-query"
 import { API_KEYS } from "app/constants/apiKeys"
-import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
+import useFormattedGovernorates, { ALL_GOVERNORATES_ID } from "app/hooks/useFormattedGovernorates"
 
 interface HomeScreenProps extends NativeStackScreenProps<AppStackScreenProps<"Home">> {}
 
@@ -33,7 +33,7 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
   const { isRTL } = useRTL()
   const { user } = useUser()
   const queryClient = useQueryClient()
-  const { governorates, setGovernorates } = useFormattedGovernorates()
+  const { governorates, setGovernorates } = useFormattedGovernorates(false, true)
   const [governorateFilter, setGovernorateFilter] = React.useState([])
   const [governorateSelected, setGovernorateSelected] = React.useState<null | number>(null)
   const { petitionsData, fetchPetitions, petitionInitalLoading } =
@@ -124,7 +124,12 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
             placeholderStyle={$dropdownPlaceholder}
             setItems={setGovernorates}
             onChange={(value) => {
-              setGovernorateFilter([value])
+              const _val = parseInt(value)
+              let filters = [_val]
+              if (_val === ALL_GOVERNORATES_ID) {
+                filters = governorates?.map((gov) => gov?.value)
+              }
+              setGovernorateFilter(filters)
               setGovernorateSelected(parseInt(value))
             }}
             value={governorateSelected}

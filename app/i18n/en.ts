@@ -9,6 +9,7 @@ const en = {
     viewMore: "View More",
     viewLess: "View Less",
     confirmation: "Confirmation",
+    all: "All",
   },
   errors: {
     pleaseTry: "Please Try",
