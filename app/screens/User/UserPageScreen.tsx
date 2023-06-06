@@ -126,7 +126,7 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
       {
         key: "signs",
         title: "userPageScreen.signs",
-        count: userData?.signedPetitions?.length ?? 0,
+        count: petitions?.reduce((val, current) => current?.signsCount + val, 0),
       },
     ]
   }, [userData, petitions])
