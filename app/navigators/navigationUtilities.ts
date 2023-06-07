@@ -135,7 +135,7 @@ export function useNavigationPersistence(storage: Storage, persistenceKey: strin
       const initialUrl = await Linking.getInitialURL()
       const state = (await storage.load(persistenceKey)) as NavigationProps["initialState"] | null
       if (state && !initialUrl) {
-        setInitialNavigationState(state)
+        // setInitialNavigationState(state)
       }
     } finally {
       if (isMounted()) setIsRestored(true)

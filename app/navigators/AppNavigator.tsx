@@ -71,6 +71,7 @@ export type AppStackParamList = {
   PetitionDetail: {
     petitionId: number
   }
+  SplashScreen2: undefined
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
   CreateAccount: undefined
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
@@ -92,11 +93,10 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStack
 const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
-  const { user } = useUser()
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false, animation: "none" }}
-      initialRouteName={user ? "HomeTab" : "ChooseLanguage"}
+      screenOptions={{ headerShown: false, animation: "none", gestureEnabled: false }}
+      initialRouteName={"SplashScreen2"}
     >
       <Stack.Screen name="ChooseLanguage" component={Screens.ChooseLanguageScreen} />
       <Stack.Screen name="Walkthrough1" component={Screens.WalkthroughScreen1} />
@@ -127,6 +127,7 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="EditPetition" component={Screens.EditPetitionScreen} />
       <Stack.Screen name="FullScreenPhoto" component={Screens.FullScreenPhotoScreen} />
       <Stack.Screen name="PetitionDetail" component={Screens.PetitionDetailScreen} />
+      <Stack.Screen name="SplashScreen2" component={Screens.SplashScreen2Screen} />
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
       <Stack.Screen name="CreateAccount" component={Screens.CreateAccountScreen} />
       <Stack.Screen name="HomeTab" component={HomeNavigator} />
