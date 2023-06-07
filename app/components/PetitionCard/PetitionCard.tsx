@@ -98,7 +98,8 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
 
   const { updatePetitionStat } = useUpdatePetitionStat()
 
-  const { signPetition, signSuccess } = useSignPetition()
+  const { signPetition } = useSignPetition()
+  const [signSuccess, setSignSuccess] = React.useState(false)
   const [signedPetition, setSignedPetition] = React.useState(false)
   const [petitionSigned, setPetitionSigned] = React.useState(false)
   const { cancelSignPetition } = useCancelSignPetition()
@@ -169,6 +170,7 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
       timer = setTimeout(() => {
         setSignedPetition(false)
         setPetitionSigned(true)
+        setSignSuccess(false)
       }, 3000)
     }
 
@@ -297,6 +299,8 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
               navigation.navigate("CreateAccount")
             }
             if (_status === "unsigned" && !signedPetition) {
+              setSignSuccess(true)
+
               await signPetition({ petitionId: id, signers })
             } else {
               await cancelSignPetition({ petitionId: id, signers })
