@@ -41,6 +41,7 @@ export interface OrganizationUser {
 export interface UpdatePetitionStat {
   views?: number
   shares?: number
+  viewers?: number[]
   id: number
 }
 
@@ -152,6 +153,7 @@ export interface IPetitionStat {
   id: number
   views?: string
   shares?: string
+  viewers?: IOwner[]
   createdAt?: string
 }
 
@@ -246,6 +248,9 @@ export interface PetitionStat {
 export interface PetitionStatAttrs {
   views: string
   shares: string
+  viewers: {
+    data: Owner[]
+  }
 }
 
 export interface PetitionCategoryAttrs {

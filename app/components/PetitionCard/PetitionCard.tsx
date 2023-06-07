@@ -36,6 +36,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import useSignPetition from "app/hooks/api/useSignPetition"
 import useCancelSignPetition from "app/hooks/api/useCancelSignPetition"
 import useUpdatePetitionStat from "app/hooks/api/useUpdatePetitionStat"
+import useUser from "app/hooks/userUser"
 
 const { chevronLeft, circleCheckSolid, eyeSolid, users, arrowUp } = icons
 export interface PetitionCardProps {
@@ -62,6 +63,7 @@ export interface PetitionCardProps {
   creatorId?: number
   petitionStatId?: number
   disableTouch?: boolean
+  viewers?: number[]
 }
 
 /**
@@ -89,7 +91,10 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
     creatorId,
     petitionStatId,
     disableTouch,
+    viewers,
   } = props
+
+  const { user } = useUser()
 
   const { updatePetitionStat } = useUpdatePetitionStat()
 
@@ -185,9 +190,11 @@ export const PetitionCard = observer(function PetitionCard(props: PetitionCardPr
       _viewsCount = 0
     }
     if (petitionStatId) {
-      updatePetitionStat({ id: petitionStatId, views: _viewsCount + 1 })
+      if (!!viewers && !viewers?.includes(user?.owner?.id)) {
+        updatePetitionStat({ id: petitionStatId, viewers: [...viewers, user?.owner?.id] })
+      }
     }
-  }, [petitionStatId])
+  }, [petitionStatId, viewers])
 
   return (
     <Pressable

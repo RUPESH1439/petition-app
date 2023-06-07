@@ -63,10 +63,12 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
         petitionImageUrl,
         creatorId,
         petitionStatId,
+        viewers,
       } = item ?? {}
       return (
         <View style={$cardContainer} key={id}>
           <PetitionCard
+            viewers={viewers}
             id={id}
             city={city}
             category={category}
