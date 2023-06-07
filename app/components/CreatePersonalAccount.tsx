@@ -15,13 +15,12 @@ import useFormattedGenders from "app/hooks/useFormattedGenders"
 import useFormattedGovernorates from "app/hooks/useFormattedGovernorates"
 import useCreateUser from "app/hooks/api/useCreateUser"
 import NetInfo from "@react-native-community/netinfo"
-import { ScrollView } from "react-native-gesture-handler"
 import { moderateVerticalScale } from "app/utils/scaling"
 import phoneValidation from "app/schemas/phoneValidation"
 import useLogin from "app/hooks/api/useLogin"
 import { Picker } from "react-native-wheel-pick"
 import { getYearRange } from "app/utils/getYears"
-
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 export interface CreatePersonalAccountProps {
   /**
    * An optional style override useful for padding & margin.
@@ -100,7 +99,7 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
 
   return (
     <View style={$container}>
-      <ScrollView>
+      <KeyboardAwareScrollView>
         <TextField
           control={control}
           name="name"
@@ -172,7 +171,7 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
           style={$continueBtn}
           onPress={handleSubmit(onSubmit)}
         />
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </View>
   )
 })

@@ -26,6 +26,7 @@ import phoneValidation from "app/schemas/phoneValidation"
 import useLogin from "app/hooks/api/useLogin"
 import { Picker } from "react-native-wheel-pick"
 import { getYearRange } from "app/utils/getYears"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 
 const schema = z.object({
   arName: z
@@ -209,7 +210,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
 
   return (
     <View style={$styles}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
         <Text tx="createOrganizationAccount.header" style={$header} />
         <ImagePicker
           titleX="createOrganizationAccount.logo"
@@ -365,7 +366,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
           onPress={handleSubmit(onSubmit)}
           style={$continue}
         />
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </View>
   )
 })
