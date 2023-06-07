@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Alert, StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { spacing } from "app/theme"
+import { colors, spacing } from "app/theme"
 import { TextField } from "./TextField"
 import { Button } from "./Button"
 import { Dropdown } from "./Dropdown"
@@ -118,22 +118,17 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
           error={errors?.birthdateYear ? "errors.pleaseFill" : null}
           placeholderTx="createPersonalAccount.dateOfBirth"
           containerStyle={$textInput}
-          onFocus={() => setDobFocused(true)}
-          onChangeText={() => setDobFocused(true)}
           onBlur={() => setDobFocused(false)}
+          showSoftInputOnFocus={false}
+          onPressIn={() => setDobFocused(true)}
         />
         {!!dobFocused && (
           <Picker
-            style={{
-              backgroundColor: "white",
-              width: "100%",
-              height: 500,
-            }}
+            style={$pickerInput}
             pickerData={getYearRange()}
             onValueChange={(value) => {
-              console.log("value", value)
               setValue("birthdateYear", value)
-              // setDobFocused(false)
+              setDobFocused(false)
             }}
           />
         )}
@@ -202,4 +197,10 @@ const $dropdownList: ViewStyle = {
 
 const $textInput: ViewStyle = {
   marginBottom: spacing.extraMedium,
+}
+
+const $pickerInput: ViewStyle = {
+  backgroundColor: colors.palette.neutral50,
+  width: "100%",
+  height: 215,
 }
