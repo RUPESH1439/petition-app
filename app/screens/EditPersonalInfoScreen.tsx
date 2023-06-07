@@ -9,7 +9,7 @@ import useRTL from "app/hooks/useRTL"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { spacing } from "app/theme"
+import { colors, spacing } from "app/theme"
 import useUser from "app/hooks/userUser"
 import useGender from "app/hooks/api/useGender"
 import useGovernorate from "app/hooks/api/useGovernorate"
@@ -20,6 +20,8 @@ import formatUserData from "app/utils/api/formatUserData"
 import useUpdateOwner from "app/hooks/api/useUpdateOwner"
 import { PersonalUser } from "app/hooks/api/interface"
 import phoneValidation from "app/schemas/phoneValidation"
+import { Picker } from "react-native-wheel-pick"
+import { getYearRange } from "app/utils/getYears"
 
 // import { useStores } from "app/models"
 
@@ -43,6 +45,7 @@ export const EditPersonalInfoScreen: FC<EditPersonalInfoScreenProps> = observer(
     const { isRTL } = useRTL()
     const { user, setUser } = useUser()
     const { isUpdating, updateUser } = useUpdateUser()
+    const [dobFocused, setDobFocused] = React.useState(false)
     const { updateOwner } = useUpdateOwner()
     const {
       name,
@@ -149,7 +152,20 @@ export const EditPersonalInfoScreen: FC<EditPersonalInfoScreenProps> = observer(
             status={errors?.birthdateYear ? "error" : null}
             error={errors?.birthdateYear ? "errors.pleaseFill" : null}
             placeholderTx="createPersonalAccount.dateOfBirth"
+            onBlur={() => setDobFocused(false)}
+            showSoftInputOnFocus={false}
+            onPressIn={() => setDobFocused(true)}
           />
+          {!!dobFocused && (
+            <Picker
+              style={$pickerInput}
+              pickerData={getYearRange()}
+              onValueChange={(value) => {
+                setValue("birthdateYear", value)
+                setDobFocused(false)
+              }}
+            />
+          )}
           <View style={$dropdownGenderList}>
             <Dropdown
               items={genders}
@@ -214,4 +230,10 @@ const $dropdownGenderList: ViewStyle = {
 
 const $dropdownList: ViewStyle = {
   zIndex: 899,
+}
+
+const $pickerInput: ViewStyle = {
+  backgroundColor: colors.palette.neutral50,
+  width: "100%",
+  height: 215,
 }

@@ -32,6 +32,8 @@ import { STORAGE } from "app/constants/storage"
 import { TxKeyPath } from "app/i18n"
 import useUploadMedia from "app/hooks/api/useUploadMedia"
 import phoneValidation from "app/schemas/phoneValidation"
+import { Picker } from "react-native-wheel-pick"
+import { getYearRange } from "app/utils/getYears"
 
 interface EditOrganizationalInfoScreenProps
   extends NativeStackScreenProps<AppStackScreenProps<"EditOrganizationalInfo">> {}
@@ -88,6 +90,7 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
     const { uploadMedia, isUploadingMedia } = useUploadMedia()
     const [logoChanged, setLogoChanged] = React.useState(false)
     const [permitImageChanged, setPermitImageChanged] = React.useState(false)
+    const [eastablishedYearFocused, setEastablishedYearFocused] = React.useState(false)
 
     const {
       arName,
@@ -339,7 +342,21 @@ export const EditOrganizationalInfoScreen: FC<EditOrganizationalInfoScreenProps>
                   status={errors?.EstablishedYear ? "error" : null}
                   error={errors?.EstablishedYear ? "errors.pleaseFill" : null}
                   containerStyle={$textInput}
+                  keyboardType="phone-pad"
+                  onBlur={() => setEastablishedYearFocused(false)}
+                  showSoftInputOnFocus={false}
+                  onPressIn={() => setEastablishedYearFocused(true)}
                 />
+                {!!eastablishedYearFocused && (
+                  <Picker
+                    style={$pickerInput}
+                    pickerData={getYearRange()}
+                    onValueChange={(value) => {
+                      setValue("EstablishedYear", value)
+                      setEastablishedYearFocused(false)
+                    }}
+                  />
+                )}
 
                 <TextField
                   control={control}
@@ -497,8 +514,15 @@ const $flexOne: ViewStyle = {
 const $imagePicker: ViewStyle = {
   paddingBottom: spacing.medium,
   alignItems: "flex-end",
+  maxHeight: moderateVerticalScale(130),
 }
 
 const $continue: ViewStyle = {
   marginTop: moderateVerticalScale(20),
+}
+
+const $pickerInput: ViewStyle = {
+  backgroundColor: colors.palette.neutral50,
+  width: "100%",
+  height: 215,
 }

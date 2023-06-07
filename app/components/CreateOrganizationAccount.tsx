@@ -24,6 +24,8 @@ import useUploadMedia from "app/hooks/api/useUploadMedia"
 import NetInfo from "@react-native-community/netinfo"
 import phoneValidation from "app/schemas/phoneValidation"
 import useLogin from "app/hooks/api/useLogin"
+import { Picker } from "react-native-wheel-pick"
+import { getYearRange } from "app/utils/getYears"
 
 const schema = z.object({
   arName: z
@@ -84,7 +86,7 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
   const { isCreating, createUser, isSuccess, createError } = useCreateUser("organization")
   const { uploadMedia, isUploadingMedia } = useUploadMedia()
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
-
+  const [eastablishedYearFocused, setEastablishedYearFocused] = React.useState(false)
   const { governorates, setGovernorates } = useFormattedGovernorates(true)
   const $styles = [$container, style]
 
@@ -248,7 +250,20 @@ export const CreateOrganizationAccount = observer(function CreateOrganizationAcc
               error={errors?.EstablishedYear ? "errors.pleaseFill" : null}
               containerStyle={$textInput}
               keyboardType="phone-pad"
+              onBlur={() => setEastablishedYearFocused(false)}
+              showSoftInputOnFocus={false}
+              onPressIn={() => setEastablishedYearFocused(true)}
             />
+            {!!eastablishedYearFocused && (
+              <Picker
+                style={$pickerInput}
+                pickerData={getYearRange()}
+                onValueChange={(value) => {
+                  setValue("EstablishedYear", value)
+                  setEastablishedYearFocused(false)
+                }}
+              />
+            )}
 
             <TextField
               control={control}
@@ -392,8 +407,15 @@ const $flexOne: ViewStyle = {
 const $imagePicker: ViewStyle = {
   paddingBottom: spacing.medium,
   alignItems: "flex-end",
+  maxHeight: moderateVerticalScale(130),
 }
 
 const $continue: ViewStyle = {
   marginTop: moderateVerticalScale(20),
+}
+
+const $pickerInput: ViewStyle = {
+  backgroundColor: colors.palette.neutral50,
+  width: "100%",
+  height: 215,
 }

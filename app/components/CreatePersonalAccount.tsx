@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Alert, StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { spacing } from "app/theme"
+import { colors, spacing } from "app/theme"
 import { TextField } from "./TextField"
 import { Button } from "./Button"
 import { Dropdown } from "./Dropdown"
@@ -19,6 +19,8 @@ import { ScrollView } from "react-native-gesture-handler"
 import { moderateVerticalScale } from "app/utils/scaling"
 import phoneValidation from "app/schemas/phoneValidation"
 import useLogin from "app/hooks/api/useLogin"
+import { Picker } from "react-native-wheel-pick"
+import { getYearRange } from "app/utils/getYears"
 
 export interface CreatePersonalAccountProps {
   /**
@@ -34,7 +36,7 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
   const { genders, setGenders } = useFormattedGenders()
   const { governorates, setGovernorates } = useFormattedGovernorates(true)
   const { isCreating, createUser, isSuccess, createError } = useCreateUser("personal")
-
+  const [dobFocused, setDobFocused] = React.useState(false)
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
   const schema = z.object({
@@ -107,6 +109,7 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
           placeholderTx="createPersonalAccount.name"
           containerStyle={$textInput}
         />
+
         <TextField
           control={control}
           name="birthdateYear"
@@ -115,7 +118,20 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
           error={errors?.birthdateYear ? "errors.pleaseFill" : null}
           placeholderTx="createPersonalAccount.dateOfBirth"
           containerStyle={$textInput}
+          onBlur={() => setDobFocused(false)}
+          showSoftInputOnFocus={false}
+          onPressIn={() => setDobFocused(true)}
         />
+        {!!dobFocused && (
+          <Picker
+            style={$pickerInput}
+            pickerData={getYearRange()}
+            onValueChange={(value) => {
+              setValue("birthdateYear", value)
+              setDobFocused(false)
+            }}
+          />
+        )}
         <View style={[$dropdownGenderList, $textInput]}>
           <Dropdown
             items={genders}
@@ -181,4 +197,10 @@ const $dropdownList: ViewStyle = {
 
 const $textInput: ViewStyle = {
   marginBottom: spacing.extraMedium,
+}
+
+const $pickerInput: ViewStyle = {
+  backgroundColor: colors.palette.neutral50,
+  width: "100%",
+  height: 215,
 }
