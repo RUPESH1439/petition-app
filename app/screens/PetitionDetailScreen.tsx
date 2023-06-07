@@ -43,6 +43,7 @@ export const PetitionDetailScreen: FC<PetitionDetailScreenProps> = observer(
       creatorId,
       petitionStatId,
       isAnonymous,
+      viewers,
     } = formattedPetition?.[0]
     const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
     return (
@@ -99,6 +100,7 @@ export const PetitionDetailScreen: FC<PetitionDetailScreenProps> = observer(
             petitionImageUrl={petitionImageUrl}
             creatorId={creatorId}
             petitionStatId={petitionStatId}
+            viewers={viewers}
           />
         )}
       </Screen>
@@ -119,6 +121,7 @@ const $container: ViewStyle = {
 const $nameContainer: ViewStyle = {
   flexDirection: "row",
   justifyContent: "center",
+  alignItems: "center",
   gap: moderateVerticalScale(10),
 }
 

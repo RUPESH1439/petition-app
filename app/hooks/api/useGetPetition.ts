@@ -29,6 +29,11 @@ export default function useGetPetition(id: number) {
             },
             petition_stat: {
               fields: ["views", "shares"],
+              populate: {
+                viewers: {
+                  fields: ["phoneNumber"],
+                },
+              },
             },
             governorate: {
               fields: ["arName", "enName", "isCountry"],

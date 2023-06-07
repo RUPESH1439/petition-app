@@ -36,6 +36,11 @@ export default function useGetSignedPetitions() {
                 },
                 petition_stat: {
                   fields: ["views", "shares"],
+                  populate: {
+                    viewers: {
+                      fields: ["phoneNumber"],
+                    },
+                  },
                 },
                 creator: {
                   fields: ["arName", "enName", "isPrivileged"],

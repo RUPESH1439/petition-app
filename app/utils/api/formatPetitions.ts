@@ -29,7 +29,9 @@ export default function formatPetitions(
             ? governorate?.data?.attributes?.arName
             : governorate?.data?.attributes?.enName,
           // eslint-disable-next-line camelcase
-          viewsCount: petition_stat?.data?.attributes?.views,
+          viewsCount: petition_stat?.data?.attributes?.viewers?.data?.length || 0,
+          // eslint-disable-next-line camelcase
+          viewers: petition_stat?.data?.attributes?.viewers?.data?.map((viewer) => viewer?.id),
           signsCount: signers?.data?.length ?? 0,
           title,
           isOrg,

@@ -73,6 +73,7 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
       signers,
       petitionImageUrl,
       creatorId,
+      viewers,
     } = item ?? {}
 
     return (
@@ -95,6 +96,7 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
           signers={signers}
           petitionImageUrl={petitionImageUrl}
           creatorId={creatorId}
+          viewers={viewers}
         />
       </View>
     )
@@ -107,11 +109,6 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
   ]
 
   const analytics: { key: string; title: TxKeyPath; count: number }[] = useMemo(() => {
-    const _views = petitions?.map((petition) => {
-      const __views = petition.petition?.attributes?.petition_stat?.data?.attributes?.views
-      return __views ? parseInt(__views) : 0
-    })
-
     return [
       {
         key: "petition",
@@ -121,7 +118,7 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
       {
         key: "views",
         title: "userPageScreen.views",
-        count: _views?.reduce((val, current) => current + val, 0),
+        count: petitions?.reduce((val, current) => current?.viewsCount + val, 0),
       },
       {
         key: "signs",

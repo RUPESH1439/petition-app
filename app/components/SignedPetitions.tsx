@@ -45,7 +45,9 @@ export const SignedPetitions = observer(function SignedPetitions(props: SignedPe
           city={isRTL ? governorate?.arName : governorate?.enName}
           category={isRTL ? category?.arName : category?.enName}
           // eslint-disable-next-line camelcase
-          viewsCount={petition_stat?.views}
+          viewsCount={petition_stat?.viewers?.length || 0}
+          // eslint-disable-next-line camelcase
+          viewers={petition_stat?.viewers?.map((viewer) => viewer?.id)}
           signsCount={signers?.length}
           name={isRTL ? creator?.arName : creator?.enName}
           isOrg={true}
