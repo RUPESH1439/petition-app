@@ -95,7 +95,7 @@ const AppStack = observer(function AppStack() {
   const { user } = useUser()
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false, animation: "none" }}
+      screenOptions={{ headerShown: false, animation: "none", gestureEnabled: false }}
       initialRouteName={user ? "HomeTab" : "ChooseLanguage"}
     >
       <Stack.Screen name="ChooseLanguage" component={Screens.ChooseLanguageScreen} />
