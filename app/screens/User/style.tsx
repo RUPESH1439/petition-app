@@ -8,6 +8,10 @@ const $root: ViewStyle = {
   backgroundColor: colors.palette.gray150,
 }
 
+const $justifyCenter: ViewStyle = {
+  justifyContent: "center",
+}
+
 const $detailContainer: ViewStyle = {
   backgroundColor: colors.palette.neutral50,
 }
@@ -110,4 +114,5 @@ export {
   $container,
   $listCardContainer,
   $flatListContainer,
+  $justifyCenter,
 }

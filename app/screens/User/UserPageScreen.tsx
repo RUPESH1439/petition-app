@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from "react"
 import { observer } from "mobx-react-lite"
-import { Image, Linking, Pressable, View } from "react-native"
+import { ActivityIndicator, Image, Linking, Pressable, View } from "react-native"
 import { AppStackParamList } from "app/navigators"
 import { PetitionCard, Screen, Text } from "app/components"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
@@ -21,6 +21,7 @@ import {
   $image,
   $imageContainer,
   $itemsContainer,
+  $justifyCenter,
   $nameContainer,
   $root,
 } from "./style"
@@ -48,7 +49,7 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
 
   const { userData } = useGetUserFromId(userId)
   const { enName, arName, isPrivileged } = userData ?? {}
-  const { petitionsData } = useGetCreatedPetitions(userId)
+  const { petitionsData, isPetitionsFetching } = useGetCreatedPetitions(userId)
   const petitions = React.useMemo(
     () => formatPetitions(petitionsData, isRTL, user?.owner?.id),
     [petitionsData, isRTL, userId],
@@ -140,83 +141,91 @@ export const UserPageScreen: FC = observer(function UserPageScreen() {
   }
 
   return (
-    <Screen style={$root} preset="fixed" safeAreaEdges={["top"]}>
-      <View style={$flashListContainer}>
-        <FlashList
-          ListHeaderComponent={() => (
-            <View style={[$detailContainer, isRTL ? $rtl : $ltr]}>
-              <Pressable
-                onPress={() => {
-                  navigation.goBack()
-                }}
-                hitSlop={5}
-                style={$icon}
-              >
-                <FontAwesome5
-                  name={isRTL ? "arrow-right" : "arrow-left"}
-                  size={24}
-                  color={colors.palette.primary100}
-                />
-              </Pressable>
+    <Screen
+      contentContainerStyle={[$root, !!isPetitionsFetching && $justifyCenter]}
+      preset="fixed"
+      safeAreaEdges={["top"]}
+    >
+      {isPetitionsFetching ? (
+        <ActivityIndicator size="large" color={colors.palette.primary100} />
+      ) : (
+        <View style={$flashListContainer}>
+          <FlashList
+            ListHeaderComponent={() => (
+              <View style={[$detailContainer, isRTL ? $rtl : $ltr]}>
+                <Pressable
+                  onPress={() => {
+                    navigation.goBack()
+                  }}
+                  hitSlop={5}
+                  style={$icon}
+                >
+                  <FontAwesome5
+                    name={isRTL ? "arrow-right" : "arrow-left"}
+                    size={24}
+                    color={colors.palette.primary100}
+                  />
+                </Pressable>
 
-              <View>
-                {isOrg ? (
-                  <View style={$imageContainer}>
-                    <Image
-                      source={{
-                        uri: userData?.image?.url,
-                      }}
-                      style={$image}
+                <View>
+                  {isOrg ? (
+                    <View style={$imageContainer}>
+                      <Image
+                        source={{
+                          uri: userData?.image?.url,
+                        }}
+                        style={$image}
+                      />
+                    </View>
+                  ) : null}
+
+                  <View style={$nameContainer(isRTL)}>
+                    {!!userData?.isPrivileged && (
+                      <AntDesign name={"checkcircle"} size={24} color={colors.palette.primary100} />
+                    )}
+                    <Text
+                      preset="primaryBold"
+                      text={isRTL ? arName : enName}
+                      style={$detailTextStyle}
                     />
                   </View>
-                ) : null}
-
-                <View style={$nameContainer(isRTL)}>
-                  {!!userData?.isPrivileged && (
-                    <AntDesign name={"checkcircle"} size={24} color={colors.palette.primary100} />
-                  )}
-                  <Text
-                    preset="primaryBold"
-                    text={isRTL ? arName : enName}
-                    style={$detailTextStyle}
-                  />
                 </View>
-              </View>
 
-              <View style={[$itemsContainer, { marginBottom: moderateVerticalScale(8) }]}>
-                {analytics.map(({ key, title, count }) => (
-                  <View key={key}>
-                    <Text style={$analyticsNumbers}>{count}</Text>
-                    <Text tx={title} style={$analyticsText} />
-                  </View>
-                ))}
-              </View>
-
-              {isPrivileged ? (
-                <View
-                  style={[
-                    $itemsContainer,
-                    $iconsContainer,
-                    isRTL ? $rtl : $ltr,
-                    !!isRTL && $rowReverse,
-                  ]}
-                >
-                  {icons.map(({ key, icon, link }) => (
-                    <Pressable key={key} onPress={() => openLink(link)}>
-                      <SvgXml xml={icon} height={39} width={39} />
-                    </Pressable>
+                <View style={[$itemsContainer, { marginBottom: moderateVerticalScale(8) }]}>
+                  {analytics.map(({ key, title, count }) => (
+                    <View key={key}>
+                      <Text style={$analyticsNumbers}>{count}</Text>
+                      <Text tx={title} style={$analyticsText} />
+                    </View>
                   ))}
                 </View>
-              ) : null}
-            </View>
-          )}
-          contentContainerStyle={$flatListContainer}
-          showsVerticalScrollIndicator={false}
-          renderItem={renderItem}
-          estimatedItemSize={200}
-          data={petitions}
-        />
-      </View>
+
+                {isPrivileged ? (
+                  <View
+                    style={[
+                      $itemsContainer,
+                      $iconsContainer,
+                      isRTL ? $rtl : $ltr,
+                      !!isRTL && $rowReverse,
+                    ]}
+                  >
+                    {icons.map(({ key, icon, link }) => (
+                      <Pressable key={key} onPress={() => openLink(link)}>
+                        <SvgXml xml={icon} height={39} width={39} />
+                      </Pressable>
+                    ))}
+                  </View>
+                ) : null}
+              </View>
+            )}
+            contentContainerStyle={$flatListContainer}
+            showsVerticalScrollIndicator={false}
+            renderItem={renderItem}
+            estimatedItemSize={200}
+            data={petitions}
+          />
+        </View>
+      )}
     </Screen>
   )
 })
