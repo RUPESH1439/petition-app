@@ -3,7 +3,7 @@ import { z } from "zod"
 
 const phoneValidation = z
   .string()
-  .refine((value) => /^07\d*$/.test(value), {
+  .refine((value) => /^09\d*$/.test(value), {
     message: I18n.translate("errors.wrongFormat"),
   })
   .refine(

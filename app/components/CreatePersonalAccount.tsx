@@ -19,6 +19,8 @@ import { ScrollView } from "react-native-gesture-handler"
 import { moderateVerticalScale } from "app/utils/scaling"
 import phoneValidation from "app/schemas/phoneValidation"
 import useLogin from "app/hooks/api/useLogin"
+import { Picker } from "react-native-wheel-pick"
+import { getYearRange } from "app/utils/getYears"
 
 export interface CreatePersonalAccountProps {
   /**
@@ -34,7 +36,7 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
   const { genders, setGenders } = useFormattedGenders()
   const { governorates, setGovernorates } = useFormattedGovernorates(true)
   const { isCreating, createUser, isSuccess, createError } = useCreateUser("personal")
-
+  const [dobFocused, setDobFocused] = React.useState(false)
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
 
   const schema = z.object({
@@ -107,6 +109,7 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
           placeholderTx="createPersonalAccount.name"
           containerStyle={$textInput}
         />
+
         <TextField
           control={control}
           name="birthdateYear"
@@ -115,7 +118,25 @@ export const CreatePersonalAccount = observer(function CreatePersonalAccount() {
           error={errors?.birthdateYear ? "errors.pleaseFill" : null}
           placeholderTx="createPersonalAccount.dateOfBirth"
           containerStyle={$textInput}
+          onFocus={() => setDobFocused(true)}
+          onChangeText={() => setDobFocused(true)}
+          onBlur={() => setDobFocused(false)}
         />
+        {!!dobFocused && (
+          <Picker
+            style={{
+              backgroundColor: "white",
+              width: "100%",
+              height: 500,
+            }}
+            pickerData={getYearRange()}
+            onValueChange={(value) => {
+              console.log("value", value)
+              setValue("birthdateYear", value)
+              // setDobFocused(false)
+            }}
+          />
+        )}
         <View style={[$dropdownGenderList, $textInput]}>
           <Dropdown
             items={genders}
