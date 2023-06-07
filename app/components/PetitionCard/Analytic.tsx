@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Pressable, StyleProp, TextStyle, View, ViewStyle } from "react-native"
+import { Pressable, StyleProp, TextStyle, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { colors, typography } from "app/theme"
 import { Text } from "app/components/Text"
